@@ -1,0 +1,16 @@
+Geo functions are perfectly working, but the point is that the performance is not satisfying, when the  data needs to be queried. A point that makes this problem more serious is that the geo spatial data have commonly huge size. This brings the idea of indexing, designed based on the geo spatial requirements.
+The first point to consider related to performance issue is that the whole database is processed for every type of query. It means, in some queries checking parts of the file and a range of geometries would be enough to get the result. For example, if we want to find the intersecting geometries of a specific geometry, there is no need to check the whole geometries and examining the area near and around to this geometry would be enough to get the results. This comes from the characteristic of the spatial data. That means, the data file is in fact written form of the geometries which are positioned in space. 
+This idea would help to use an indexing structure for such a queries and decrease the number of scanned geometries and therefore, better timing.
+As it is explained in related work [??], there are different spatial indexing structure. The one that we use is JTS STRTree. STRTree has the basic structure of the R-Tree, with the improved performance in comparison to R-Tree [??]. This structure is once made, when the spatial index for a database is requested, then uses two step filtering for each time a query needs to be done. It should be considered that only specific queries would benefit from this index,
+intersects
+within
+contain
+relates 
+overlaps
+crosses
+touches
+equals
+disjoint*
+
+The tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is written into a file and each time the index is applied, the file is read into main memory (see Figure ???). The first step of filtering is to select those nodes of the tree, which intersect with the given geometry's bounding box. And in the second step, the geometric operation is applied on geometries inside the selected areas, whether they meet the query condition. This strategy will dramatically decrease the number of processes in database. In the following sections we represent the performance issues of the index structure.
+

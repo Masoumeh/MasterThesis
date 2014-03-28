@@ -1,0 +1,93 @@
+MongoDB provides geo spatial functionalities and features to query and process the data in the format of GeoJson. This is an encoding format for geographical features, using JSON standard []. A Geojson files has the file structure is as follow,
+\begin{verbatim}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [102.0, 0.5]
+      },
+      "properties": {
+        "prop0": "value0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
+        ]
+      },
+      "properties": {
+        "prop1": 0.0,
+        "prop0": "value0"
+      }
+    }
+  ]
+}
+\end{verbatim}
+
+
+We have used geographic data from Netherland...
+The original data are in GML2.0 format and in RD/NAP Amersfoort RD New coordinate system, which is one of the Netherlands' national reference system. Since MongoDB only supports WGS84 coordinate system, the conversion was done to have the coordinates in new format. The file contains 12773 polygons in 11886 MultiPolygons. 
+
+Importing data into MongoDB could be done through Mongo Shell or either using an API.
+
+There are some limitations needs to be considered in using geo spatial features in MongoDB. The main one is the document size limitation. The imported documents should have the size smaler than 16MB [ref to website]. Since it is normal to have large geometries in real geographic data files, this would be serious problem while working with such a data in MongoDB. Therefore, the documents have to be converted into smaller one in a way. The other limitation is that z coordinate is not supported in MongoDB and no error massage will be shown when a coordinate contains third value as z coordinate. Instead, those geometries would no be processed. Additionally, multi geometries are not supported in MongoDB and they also will not be checked in queries, without any error massage. These should be concerned during the querying geo spatial data in MongoDB.
+
+The data file that we used to query with MongoDB, had already size problem. So, we tried to to import those geometries smaller than this size. The file was originally in GML format and converted to geojson format, using an online tool (http://converter.mygeodata.eu/). Then tried to filter geometries and insert them in different geojson files. Then, we inserted these files into a collection. With this approach, there are some points about querying that are mentioned here. As the example above shows, geometries are contained in the key “features” which is an array. To  query the elements inside an array, the general find() function,
+\begin{verbatim}
+db.collection.find ({“features.geometry”: {$geoIntersects: {$geometry: {type: “Point”, coordinates: [2 , 3]}}}})
+\end{verbatim}
+would not give us the individual elements. This query would go through the whole array, and if it finds any element meeting the condition, returns the “features” array, not those selected elements inside the array, since we have a collection with a set of JSON files (see Figure ??). To get just those specific elements, aggregation function should be used,
+\begin{verbatim}
+db.collection.aggregate({$unwind: “features”}, {$match: {“features.geometry”: {$geoIntersects: {$geometry: {type: “Point”, coordinates: [2 , 3]}}}}})
+\end{verbatim}
+Aggregation function is used to access aggregation framework in MongoDB. This framework is one of the three approaches that MongoDB uses for aggregation. This approach processes a document in a pipeline of commands. The above aggregation function would split the result elements of the array and returns them individually with “$unwind” command and will select those elements matching the given query and condition through the “$match” operator. The order of the aggregation will differ the results and also in some cases, the performance.
+Additionally, in this structure indexing geometry objects do not work. It means, the cursor which is returned by a find() function is “BasicCursor”, as it is shown in the profile of a query below,
+
+… (profile)
+
+If “s2cursor” is used, it means that geo spatial index is applied. It seems that the index do not work in such a structure of this collection. When we changed the structure by just inserting the geometries one by one, out of the main structure of GeoJson files. It means, instead of having individual geojson files in a collection, we will have individual geometries in the collection, as illustrated in Figure ??.
+
+
+As it is explained above, aggregation function with “$unwind” and then “$match” commands is needed to find the geometries in a query for the first structure. But in the second one with the individual geometries, a regular find() function gives the desired results as geometries.
+
+… mesale agregate va find()
+
+Furthermore, query timing of the second collection is better. Below is two queries, the first from a collection with JSON files structure and the second from a collection with individual geometries, both having the same geometries. Both geometries give the same result, but query timing of the collection without files are better. 
+
+…. (profiles)
+
+
+Geo Spatial Operators
+
+Geo spatial operators in MongoDB are limited to the following ones:
+
+geoIntersects
+geoWithin
+near
+nearSphere
+
+
+Indexes 
+
+There are three type of geo spatial indexes supported in MongoDB, 2dsphere index, 2d index, and Haystack index. 2D index are suitable for querying the geometric data in legacy coordinate systems , i.e. not WGS84, in MongoDB 2.2 and earlier. Haystack should be used to query small geo spatial areas on earth. 2Dsphere as the index, which we also have used, are designed for querying geo spatial data on a sphere. We have used the real data on the earth in WGS84 coordinate system, so 2dsphere index had to be used. Here we briefly explain about th 2D index structure. 
+In fact, MongoDB indexes the geohash values which are created for coordinates [website mongoDB]. A geohash in generated by recursively dividing the geographic area into quarters and assigning each part a two-bit value . As this process repeats, each quarter could be divided into sub-quarters, this numbering follows the same way (see Figure … ). Therefore, the geohashs for all points in 00 area would be 00.
+
+
+The more division is continued and smaller the areas are and longer geohash is produced for each, the more precision is available.
+
+Results in MongoDB and BaseX
+
+After preparing the same data in both GML and JSON, it is time to compare the results. The queries are applied once with spatial index and once without index. The queries are selected to get the different range of results, so the changes in query timings could be seen as the number of results goes higher or lower. Figure … shows the timing result for different queries, without spatial index. 
+As it could be seen, in both databases query time is decreasing as the number of results goes higher. This trend repeats when spatial index is added (see Figure …). The point is that when index is not used, the performance are more or less the same in both databases, since the whole data file would be processed to find the matching cases. The profile shows that in absence of index, the number of  scanned documents and number of index entries in MongoDB are equal to the number of total documents in collection. While using the index would lower these numbers and consequently improves the performance. The same happens in BaseX, but the index structure provides the results in shorter time....!
+
+
+
+
+
+

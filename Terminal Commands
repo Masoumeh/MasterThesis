@@ -1,0 +1,2 @@
+find and replace: sed -i 's/\]\]\],\[\[\[/\]\]\]}},\n{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":\[\[\[/g' neighbourhoods-WGS.json
+count of a string: grep -o -w 'Polygon' neighbourhoods-WGS.json | wc -w

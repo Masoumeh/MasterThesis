@@ -1,12 +1,7 @@
-Indexing in databases …..
-Indexing would dramatically influence efficient data manipulation and storage [survay]. Like any other type of data, Geo Spatial data would be needed o be indexed. 
-Conventional index types are not suitable to support the spatial data [indexing survay], since the spatial data are very large and also complex in structure and relations, operators used for data retrieval are complicated, and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable for spatial objects is that they would consider the spatial objects in one dimension and do not preserve the spatial proximity.
-Also, the ordering structures and algorithms for the Geo spatial data should be different from the common data, as …
+According to \cite{survey}, indexing would dramatically influence efficient data manipulation and storage. Like any other type of data, Geo Spatial data would be needed o be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable for spatial objects is that they would consider the spatial objects in one dimension and do not preserve the spatial proximity.
 
-As it is examined in [survey] many number of spatial indexes has been introduced to improve the spatial data retrieval. Each class and approach has its own strengths and weaknesses and it mostly depends on different issues that based on them is developed, such as requirements, query types, and applications. The classification could be based on different aspect. For example, based on the index structure, the groups would be binary trees, B-Trees, hashing, and space filling methods.
-….
-
-Here we discuss some of the approaches from the groups mentioned abow, considering the aspects covered by them.
+As it is examined in \cite{survey}, a large number of spatial indexes has been introduced to improve the spatial data retrieval.
+The strength or weekness of an indexing approach mostly depends on requirements, query types, and applications. In the following sections, we go through selective spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree.
 
 \subsection{Binary-tree Based}
 The indexes in this group are basically and conceptually derived from the binary search tree. They adopt and generalize the idea of partitioning the space. Here some of them are explained.
@@ -26,11 +21,10 @@ When an item is deleted, a node from the sub-tree must be replaced. Here arises 
 Kd-Tree has been used a lot in intensive searches, but some variants has been introduced to make a better performance in clustering, searching, storage efficiency and balancing [survay], such as …..
 and below we discuss some of them.
 
-\subsubsection{Kd-tree Extensions with Paging Capability}
 Main memory storage of the index trees are mostly a problem, since it is too big to be placed there  [survay]. Hence, the storage has to be done into disk space. Using binary search tree paging techniques [CeS82 survay] or tree organization of B-trees [BaM72 survay] to store the kd-Tree proposes new indexing structures.
 
-\subsubsection{KDB-tree}
-Using properties of both kd-tree and B-tree, the KDB-tree rebuilds the kd-tree to improve some inefficiencies of it.  It means benefits of the balanced kd-trees and the I/O efficiency of B-trees are together. It uses the disk space to bring the kd-tree on disk. 
+Using properties of both kd-tree and B-tree [reference], the KDB-tree rebuilds the kd-tree to improve some inefficiencies of it.  It means benefits of the balanced kd-trees and the I/O efficiency of B-trees are together. It uses the disk space to bring the kd-tree on disk. 
+
 The method which is used to build  KDB-tree is a space partitioning structure such that the partitions do not overlap each other. The partitions which stand for pages as organizational units, are organized in k-d-tree structure. 
 KDB-tree has two basic structures: region page, consist of (region, pageID) pairs, and point page, consist of  (point, pageID) pairs. The region page contains the description of its subpages and a reference to those pages. The point pages contains actual data and references to them. 
 
@@ -43,8 +37,7 @@ KDB-tree has two basic structures: region page, consist of (region, pageID) pair
 
 The pagination of the B-tree is integrated in the KDB-tree and consequently the tree is height-balanced. Space utilization and efficiency might be low or high, though, since the downward propagation of splitting, caused by region split, may cause low storage utilization. On the other side, there is no guarantee for minimum space utilization. Since partitions do not overlap, it is not always easy to find disjoint partitions to divide a region. So, those partitions must be split at the same value as parent, even though they do not use the minimum amount of space specified for each node. By this problem the range queries' performance is poor. 
 
-\subsubsection{HB-tree}
-This is a variation of K-D-B-Tree which could be distinguished by two features: …
+Another variation of KDB-Tree which can be distinguished by two features: …
 Since in a the region split in lower levels result in sparse nodes, hB-Tree (the holey brick Btree) as a multi-attribute index structure is proposed. Data spaces could be holey. It allows the data space associated with a node to be non-rectangular and it uses kd-trees for space representation in its internal nodes. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through kd-tree recursive partitioning. It is height balanced since it is based on the K-D-B-Tree. 
 Advantages of this structure is removing the sparse nodes of the K-D-B-Tree and reduction of search time and space utilization, since kd-tree is used. 
 Disadvantages of this structure is that the deletion and splitting of nodes are expensive and also multiple references to a data node will lead to more than one traversal of a path.

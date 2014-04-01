@@ -56,56 +56,58 @@ Master of Science (M.Sc.)}
 \newpage
 
 \section{Related Works}
-Here, we are going to summerize a large set of literature
-over different XML handling methods. Section~\ref{storage} studies
+Here, we are going to summerize a large set of literature over different methods
+to store GML. Section~\ref{storage} studies
 different approaches to store GML. These approaches are investigated
 with respect to the effectiveness of storage models in terms of query processing.
+After the discussion over storage, the different proposed query languages
+will be explained in Section~\ref{query}. Finally, we will look at the
+famous databases in Section~\ref{s.dbs} and what they did regarding GML
+handling.
   
 \subsection{Storage}
 \label{storage}
-To store GML data more efficiently, \cite{Li2004} proposes an approach 
-to store it in a spatial database. First, the schema tree is generated
- and then it's mapped to relational schema to store all spatial objects as 
-values of the mapped tables' field.  Spatial query can be submitted 
-in XQuery\cite{xquery}-like language with spatial functional extensions, and GML 
-query is first translated into equivalent SQL query that is evaluated 
-by spatial database management system.
+One of the basic approaches to store GML data is proposed in \cite{Li2004}.
+In this approach, the schema tree is generated at first. Then, the generated
+tree is mapped to a relational schema to store all spatial objects as 
+values of the mapped tables' field. Spatial query can be submitted 
+in XQuery\cite{xquery}-like language with spatial functional extensions.
+These GML queries are translated into equivalent SQL queries which are evaluated 
+using spatial database management system.
 
-\cite{Zhu2011} discussed another approach to store and query GML, 
-focusing on non-schema documents.
-First GML is parsed, the document tree is made. Then the nodes are analyzed and 
-schema mapping is generated to store the doc in object-relational DB. 
-Spatial and non-spatial queries are supported.
+Another similar approach is discussed in \cite{Zhu2011}. Here, GML is stored and queied 
+focusing on non-schema documents. After the generation of the GML parse tree,
+the nodes are analyzed and  schema mapping is generated to store the doc in object-relational DB. Both spatial and non-spatial queries are supported in this approach.
 
-\cite{Zhang2008} Considering both characteristics of XML DB and GML spatial data, 
-a native XML database based GML storage is proposed. A prototype system 
-is developed, on the basics of JAXP (Java API for XML Processing) program API 
+Shulian Zhang et al~\cite{Zhang2008} are considering both characteristics of XML DB and GML spatial data. Here, a native XML database based GML storage is proposed. A prototype system is developed on the basics of JAXP (Java API for XML Processing) program API 
 and JTS, containing schema mapping constructor, document storage tool, 
 and spatial analyzer.
 
 \subsection{Query Languages}
-\label{index}
-\cite{Fubao2010} XQuery language, recommended by W3C, is only 
-applicable to non-spatial data. To query spatial data in GML, 
+\label{query}
+XQuery language, recommended by W3C, is only 
+applicable to non-spatial data. To query spatial data in GML,
 XQuery is expanded in data model, algebra, functions and operations, 
-and formal semantics to achieve a GML query processor. The processor can 
-deal with non-spatial and spatial queries, and the results will be outputted in GML.
+and formal semantics to achieve a GML query processor~\cite{Fubao2010} .
+
+The processor can deal with non-spatial and spatial queries, 
+and the results will be outputted in GML.
 Defined data types are: Geometry, Coord, Coordinates, Point, LineString, LinearRing, 
 Polygon, Box, GeometryCollection, MultiPoint, MultiLineString, and MultiPolygon 
 and spatial operations are: simple geometry operation, spatial relation 
-operation, spatial analysis operation and specific geometry operation. 
-JTS is called for handle operations
+operation, spatial analysis operation and specific geometry operation.
+JTS\cite{jts} is called for handling operations.
 
-\cite{corcoles2001} Besides GML is used to represent and exchange 
+Besides GML is used to represent and exchange 
 the geographic data, it also benefits its XML-based model in interoperability, 
-and more importantly, could be queried. In this study, the data model 
+and more importantly, could be queried. In \cite{corcoles2001}, the data model 
 and algebra behind the language, based on a previously proposed model 
 in which components and interrelations are represented as a directed graph. 
-(The model includes new type of vertex for geometry types and its properties. 
-Egdes represent elements containment, relationship between elements, and values.) 
-With a data model and algebra, data types, and operation, the features that the language needs.
+The vertices of this graph are geometry types and properties. The edges also
+represent the element containment, relationship between elements, and values. 
+This query language tries to provide an interface like SQL to work with GML.
 
-\cite{Lisa2006} Xquery is not a sutable language to query GML, 
+Xia Li~\cite{Lisa2006} defines Xquery as a language  not sutable to query GML, 
 since spatial related data types and semantics need to be treated different from XML. 
 The purpose of this study is to define expand Xquery not for predefined GML elements, 
 but more flexible.  A set of operators and functions on GML data types that cover 
@@ -156,7 +158,8 @@ return $x
 
 \cite{corcoles2003} An approach to integrate Geospatial data on the Web, storing them in GML, and using a query language. An ontology is used to solve the semantic heterogeneity of different GML documents.
 
-\subsection{Indexing in famous XML databases}
+\subsection{Geospatial data in famous XML databases}
+\label{s.dbs}
 \subsubsection{MongoDB}
 \cite{mongogeneral2010}
 \cite{mongoinaction2011}

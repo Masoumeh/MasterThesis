@@ -1,0 +1,2 @@
+db.neighbourhoods.find({geometry:{$geoIntersects:{$geometry:{type: "Polygon",coordinates:[[[7.1,53 ],[7.1,52.8],[ 6.9,53 ],[7.1,52.9],[ 7.1,53]]]}}}}).explain()
+

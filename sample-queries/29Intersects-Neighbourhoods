@@ -1,0 +1,1 @@
+db.neighbourhoods.find({geometry:{$geoIntersects:{$geometry:{type: "Polygon",coordinates:[[[7,53 ],[7,52.8],[ 6.9,53 ],[7,52.9],[ 7,53]]]}}}})

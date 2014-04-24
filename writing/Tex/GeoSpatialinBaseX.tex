@@ -55,19 +55,38 @@ throughout all my studies at University, and my best friend M. Ali Rostami.
 \newpage
 \section{Introduction}
 \setcounter{page}{1}
+The geospatial data is increasingly becoming more important nowadays.
+Different ways of processing this data is studied in ....
+
+The time complexity ...
 
 \subsection{Motivation}
 
 \subsection{Overview}
+This essay will first define the concepts needed later in the discussion, called
+Methodology, in Sec.~\ref{s.method}. In this section, the basic geospatioal data
+and it's application areas will be introduced. Also, various ways that other works
+are processing this data will be investigated in Sec.~\ref{s.rwork}. BaseX,
+as a native XML database, which is our focus in this essay, is studies and extended
+by a module to handle geospatial data in Sec.~\ref{s.basex}. 
+Sec.~\ref{s.mongo} improves the efficiency of the module
+by proposing another novel way considering MongoDB.
+Finally, new ideas for further works are explained in
+Sec.~\ref{s.future}.
+
 
 \newpage
 \section{Methodology}
+\label{s.method}
+According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relating to a position of things on the
+earth's surface, also \emph{Geospatial Data}  is any data showing any thing on the earth's surface. Different 
+countries and organizations are using different systems to represent this data. WGS84 ??
+
 \subsection{Geospatial Data}
 
 \subsection{Geospatial Data in Native XML Databases}
 
 \subsection{General Spatial Requirements in Native XML Database}
-\newpage
 
 \subsection{GeoSpatial Indexing}
 According to \cite{survey}, indexing would dramatically influence efficient data manipulation and storage. Like any other type of data, Geo Spatial data would be needed o be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable for spatial objects is that they would consider the spatial objects in one dimension and do not preserve the spatial proximity.
@@ -218,6 +237,7 @@ It is organized in a way similar to the region quad-tree. A region is recursivel
 
 
 \section{Related work}
+\label{s.rwork}
 Here, we are going to summerize a large set of literature over different methods
 to store and process GML~\cite{gml} data. Section~\ref{storage} studies
 different approaches to store GML. These approaches are investigated
@@ -328,7 +348,7 @@ Finally, a novel approach is propsed by Corcoles~\cite{corcoles2003} to integrat
 This data is stored and queried using GML format and a special query language. 
 An ontology is used to solve the semantic heterogeneity of different GML documents.
 
-\subsection{Geospatial Data in Famous Databases} ??
+\subsection{Geospatial Data in Well-known Databases} ??
 \label{s.dbs}
 \subsubsection{MongoDB}
 \cite{mongogeneral2010}
@@ -535,6 +555,7 @@ Storing the eospatial data in geohash ???
 
 
 \section{Spatial Query in BaseX}
+\label{s.basex}
 \subsection{Geo Module in BaseX}
 Geo features in BaseX are implemented based on the EXPath Geo Module Specification \cite{expath}. The specification contains the difinition of functoin for widely used geographic and geometric analysis operations, from Open Geospatial Consortium Simple Features Common Access API version 1.2 \cite{simpleFeature}. The functions apply to geometries in different formats, such as GML, KML, GeoJSON, Well Known Text (WKT), Well Known Binary (WKB). Based on the specification, \textit{geo module} in \textit{BaseX} comprises a set of functions, such as intersection, within, distance, boundary, centroid, diference, union, and etc., added to the “basex-api” package in BaseX. In addition, spatial index structure is implemented in BaseX core. The geometries supported in this module are Point, LineString, Polygon, plus MultiPoint, MultiLineString, and MultiPolygon. \textit{Geo module} is an individual package with a set of classes as briefly described below,
 \begin{itemize}
@@ -701,6 +722,7 @@ As the profile output indicates, the call for function \textit{split} consumes t
 
 
 \section{Basex vs MongoDB}
+\label{s.mongo}
 In this section we examine the geo spatial features in MongoDB and the comparison between BaseX and MongoDB.
 To start with, we will have a look at general functionalities and features in MongoDB and then the comparison from a specific perspectives are explained. The comparision is aiming at geo module improvement in the future........?????????????????????
 
@@ -911,6 +933,7 @@ Updating a database as a significant part os a database system generally compris
 
 \newpage
 \section{Future Work}
+\label{s.future}
 \newpage
 \bibliographystyle{unsrt}
 \bibliography{refs}

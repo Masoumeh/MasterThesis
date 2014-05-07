@@ -8,6 +8,7 @@
     \vskip0.5em}%
 }
 \usepackage{url}
+\usepackage[tight,footnotesize]{subfigure}  
 \usepackage[top=2cm, bottom=2cm, left=4cm, right=2cm]{geometry}
 \title{Processing GeoSpatial Data in BaseX}
 \subtitle{Master Thesis in fulfillment of the requirements for the degree of
@@ -109,7 +110,7 @@ Types of coordinate systems:
 
 
 \subsection{Geospatial Data in Native XML Databases}
-As a powerful XML grammer introduced by GIS community, \texit{Open GIS Consortium (OGC)}, \textit{GML} plays an important role in spatial data modeling, integration, sharing, transission, and exchange, beacuase of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be perfectly handled in the native XML databases. ...
+As a powerful XML grammer introduced by GIS community, \textit{Open GIS Consortium (OGC)}, \textit{GML} plays an important role in spatial data modeling, integration, sharing, transission, and exchange, beacuase of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be perfectly handled in the native XML databases. ...
 
 \subsection{General Spatial Requirements in Native XML Database}
 In addition to general functions and features on XML structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML format shouold be readed and treated as a Geometries. Therefore, just the string information is not enough to satisfy the geospatial features. In a target space with a set of geometries, the positions, locations, and relations of the geometries rises some requirements. For example, "What is the distance between two geometries?" Or, "Which geometries intersect this geometry?". Additionally, there are features related to single geometries, such as the lenght and area of a geometry, the number of interior ring of a polygon, and the start point of a line. Of course in a database the features related to a set of geometries are of more importane...................
@@ -912,12 +913,13 @@ The same step is also taken in BaseX since the index structure can be used in bo
 
 Besides, the search for the geometries inside an input area is done in the same way and the timings are shown in Figure~\ref{figBXvsMongoIndexWithin}. It can be seen that also in this query the queries with smaller number of returned geometries have better performane in MongoDB. This could be a considerable point since these queries are more common.?????????????????????
 
-\begin{figure}
-\centering
-\includegraphics[width=0.7\textwidth]{BXvsMongo-Within-Index}
-\caption{Query Timing of \textit{intersect} Operation with Spatial Index}
-\label{figBXvsMongoIndexIntersects}
-\end{figure}
+% TODO
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.7\textwidth]{BXvsMongo-Within-Index}
+%\caption{Query Timing of \textit{intersect} Operation with Spatial Index}
+%\label{figBXvsMongoIndexIntersects}
+%\end{figure}
 
 The next wiedly used type of query is finding the near places or geometries up to a distance from a specific point. This feature is provided in MongoDB via \textit{near} and \textit{nearSphere} operators. Both operators nead a geospatial index, either \textit{2d} or \textit{2dsphere}. A specific distance in meter could be defined as a condition to filter those geometries included to this distance. 
 
@@ -957,12 +959,13 @@ This is also obvious from the timing results in BaseX as every number of results
 ?????????? figure for converion method in BX
 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.7\textwidth]{}
-\caption{Query Timing of \textit{near} Operation}
-\label{figBXvsMongoNear}
-\end{figure}
+% TODO
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.7\textwidth]{}
+%\caption{Query Timing of \textit{near} Operation}
+%\label{figBXvsMongoNear}
+%\end{figure}
 
 
 Opening the index into main memory ????????????????????

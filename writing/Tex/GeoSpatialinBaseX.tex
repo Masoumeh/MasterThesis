@@ -820,7 +820,7 @@ To analyse and compare the databases behaviour, designing the same test queries 
 
 To start with, the \textit{GeoJSON} file containing the geometries is imported into MongoDB, using \textit{java API}. It could be done also through Mongo Shell with appropriate \textit{mongoimport} command. There are some limitations to consider when using geo spatial features in MongoDB. The main one is the document size limitation in a collection. Document in MongoDB applies to the sets of key-values and would repeat through the whole collection. In other words, a collection in a database could be correspond with a table and documents involved documents as records. To successfully import a document into a collection, it  should be smaller than 16MB [ref to website]. Since it is normal to have large geometries in real geographic data files, this might appear as a problem. Aother limitation is that the z coordinate is not supported in MongoDB and no error massage will be shown when a coordinate contains third value as z coordinate. Instead, those geometries will not be processed. Additionally, geometries, like \textit{MultiPoint}, \textit{MultiLineString}, and \textit{MultiPolygon}, which are not supported in MongoDB  will be skipped in queries, without any error massage. 
 
-In addition to the abovementioned limitations, importing a \textit{JSON} file into MongoDB should contain individual Features or geometries and not be in the form of a FeatureCollection as bellow, 
+In addition to the abovementioned limitations, importing a \textit{JSON} file into MongoDB should contain individual Features or geometries as bellow, 
  
 \begin{verbatim}
     {
@@ -848,7 +848,7 @@ In addition to the abovementioned limitations, importing a \textit{JSON} file in
     { ... }, ..., { ... }
 \end{verbatim}
 
-Since a \textit{FeatureCollection} contains the whole objects inside and is considered as one object it might be bigger than 16MB. This structure for the above file will be as following,
+Since a \textit{FeatureCollection} contains the whole objects inside and is considered as one object, it might be bigger than 16MB and should not choosed as the imported file structure. This structure for the above file will be as following,
 \begin{verbatim}
 {
  "type": "FeatureCollection",
@@ -871,6 +871,7 @@ Since a \textit{FeatureCollection} contains the whole objects inside and is cons
 }
 \end{verbatim}
 
+%TODO:explain about the query difficulties and aggregation of the above structure
 After importing the file, we have tried to examine the common features, i.e., intersection, within and near functionalities, in both databases.
 The sample queries are applied to the databases either with using geospatial index or without any, regarding some limitations that database functionalities may define, like \textit{near} queries in MongoDb that definately need the geospatial index as mentioned or using the \textit{distance} function to find the near geometries in BaseX in which the current index structure is not applicable.
 The following queries find the intersecting geometries with the given one in \textit{BaseX} and \textit{MongoDB},
@@ -928,7 +929,7 @@ Bellow the profile of a sample query is shown,
 "server" : "MongoServer"
 \end{verbatim}
 
-In the provided information, number of the results and the query time is implied in \textit{n} and \textit{millis} elements respectively. \textit{cursor} specifies the type of the cursor used by the operation. Here, \textit{BasicCursor} indicates that the query is only performing the a normal scan to find the results and typical cursor is used which reads the documents in natural order. That is, no index is used for this operation and the whole data is scanned in the original order. If a geospatial index \textit{2dsphere} is used, the cursor type will be \textit{S2Cursor}. \textit{n} reflects the number of geometries that match the query condition (i.e. the number of items on the cursor). \textit{nscannedObjects} is the number of the documents scanned in this query and \textit{nscanned} is the number of documents or index entry (in case that index is used) scanned for this operation. In queries which the index structure is not used, as in the above sample, these two numbers will be equal. Otherwise, \textit{nscannedObjects} may be lower, as shown in the following query plan which uses \textit{2dsphere} index, 
+In the provided information, number of the results and the query time is implied in \textit{n} and \textit{millis} elements respectively. \textit{cursor} specifies the type of the cursor used by the operation. Here, \textit{BasicCursor} indicates that the query is only performing the a normal scan to find the results and typical cursor is used which reads the documents in natural order. That is, no index is used for this operation and the whole data is scanned in the original order. If a geospatial index \textit{2dsphere} is used, the cursor type will be \textit{S2Cursor}. \textit{n} reflects the number of geometries that match the query condition (i.e. the number of items on the cursor). \textit{nscanned} is the number of documents or index entry in the range (in case that index is used), scanned for this operation and \textit{nscannedObjects} is the number of the documents scanned in this query to get the results. In queries which the index structure is not used, as in the above sample, these two numbers will be equal. Otherwise, \textit{nscannedObjects} may be lower, as shown in the following query plan which uses \textit{2dsphere} index. 
 
 \begin{verbatim}
 "cursor" : "S2Cursor",
@@ -939,7 +940,17 @@ In the provided information, number of the results and the query time is implied
 ...
 \end{verbatim}
 
-Having the same queries, Figure ~\ref{figBXvsMongoNoIndexIntersects} shows the timing of various queries without using any geospatial index in both databases. As it could be seen, the timing of all queries are more or less the same, since the whole data is scanned when no index is used. ?????????
+In other words, nscanned >= nscannedObjects >= n always. Ofcourse, the most optimum state is where scanned = nscannedObjects = n and it could be reached with compound indexes and rephrasing the query statement in some cases as well.
+%TODO mesal for optimization from: http://java.dzone.com/articles/optimizing-mongodb-compound
+
+Having the same queries, Figure ~\ref{figBXvsMongoNoIndexIntersects} shows the timing of various queries without using any geospatial index in both databases. As it could be seen, the timing of all queries are more or less the same, since the whole data is typically scanned when no index is used. It is also obvious from the query plan in MongoDB which specifies the cursor type, number of index keys scanned (nscsnned), and number of documents scanned to get the result (nscsnnedObjects),
+\begin{verbatim}
+...
+"n" : 12773,
+"nscannedObjects" : 12773,
+"nscanned" : 12773,
+...
+\end{verbatim}
 
 \begin{figure}
 \centering
@@ -948,12 +959,13 @@ Having the same queries, Figure ~\ref{figBXvsMongoNoIndexIntersects} shows the t
 \label{figBXvsMongoNoIndexIntersects}
 \end{figure}
 
-Now we continue the process by applying the index. In MongoDB there are two choises for using geospatial index, \textit{2d} for legacy coordinate pairs and \textit{2dsphere} for both \textit{GeoJSON} data objects and legacy coordinate pairs. We use \textit{2dsphere} as fits to our sample data, via the following shell command,
+This process is continued by applying the geospatial index. In MongoDB there are two choices for using geospatial index, \textit{2d} for data expressed in legacy coordinate pairs and \textit{2dsphere} for both \textit{GeoJSON} data objects and legacy coordinate pairs. We use \textit{2dsphere} which fits to our sample data, via the following shell command,
+
 \begin{verbatim}
 db.Collection.ensureIndex({geometry:"2dsphere"})  
 \end{verbatim}
 
-The same step is also taken in BaseX since the index structure can be used in both intersection and within functions. Running again the same queries, supposedly gives declined query times (see Figure~\ref{figBXvsMongoIndexIntersects}). ????????????
+The same step is also taken in BaseX since the index structure can be used in both intersection and within functions. Running again the same queries using a geospatial index, supposedly gives declined query times (see Figure~\ref{figBXvsMongoIndexIntersects}). As explained in Section~\ref{s.basex}, in BaseX index is apllied through the \textit{filter} function, while MongoDB follows another approach. MongoDB applies the index in casual query formats after executing the above-mentioned command and there is no need to change the queries in general. 
 
 
 \begin{figure}
@@ -963,7 +975,7 @@ The same step is also taken in BaseX since the index structure can be used in bo
 \label{figBXvsMongoIndexIntersects}
 \end{figure}
 
-Besides, the search for the geometries inside an input area is done in the same way and the timings are shown in Figure~\ref{figBXvsMongoIndexWithin}. It can be seen that also in this query the queries with smaller number of returned geometries have better performane in MongoDB. This could be a considerable point since these queries are more common.?????????????????????
+Besides, the search for the geometries within an input area is done in the same way and the timings are shown in Figure~\ref{figBXvsMongoIndexWithin}. It can be seen that the queries with smaller number of returned geometries have better performane in MongoDB. Although it seems a positive point to return the big numbers of result in as shorter time as possible, considering smaller returned numbers of results is of greate importance for us, since these queries are more common in real-world usecases.
 
 % TODO
 %\begin{figure}
@@ -973,7 +985,18 @@ Besides, the search for the geometries inside an input area is done in the same 
 %\label{figBXvsMongoIndexIntersects}
 %\end{figure}
 
-The next wiedly used type of query is finding the near places or geometries up to a distance from a specific point. This feature is provided in MongoDB via \textit{near} and \textit{nearSphere} operators. Both operators nead a geospatial index, either \textit{2d} or \textit{2dsphere}. A specific distance in meter could be defined as a condition to filter those geometries included to this distance. 
+The next wiedly used type of query is finding the near places or geometries up to a distance from a specific point. It could be also expressed as finding the geometries inside a polygon or specifically a circle with the distance value as the radius lenght. This feature is provided in MongoDB via \textit{near} and \textit{nearSphere} operators which simply get the reference point and the disance and hereafter returns the whole geometries in the specified distance from the point. In the following we have provided a sample query of this feature. Both near operators nead a geospatial index, either \textit{2d} or \textit{2dsphere}. A specific distance in meter could be defined as a condition to filter those geometries included to this distance. 
+
+\begin{verbatim}
+db.collection.find({{geometry:
+                         {$nearSphere:
+                            {$geometry:
+                               {type:"Point", coordinates:[4.5,51.95]}, 
+                             $maxDCistance : 100}
+                         }
+                     }
+                   })
+\end{verbatim}
 
 
 BaseX \textit{Geo Module} could provide this feature via \textit{distance} or combination of \textit{buffer}, \textit{within} functions. In Both cases, meter as the unit for distance specification works for the projected coordinate systems\cite{}. In a projected coordinate system all the areas, lengths, and angels are defined on a flat two-dimensional space. In such a system, the user is provided with this feature, using the above-mentioned functions, as the following example,

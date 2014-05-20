@@ -100,17 +100,22 @@ was introduced in $1984$. However, there are many different standards like ... a
 There are variuos convertors between ....
 
 \subsection{Geospatial Data}
-Geospatial data is the information describing features and locations  and their characteristics having a spatial component, which means are connected to a place on the earth. The entities are defined as geometries, i.e. points, lines, and polygons. The rules for uniquely identifying the position of geometries by an ordered set of numbers, called coordinates, are defined in the coordinate system. Since a geometrical figure could be described in different ways based on various requirements and definitions, there are numerous coordinate systems. A location could be defined with distinct coordinates from seprate coordinate system. In other words, various coordinates from different coordinate systems could point to the same location. Accordingly, it is necessary to know how they are related in concepts and definitions.
+Geospatial data is the locational information describing features and locations and their characteristics having a spatial component, which means are connected to a place on the earth, such as countries, cities, buildings, population, and demographics. It also applies to three-dimnesionsl data, like above and below the Earth's surafce~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. The entities are defined as geometries, i.e. points, lines, and polygons. An ordered set of numbers identifies the position of geometries, called coordinates which are defined in a coordinate system. A coordinate system defineds the rules, components, and properties to determine the coordinate numbers, which basically differ from a system to another. That means, since coordinates are defined in different ways based on the requirements and definitions, there are numerous coordinate systems and an object or a location could be defined by different coordinates in distinct coordinate system. In other words, various coordinates from different coordinate systems could point to the same location. Accordingly, it is necessary to know how they are related in concepts and definitions to make it 
 
-Geometry examples,
-representing languages like gml,... and how we choose one!
+\subsubsection{Terms and Definiions}
 
-Types of coordinate systems:
-..............................
-
+\begin{itemize}
+\item GML
+\item KML
+\item WKB
+\item WKT
+\item Coordinate System
+\item Geometry
+\
+\end{itemieze}
 
 \subsection{Geospatial Data in Native XML Databases}
-As a powerful XML grammer introduced by GIS community, \textit{Open GIS Consortium (OGC)}, \textit{GML} plays an important role in spatial data modeling, integration, sharing, transission, and exchange, beacuase of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be perfectly handled in the native XML databases. ...
+As a powerful XML grammer introduced by GIS community, \textit{Open GIS Consortium (OGC)}, \textit{GML} plays an important role in spatial data modeling, integration, sharing, transission, and exchange, beacuase of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be perfectly handled and queried in the native XML databases. Nowadays, 
 
 \subsection{General Spatial Requirements in Native XML Database}
 In addition to general functions and features on XML structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML format shouold be readed and treated as a Geometries. Therefore, just the string information is not enough to satisfy the geospatial features. In a target space with a set of geometries, the positions, locations, and relations of the geometries rises some requirements. For example, "What is the distance between two geometries?" Or, "Which geometries intersect this geometry?". Additionally, there are features related to single geometries, such as the lenght and area of a geometry, the number of interior ring of a polygon, and the start point of a line. Of course in a database the features related to a set of geometries are of more importane...................
@@ -592,7 +597,7 @@ Storing the eospatial data in geohash ???
 \section{Spatial Querying in BaseX}
 \label{s.basex}
 %TODO tozihe bishtar dar more requirements va inke chera injuri develop shode
-Spatial query is a spacial type of query with two certain properties in general. First, they use geometris as inputs and in some cases as ouputs. Ofcourse, in XML databases geometries are expressed in XML sructure, like GML elements. Moreover, they consider spatial relations between the geometries. 
+Spatial query is a spacial type of query which requieres the processing of geometries with two certain properties in general. First, they use geometris as inputs and ouputs as well as other types. Ofcourse, in XML databases geometries are expressed in XML sructure, like GML elements. Moreover, they consider spatial relations between the geometries. 
 Regarding the related works and ideas in ?????, there are various viewpoints in providing geospatial features in a database up to some extend of requirements fulfillment. Following the Open Geospatial Consortium (OGC) Simple Feature (SF) [????] data model, geospatial features in BaseX follow the EXPath geospatial API function interface specification which defines commonly used and implemented function signatures from the Open Geospatial Consortium Simple Features Common Access API version 1.2 \cite{simpleFeature}. Since the OCGSF data model typically will be representeg in GML, the idea has been started to develope in BaseX to support GML format. However, an implementation would support the other encodings, like KML. 
 
 In this section, we explain \textit{Geo Module} in BaseX in which the geospatial functions are introduced and the the implementation details, which would be starting point for furthur developments. Moreover, indexing and the related time complexities are discussed in the following, as the critical issue in this thopic.
@@ -998,8 +1003,8 @@ db.collection.find({{geometry:
                    })
 \end{verbatim}
 
-
-BaseX \textit{Geo Module} could provide this feature via \textit{distance} or combination of \textit{buffer}, \textit{within} functions. In Both cases, meter as the unit for distance specification works for the projected coordinate systems\cite{}. In a projected coordinate system all the areas, lengths, and angels are defined on a flat two-dimensional space. In such a system, the user is provided with this feature, using the above-mentioned functions, as the following example,
+%TODO:reference for projected coordinate sys.
+BaseX \textit{Geo Module} currently could provide this feature via \textit{distance} or combination of \textit{buffer}, \textit{within} functions. In Both cases, if the coordinate system in which the data is provided is a projected coordinate systems\cite{}, meter unit could be used to specify the distance. In a projected coordinate system all the areas, lengths, and angels are defined on a flat two-dimensional space. In such a system, the user is provided with this feature, using the above-mentioned functions, as the following example,
 
 \begin{verbatim}
 import module namespace geo = "http://expath.org/ns/Geo";
@@ -1014,23 +1019,25 @@ return if (geo:distance( $a, $b) le 500) then $b else ()
 \end{verbatim}
 
 
-For the data provided in a geographic coordinate system\cite{}, calculations do not work with metric values. A geographic coordinate system, such as \textit{WGS89}, defines the areas and locations in a three-dimensional spherical space. The \textit{distance} function in BaseX will get the distance in the same coordinate system which the data are provided and ofcourse it is not in meters. In other words, there is not a specific units for existing \textit{Geo Module} and the calculations are based on the coordinate system of the data, and the distance between every two geometries in any coordinate system is calculated by the distance rules and formulas on the flat space. ???????????????????
-As a consequence, to find a distance on earth we will need to work in a metric coordinate system. An idea could be to convert the geometry to a projected coordinate system. Then, to spacify the buffer of converted geometry up to the defined distance in meter, in the same metric system and convert the buffer back to the original geographic coordinate system to find the all geometries within this area. In this way we could benefit from the geospatial index structure, via the \textit{within} function........................................
-This procedure be expressed as bellow, using the current \textit{buffer} and \textit{within} functions, 
+For the data provided in a geographic coordinate system\cite{}, calculations do not work with metric values. A geographic coordinate system, such as \textit{WGS89}, defines the areas and locations in a three-dimensional spherical space. The \textit{distance} function in BaseX will get the distance in the same coordinate system which the data are provided and ofcourse it is not in meters. It means, the value determined for distance would be considered in the coordinate system of the data. Hence, as far as the coordinates are in a metric system which is projected on a flat space, the distance could be measured in meters. In other words, there is not a specific units for existing \textit{Geo Module} and the calculations are based on the coordinate system of the data, and the distance between every two geometries in any coordinate system is computed by the distance rules and formulas on the flat space. %TODO:better description
+As a consequence, to find a distance on earth we will need to work in a metric coordinate system, since the computations are based on the flat space relues which will not be accurate for the data on spherical shape of the Earth. An idea to resolve this problem could be to convert the geometry to a projected coordinate system. Then, to spacify the buffer of converted geometry up to the defined distance in meter, in the same metric system and convert the buffer back to the original geographic coordinate system to find the all geometries within this area. In this way, we could benefit from the geospatial index structure, via the \textit{within} function while \textit{distance} function do not utilize the geospaial index. 
+This procedure is expressed as bellow, using the current \textit{buffer} and \textit{within} functions and should return the same result as the previous query, 
 
 % TODO: indention
 \begin{verbatim} 
-	within(geometry,transform(buffer(
-				transform(myPoint_in_wgs84, other_metric_cs),
-			  	500),
-		wgs84))
+within(geometry,
+       transform(buffer(
+                   transform(myPoint_in_wgs84, other_metric_cs)
+                   , 500)
+                 , wgs84
+                )
+      )
 \end{verbatim}
 
+Having the same usecases, we have tested this feature in both databases,shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function, while \textit{nearSphere} operator finds the geometries in MongoDB. MongoDB obviously has a better performance, specifically with smaller number of results, and qurey times and number of results are directly proportional, since index is used and both chaneges accompany each other. BaseX which do not use the geospatial index returns every the results more or less in the same time.
 
-??????????As shown in Figure~\ref{figBXvsMongoNear}, performance of finding near geometries in MongoDB gives a better result............
-This is also obvious from the timing results in BaseX as every number of results is returned more or less in the same time.
-
-?????????? figure for converion method in BX
+%TODO: figure for converion method in BX
+%TODO:change the chart for new queries of distance in BaseX
 
 
 \begin{figure}
@@ -1041,19 +1048,18 @@ This is also obvious from the timing results in BaseX as every number of results
 \end{figure}
 
 
-Opening the index into main memory ????????????????????
+In BaseX as mentioned earlier, the index structure is recorded in a file, and it is read into the main memory. A Point which we should contemplate is to include the time for index opening in query times, since in case of memory lack, the index file could be removed from the memory and read back again as soon as it is demanded. In the presented charts this time is not looked at.
+%TODO: better explanation
 
 
 \subsection{Updating a Database}
+%TODO:Complete!not good :|
+Updating a database as a significant interaction supplied by the database system generally comprise three different operation: insert, delete, and modify. In addition to the whole issues related to database update on disk and memory management, reconstructing the indexes is of great importance. That is, since the index is constructed based on the old structure and values, the updated database needs a new index. 
 
-Updating a database as a significant interaction supplied by the database system generally comprise three different operation: insert, delete, and modify. In addition to the whole issues related to database update on disk and memory, reconstructing the indexes is also of great importance. That is, since the index is constructed based on the old structure and values, hence, the updated database needs a new index. 
+Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means, the STRTree do not get updated automatically and accordingly and the geospatial index has to be rebuilt manually, which would cause redundant constructions and consequently, worse performance. Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
 
-Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means, the STRTree do not get updated automatically and accordingly, the geospatial index has to be rebuilt manually, which would cause redundant constructions and consequently, worse performance. Here, we see how it could effect the updating performance, comparing with MongoDB, since it manages to rebuild the index in the updating process.
-
-Considering the manual update of the geospatial index in BaseX, to evaluate an update process by which the database and the index is updated, reindexing time have to be considered. This implies, the index creation time plus reopeneing the index file into the main memory should be included in the evaluation. In MongoDB, we have concentrated on updating operations using the geo spatial index, while the consumed time also contains the index structure updating. 
-
-
-As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operations in MongoDB are obviously better. As mentioned before, reindexing causes a huge growth in time, which individually takes the greatest amount of total time (See Figure~\ref{figBXUpdate}).  ?????????????????
+Considering the manual update of the geospatial index in BaseX, to evaluate this process by which the database and the index are both updated, reindexing time have to be considered. This implies, the index creation time plus reopeneing the index file into the main memory should be included in the evaluation. 
+As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operations in MongoDB are obviously better. As mentioned before, reindexing in BaseX causes a huge growth in time, which individually takes the greatest amount of total time (See Figure~\ref{figBXUpdate}).  Since the current index implementation do not involves updating based on the STRTree definition, hence a new index should be designed and implemented.................
  
 
 

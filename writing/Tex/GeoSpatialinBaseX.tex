@@ -91,8 +91,9 @@ Sec.~\ref{s.future}.
 \newpage
 \section{Methodology}
 \label{s.method}
+%TODO:in tarifa bere bakhshe badi, inja chanta jomle koli begam
 According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relating to a position of things on the
-earth's surface, also \emph{Geospatial Data}  is any data showing any thing on the earth's surface. Different 
+earth's surface, also \emph{Geospatial Data} is the data representing any thing on the earth's surface. Different 
 countries and organizations are using different systems to represent this data. 
 The World Geodesic System (WGS) is one of the standard system that is used world-wide 
 for space-based satellite navigation system. \emph{WGS84} is the lateset version of this standard which
@@ -100,24 +101,41 @@ was introduced in $1984$. However, there are many different standards like ... a
 There are variuos convertors between ....
 
 \subsection{Geospatial Data}
-Geospatial data is the locational information describing features and locations and their characteristics having a spatial component, which means are connected to a place on the earth, such as countries, cities, buildings, population, and demographics. It also applies to three-dimnesionsl data, like above and below the Earth's surafce~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. The entities are defined as geometries, i.e. points, lines, and polygons. An ordered set of numbers identifies the position of geometries, called coordinates which are defined in a coordinate system. A coordinate system defineds the rules, components, and properties to determine the coordinate numbers, which basically differ from a system to another. That means, since coordinates are defined in different ways based on the requirements and definitions, there are numerous coordinate systems and an object or a location could be defined by different coordinates in distinct coordinate system. In other words, various coordinates from different coordinate systems could point to the same location. Accordingly, it is necessary to know how they are related in concepts and definitions to make it 
+Geospatial data is the locational information describing features and locations and their characteristics having a spatial component, which means are connected to a place on the earth, such as countries, cities, buildings, population, and demographics. It also applies to three-dimnesionsl data, like above and below the Earth's surafce~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regard to specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects, which are defined in a coordinate system. Here we introduce the concepts related to the current definitions which are required in this study as well.
 
 \subsubsection{Terms and Definiions}
 
 \begin{itemize}
-\item GML
-\item KML
-\item WKB
-\item WKT
-\item Coordinate System
-\item Geometry
+
+\item Open Geospatial Consortium (OGC) \cite{ogc}: The OGC is an international consortium, developing interface standards for geospatial content, services, data exchange and communication, and data processing and sharing.
+\item Feature: Feature represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world. A geographic feature is a feature associated with a location relative to the Earth. As a result, real-world entities could be expresed as a set of features. 
+\item Geometry: A geometry is a datatype to represent a location and region. 
+%TODO \item: encodings, baghiye subitem bashan (http://www.digitalpreservation.gov/formats/fdd/gis_fdd.shtml)
+\item Geography Markup Language (GML): The XML based standard encoding defined by OGC, serves as a modeling language to express geographical features in both spatial and non-spatial charachteristic. It is used as an interchange format in internet data exchange, transport and transaction. The key to utility of GML is its ability in intergrating all forms of geographic information [] %TODO:ref az wikipedia!.
+GML encods a set of geometries, i.e. \textit{Point}, \textit{LineString}, and \textit{Polygon} in GML 1.0 and GML 2.0. GML 3 supports curve, surface, 
+\item KML: 
+\item WKB:
+\item WKT:
+\item GeoJSON:
+\item Coordinate System: A coordinate system uses the definitions, components, and properties to determine the numbers, called coordinates, which specifies the linear and angular position. Coordinates may differ for the same object from a system to another. That means, since coordinates are defined in different ways based on the requirements and definitions, there are numerous coordinate systems utilized by various countries, organizations, and systems. In other words, various coordinates from different coordinate systems could point to the same location. Accordingly, it is necessary to know how they are related in concepts and definitions to make the conversion possible.
+
 \end{itemize}
 
 \subsection{Geospatial Data in Native XML Databases}
-As a powerful XML grammer introduced by GIS community, \textit{Open GIS Consortium (OGC)}, \textit{GML} plays an important role in spatial data modeling, integration, sharing, transission, and exchange, beacuase of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be perfectly handled and queried in the native XML databases. Nowadays, 
+As a powerful XML grammer introduced by GIS community(OGC), \textit{GML} plays an important role in spatial data modeling, integration, sharing, transission, and exchange, beacuase of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. in the XML database. 
+%TODO:In classic relational databases,... In XML native databases, geospatial data are handled ...
 
 \subsection{General Spatial Requirements in Native XML Database}
-In addition to general functions and features on XML structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML format shouold be readed and treated as a Geometries. Therefore, just the string information is not enough to satisfy the geospatial features. In a target space with a set of geometries, the positions, locations, and relations of the geometries rises some requirements. For example, "What is the distance between two geometries?" Or, "Which geometries intersect this geometry?". Additionally, there are features related to single geometries, such as the lenght and area of a geometry, the number of interior ring of a polygon, and the start point of a line. Of course in a database the features related to a set of geometries are of more importane...................
+In addition to general functions and features on XML structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML format should be readed and treated as a Geometries. Therefore, just the string information is not enough to satisfy the geospatial features. In a target space with a set of geometries, the positions, locations, and relations of the geometries rises some requirements. For example, "What is the distance between two geometries?" Or, "Which geometries intersect this geometry?". Additionally, there are features related to single geometries, such as the lenght and area of a geometry, the number of interior ring of a polygon, and the start point of a line. Of course in a database the features related to a set of geometries are of more importane ...................
+%TODO: We then present spatial comparisons as XQuery functions
+%(similar to how the spatial operators are defined in spatial-enabled SQL
+%engines) so they can be mixed with standard XQuery, full-text, etc.
+
+%GML works nicely with XQuery and the indexing since it allows the engine to
+%determine what to index, and it can be nested anywhere in an XML document.
+%Furthermore, XQuery, with some additional functions to convert from the
+%Well-Known Text/Binary formats used in other engines, is quite useful for
+%building new GML on the fly, and parsing/validating existing GML.
 
 \subsection{GeoSpatial Indexing}
 According to \cite{survey}, indexing would dramatically influence efficient data manipulation and storage. Like any other type of data, geospatial data need to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable for spatial objects is that they would consider the spatial objects in one dimension and do not preserve the spatial proximity.
@@ -200,6 +218,7 @@ The Sdk-tree is memory-based, not a disk-based, data structure, thus is not suit
 
 \subsubsection{B-tree based Indexing Technique}
 \emph{R-tree}
+\label{rtree}
 
 Minimization of both coverage and overlap is crucial to the performance of R-trees.
 \subsubsection{$R^*$-tree}
@@ -596,25 +615,28 @@ Storing the eospatial data in geohash ???
 \section{Spatial Querying in BaseX}
 \label{s.basex}
 %TODO tozihe bishtar dar more requirements va inke chera injuri develop shode
-Spatial query is a spacial type of query which requieres the processing of geometries with two certain properties in general. First, they use geometris as inputs and ouputs as well as other types. Ofcourse, in XML databases geometries are expressed in XML sructure, like GML elements. Moreover, they consider spatial relations between the geometries. 
-Regarding the related works and ideas in ?????, there are various viewpoints in providing geospatial features in a database up to some extend of requirements fulfillment. Following the Open Geospatial Consortium (OGC) Simple Feature (SF) [????] data model, geospatial features in BaseX follow the EXPath geospatial API function interface specification which defines commonly used and implemented function signatures from the Open Geospatial Consortium Simple Features Common Access API version 1.2 \cite{simpleFeature}. Since the OCGSF data model typically will be representeg in GML, the idea has been started to develope in BaseX to support GML format. However, an implementation would support the other encodings, like KML. 
+%TODO:why gml:http://www.w3.org/Mobile/posdep/GMLIntroduction.html
+Spatial query is a spacial type of query which requieres the processing of geometries with two certain properties in general. First, it uses geometris as inputs and ouputs as well as other primitive types, like double, integer, etc. Second, it considers spatial relations between the geometries.
+As we discussed in Sec.\ref{s.rwork,s.dbs}, there are various viewpoints in providing geospatial features in a database to fulfill expected requirements. Following the OGC Simple Feature (OGCSF)~\cite{springergeo} data model, geospatial features in BaseX adapt the EXPath geospatial API function interface specification which defines commonly used function from the OGCSF Common Access API \cite{simpleFeature}. Since the OCGSF data model is typically represented in GML, we concentrate to add the support of GML format in BaseX. However, an implementation would support the other encodings, like KML, or GeoJSON. 
 
-In this section, we explain \textit{Geo Module} in BaseX in which the geospatial functions are introduced and the the implementation details, which would be starting point for furthur developments. Moreover, indexing and the related time complexities are discussed in the following, as the critical issue in this thopic.
+In this section, we introduce the geospatial functions as a new module, called \textit{Geo Module}, in BaseX. Query efficiency is improved later by implementing an index structure. Indexing and the related time complexities are discussed herafter as the critical issue in this topic.
 
-\subsection{Geo Module in BaseX}
-As mentioned above, geospatial features in BaseX are implemented based on the EXPath Geo Module Specification \cite{expath}. The specification contains the difinition of functoin for widely used geographic and geometric analysis operations, from Open Geospatial Consortium Simple Features Common Access API version 1.2 \cite{simpleFeature}. The functions apply to geometries in different formats, such as GML, KML, GeoJSON, Well Known Text (WKT), and even Well Known Binary (WKB). Based on the specification, \textit{Geo Module} in BaseX comprises a set of functions, such as intersection, within, distance, boundary, centroid, diference, union, and etc., added to the “basex-api” package in BaseX. In addition, geospatial index structure is implemented in BaseX core. The geometries supported in this module are Point, LineString, Polygon, plus MultiPoint, MultiLineString, and MultiPolygon. The module is an individual package with a set of classes as briefly described bellow,
+\subsection{Geo Module}
+As mentioned above, geospatial features in BaseX are implemented based on the EXPath Geo Module Specification \cite{expath}. This specification contains the difinition of functoins for widely used geographic and geometric analysis operations, from OGCSF Common Access API version 1.2 \cite{simpleFeature}. The functions apply to geometries in different formats, such as GML, KML, GeoJSON, Well Known Text (WKT), and even Well Known Binary (WKB). Based on the specification, \textit{Geo Module} in BaseX comprises a set of functions, such as intersection, within, distance, boundary, centroid, diference, union, and etc., added to the \textit{basex-api} package. The geometries supported in this module are Point, LineString, Polygon, MultiPoint, MultiLineString, and MultiPolygon. This module is an individual package with a set of classes as briefly described below,
 \begin{itemize}
-\item Geo: This class is the main class, in which all geo spatial functions are defined and implemented and are used in Xquery.
-\item GeoError: Ths class defines error functions with related massages to be thrown.
-\item GeoTest: Contains functions to test the functions implemented in \textit{Geo.java} class.
-\item GmlReader: Functions required to read the GML geometries as xml elements are implemented in this class.
-\item GeoIndex: Functions to use geo spatial index in geo functions and queries are implemented here. 
+\item \textit{Geo}: This class is the main class, in which all geo spatial functions are defined. The set of functions in this class include those which are used in Xquery.
+\item \textit{GeoError}: This class defines error functions with related massages which are thrown when an error occurs.
+\item \textit{GeoTest}: Functions to test the \textit{Geo.java} class are implemented here.
+\item \textit{GmlReader}: Functions required to parse the GML geometries as XML elements, are implemented in this class.
+\item \textit{GeoIndex}: This class implements the functions related to the geospatial index. 
 \end{itemize}
 
-Spatial indexing and related implementation details will be described in the next section. Here we explain general functionalities of this module.
+Geospatial index structure is implemented in BaseX core. Spatial indexing and related implementation details will be described in Sec.~\ref{indexBX}. Here we explain general functionalities of this module.
 
-The geospatial functions, defined as public in \textit{Geo.java} class, are accessible from BaseX GUI, as defined in the specification. They use some private functions to read geometries or write them out into the GUI. Besides, each function uses corresponding function from JTS library[ref.????] to do the required geometric operation and provide the appropiate result. Here we briefly explain the process by which the input geometries, either from a variable or a database node, is processed and the result is returned.
-Let's start it with an example, asking for geometries within a specified polygon (\$p). The query should be written using Xquery via BaseX GUI as follow,
+The geospatial functions, defined as public methods in \textit{Geo.java} class, are accessible from BaseX GUI. They use some private methods to read geometries or write them out into the GUI. Besides, each function employs the corresponding function from the JTS library to do the required geometric operation and to provide the appropiate result. Here we briefly explain the process by which the input geometries, either from a variable or a database node, are processed.
+
+
+Suppose we are searching for all geometries within a specified polygon ($\$p$). The query should be written using Xquery via BaseX GUI as follows,
 
 \begin{verbatim}
 let $p := 
@@ -626,20 +648,28 @@ for $x in //gml:Polygon
   return if ( within($x, $p) ) then $x else ()
 \end{verbatim}
 
-Each geo spatial function has at least one geometry as input, like function “within” above. In this example, the \textit{\$p} variable is provided as a node and the \textit{\$x} variable is each \textit{<gml:Polygon>} node in the current database. To read the geometries in a node when the geo function \textit{within} is called, the private function \textit{geo} first checks the element name to make sure that at least the node name is a valid geometry name. It means, if the element name is something out of the set of geometry names, the function would throw an error. 
-Then, the gmlReader class is used to read and pars the whole element and to check their validity based on GML 2.0 format. That means, geometries have to be formatted in GML 2.0 to be validated and analyzed for further operations. The reader is implemented as the \textit{GMLReader.java} class and differently reads the elements based on their types (tag names). If the element is a valid GML geometry, the function creates the corresponding geometry, using JTS constructors. Otherwise, the corresponding error massage will be shown. For instance, if a polygon does not have any outer ring or the coordinates of a geometry are not valid coordinates, an error will be thrown. 
+Each geospatial function has at least one geometry as input, like the above \textit{within} function. In this example, the $\$p$ variable is provided as a docment node and the $\$x$ variable iterates all \textit{Polygon} node in the current database. To read the geometries as a document node, the private function \textit{geo} first makes sure that the node name is at least a valid geometry name. It means, if the element name is something out of the set of geometry names, the function will throw an error. 
+Then, the gmlReader class is used to read and parse the whole element and to check the validity based on GML 2.0 format. Regarding the JTS limitation, geometries have to be in GML 2.0 format to be validated and analyzed for further operations. 
 
-(Figure for this process)
 
-Now, the geometries are ready to be processed in a geometric operation, like checking two geometries whether they intersect each other, finding the symmetric distance of two geometries, and getting the number of inner rings of a polygon. The operation is done using the JTS function. The functions output could be in any XML Schema [???] data types, such as integer, boolean, string, URI, and etc or in \textit{GML 2.0} geometry type. \textit{XSD} return types, like integer and boolean, are simply the defined BaseX data type. For example, boolan, integer, and string values in BaseX are implemented as \textit{Bln}, \textit{Str}, and \textit{Int} respectively. Geometry type outputs, like the intersection, union, and diffence of two geometries, need to be returned as a node (\textit{ANode}). Therefore, geometries in GML format are converted to a database node (DBNode) in \textit{gmlWriter} function, first by converting it to a string, using JTS \textit{gmlWriter}, and then building a \textit{BDNode} out of the string. The output geometry is shown on GUI as a gml element. These steps are shown in Figure ….
+The reader is implemented as the \textit{GMLReader.java} class and reads the elements differently based on their types, i.e. tag names. If the element is a valid GML geometry, the function creates the corresponding geometry, using JTS constructors. Otherwise, the matching error massage will be shown. For instance, if a polygon does not have any outer ring or if the coordinates of a ring do not shape a closed ring, an error will be thrown. 
+
+ \begin{figure}
+\centering
+\includegraphics[width=0.95\textwidth]{GeoModuleProcess}
+\caption{Converting GML elements to geometris.}
+\label{figGeoModuleProcess}
+\end{figure}
+
+Now, the geometries are ready to be processed in a geometric operation, like checking two geometries whether they intersect each other, finding the symmetric distance of two geometries, or getting the number of inner rings of a polygon. The operation is done using the JTS function. The functions output could be in any XML Schema (XSD) data types, such as integer, boolean, string, URI, and etc. or in \textit{GML 2.0} geometry type. The former is equivalet to the BaseX defined data type. It means, primitve data types like boolan, integer, and string are represented in BaseX as \textit{Bln}, \textit{Str}, and \textit{Int} classes respectively. The former type, Geometry, like the intersection, union, and diffence of two geometries, is returned as an element in the abstract node (\textit{ANode}) type to be in compliance with the specification. Having output geometries in GML format, \textit{GMLWriter} function convertes them first to a string, using JTS GmlWriter and builds a database node (DBNode) herafter. DBNode extends the ANode class, therefore the output node is sent to the GUI and is shown as a gml element, expressing the geometric result. These steps are shown in Figure~\ref{figGeoModuleProcess}.
 
 \subsection{Geo Module Limitations}
-Geo functions are perfectly working, but the query performance seems not satisfying. A point that makes this problem more serious is that the geo spatial data are commonly huge in size. This brings the idea of indexing, designed based on the geo spatial requirements.
+Although the geo functions are working, the query performance seems not satisfying. Having commonly huge geospatial data, performance problem is serious. Not surprisingly, the solution is an indexing algorithm designed based on the geo spatial requirements.
 The first point to consider related to performance issue is that when no index is used in a query, the whole database is processed, however in some queries checking part of the file and a range of geometries would be enough to get the result. For example, if we want to find the intersecting geometries of a specific geometry, there is no need to check the whole geometries and examining just the area near to this geometry is adequate. The idea behind simply comes from the characteristic of the spatial data. Since the data file is in fact written form of the geometries positioned in space and each one has a bounding box or rectangle, if two geometries have intersecting bounding boxes, they might intersect each other. Otherwis, they will not have any contact and there is no need to check them in a set of queries which needs geomettric contact of geometries.  
 This would lead to an indexing idea for such queries to decrease the number of scanned geometries and consequently, to have better timing. Moreover, functions of this module in which a big number of geometries from the database coule be involved, have the time complexity bigger than O(1) and need a spatial indexing to be handled in shorter time. %TODO conintinue
 
 
-As explained in related work [???], there are several spatial indexing structure. The one that we use is \textit{JTS STRTree}. STRTree has the basic structure of the R-Tree, with the improved performance in comparison to R-Tree [??]. This structure is once made, when the spatial index for a database is requested, then uses two step filtering for each time a query is executed. Again it should be considered that the only specific queries would benefit from this index, as listed bellow,
+As explained in Sec.\ref{s.rwork}, there are several spatial indexing structure. The one that we use is \textit{JTS STRTree}. STRTree has the basic structure of the R-Tree, with the improved performance in comparison to R-Tree. This structure is once made, when the spatial index for a database is requested, then uses two step filtering for each time a query is executed. Again it should be considered that the only specific queries would benefit from this index, as listed bellow,
 
 \begin{itemize}
 \item intersects (geometry1, geometry2): checks two geometries wether they interset each other.
@@ -653,11 +683,20 @@ As explained in related work [???], there are several spatial indexing structure
 \item disjoint* : ????
 \end{itemize}
 
-The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is written into a file on disk and each time the index is applied, the file is read into main memory (see Figure ??????????). While doing the above mentioned queries, using spatial index, first the tree nodes intersecting bounding box the given geometry's bounding box or the query area and then, geometric operation is applied on geometries inside the selected areas, whether they meet the query condition. This strategy will dramatically decrease the number of processes in database. In the following sections we represent the performance of the index structure in comparison with the no-index querying.?????????
+The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is written into a file on disk and each time the index is applied, the file is read into main memory (see Figure~\ref{figIndexinFile}). While doing the above mentioned queries, using spatial index, first the tree nodes with intersecting bounding box of the given geometry's bounding box or the query area is filtered and then, geometric operation is applied on geometries inside the selected areas, whether they meet the query conditions. This strategy will dramatically decrease the number of processes in database. In the following sections we represent the performance of the index structure in comparison with the no-index querying.?????????
+
+ \begin{figure}
+\centering
+\includegraphics[width=0.95\textwidth]{IndexinFile}
+\caption{Geospatial index creation}
+\label{figIndexinFile}
+\end{figure}
 
 \subsection{Geo Spatial Index in BaseX}
-Spatial index in BaseX is added both in BaseX core and also BaseX-API packages. The main structure of the index is added as a package in core, called \textit{index.spatal} ?????, defining the index builder classes, based on the core index structure of BaseX. The class \textit{SpatialBuilder} extends \textit{IndexBuilder} and builds the index tree, using pre-values ????? of the nodes for pointing to elements and serializes it into the disk, using JTS serializer. In the end, a file called \textit{STRTreeIndex} for the related database is created. 
-The other \textit{GeoIndex} class in \textit{BaseX-API} extends \textit{QueryModule} and implements the methods defined by \textit{JTS STRTree} class for reading the index file from hard disk into memory and filtering. These functions could be combined with regular geo functions, when spatial index is created for a database, to have the benefit of filtering feature and gain better performance. The below example clarifies how the indexing function should be used,
+\label{indexBX}
+Spatial index in BaseX is added both in BaseX core and also \textit{basex-api} packages. The main structure of the index is added as a package in core, called \textit{index.spatial} ?????, defining the index builder classes, based on the core index structure of BaseX. The class \textit{SpatialBuilder} extends \textit{IndexBuilder} and builds the index tree, using pre-values ????? of the nodes for pointing to elements and serializes it into the disk, using JTS serializer. In the end, a file called \textit{STRTreeIndex} for the related database is created. 
+The other \textit{GeoIndex} class in \textit{basex-api} package extends \textit{QueryModule} class and implements the methods defined by JTS \textit{STRTree} class for reading the index file from hard disk into memory and filtering. These functions could be combined with regular geo functions, when spatial index is created for a database, to have the benefit of filtering feature and gain better performance. 
+The below example clarifies how the indexing function should be used,
 
 \begin{verbatim}
 import module namespace geo-index = "http://expath.org/ns/GeoIndex";
@@ -678,15 +717,20 @@ return ( geo-index:filter("DB", $a)[geo:intersects( $a, .)])
 As it could be seen in this sample, first the filter function from the \textit{GeoIndex} class does the first filtering step and then the selected geometries are send to the \textit{intersects} function to be checked against the intersection with the polygon \textit{a}.  
 
 \subsection{Indexing Functions Implementation}
+\label{indexFunc}
 The first approach to add geospatial functions using spatial index, was implementing new signature for the forementioned functions in a new class. It means, functions like intersects are differently implemented in the \textit{GeoIndex} class, with a new signature, using the basic index functions, such as filter. In ths case XQueries just use the spatial functions and filtering is done implicitly by using the new spatial function, as in the following example,
 
-(query example????????????????)
+\begin{verbatim}
+import module namespace geo-index = "http://expath.org/ns/GeoIndex";
+let $a:= <gml:Polygon> ... </gml:Polygon>
+return geo-index:intersects("DB", $a) 
+\end{verbatim}
 
 Since this approach had some redundancies/To stop ....  ?????, the approache was changed to have the same spatial function, and using the \textit{filter} function in XQuery to benefit from the index stucture. In this way a sample query would be as bellow,
 
  (sample query ???????)
  
-The negetaive point about the later approach is that the input polygon \textit{a} is read, paarsed, and created every time that the spatial function, here intersects, is called in the \textit{for} loop, evevn though it is the same fixed object. Since, this cause redundancy and consumes a considerable amount of time, a map is used to hash the fixed input and prevet the further redundant reading. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
+The negetaive point about the later approach is that the input polygon \textit{a} is read, parsed, and created every time that the spatial function, here intersects, is called in the \textit{for} loop, evevn though it is the same fixed object. Since, this cause redundancy and consumes a considerable amount of time, a map is used to hash the fixed input and prevet the further redundant reading. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
 
  \begin{figure}
 \centering
@@ -697,7 +741,7 @@ The negetaive point about the later approach is that the input polygon \textit{a
 
 \subsection{Time Complexity}
 
-There is no need to emphasize on importance of the role that indexing plays in query time and performance improvement. Here, we use real-world data to observe the effect of the currently implemented spatial index, followed by in depth looking at the implementation from other perspectives, aiminging to achieve better performance. This data is provided by University of Twente, Department of Geoinformation Processing [???] and holds some real information of geometries on earth, in \textit{GML 2.0} format. The original file based on one of the Netherlands' coordinate system (RD/NAP Amersfoort RD New) [???] is around 133.3 MB and have 12773 polygons inside 11886 multipolygons.
+There is no need to emphasize on importance of the role that indexing plays in query time and performance improvement. Here, we use real-world data to observe the effect of the currently implemented spatial index, followed by in depth looking at the implementation from other perspectives, aiminging to achieve better performance. This data is provided by University of Twente, Department of Geoinformation Processing [???] and holds some real information of geometries on earth, in \textit{GML 2.0} format. The original file based on one of the Netherlands' coordinate system (RD/NAP Amersfoort RD New) is around 133.3 MB and have 12773 polygons inside 11886 multipolygons.
 We run different queries on this database with and without spatial index to see time consumption dependency on the index structure. Moreover, queries have various number of results, to see also the trend changes concerning the number of outputs.
 To start with, we take a look at the effect on index utilization in queries in comparison with queries using no spatial index. Figure~\ref{figIndexEfficiency} shows the effectiveness of index utilization.
 

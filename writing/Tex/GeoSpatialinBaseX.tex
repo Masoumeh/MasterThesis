@@ -1,6 +1,7 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{graphicx}
 \usepackage{titling}
+\usepackage{color}
 \newcommand{\subtitle}[1]{%
   \posttitle{%
     \par\end{center}
@@ -8,6 +9,7 @@
     \vskip0.5em}%
 }
 \usepackage{url}
+\usepackage{listings}
 \usepackage[tight,footnotesize]{subfigure}  
 \usepackage[top=2cm, bottom=2cm, left=4cm, right=2cm]{geometry}
 \title{Processing GeoSpatial Data in BaseX}
@@ -23,6 +25,28 @@ Master of Science (M.Sc.)}
 	Konstanz University}
 
 \begin{document}
+\definecolor{darkgray}{gray}{0.35}
+\lstnewenvironment{fakeXML}[1][]{
+\lstset{basicstyle=\scriptsize\sffamily,
+linewidth=0.90\linewidth,
+numbers=left,
+stepnumber=1,
+numbersep=10pt,
+frame=single,
+framerule=1.0pt,
+%backgroundcolor=\color{darkgray},
+language=HTML,
+identifierstyle=\color[rgb]{1,0,0},
+emph={ element, complexType, choice, simpleType, sequence, restriction, pattern}, emphstyle=\color{red},
+keywordstyle=\color[rgb]{0,0,1},
+commentstyle=\color[rgb]{0.133,0.545,0.133},
+stringstyle=\color[rgb]{0.627,0.126,0.941},
+morekeywords={xml, ref, xs, version, targetNamespace, minOccurs, maxOccurs}
+}\lstset{#1}}{}
+
+\renewcommand{\lstlistingname}{Code}
+
+
 \maketitle
 \thispagestyle{empty}
 
@@ -138,6 +162,7 @@ In addition to general functions and features on XML structure of GML data, geos
 %building new GML on the fly, and parsing/validating existing GML.
 
 \subsection{GeoSpatial Indexing}
+\label{geospatialindex}
 According to \cite{survey}, indexing would dramatically influence efficient data manipulation and storage. Like any other type of data, geospatial data need to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable for spatial objects is that they would consider the spatial objects in one dimension and do not preserve the spatial proximity.
 
 As it is examined in \cite{survey}, a large number of spatial indexes has been introduced to improve the spatial data retrieval.
@@ -663,27 +688,18 @@ The reader is implemented as the \textit{GMLReader.java} class and reads the ele
 
 Now, the geometries are ready to be processed in a geometric operation, like checking two geometries whether they intersect each other, finding the symmetric distance of two geometries, or getting the number of inner rings of a polygon. The operation is done using the JTS function. The functions output could be in any XML Schema (XSD) data types, such as integer, boolean, string, URI, and etc. or in \textit{GML 2.0} geometry type. The former is equivalet to the BaseX defined data type. It means, primitve data types like boolan, integer, and string are represented in BaseX as \textit{Bln}, \textit{Str}, and \textit{Int} classes respectively. The former type, Geometry, like the intersection, union, and diffence of two geometries, is returned as an element in the abstract node (\textit{ANode}) type to be in compliance with the specification. Having output geometries in GML format, \textit{GMLWriter} function convertes them first to a string, using JTS GmlWriter and builds a database node (DBNode) herafter. DBNode extends the ANode class, therefore the output node is sent to the GUI and is shown as a gml element, expressing the geometric result. These steps are shown in Figure~\ref{figGeoModuleProcess}.
 
-\subsection{Geo Module Limitations}
-Although the geo functions are working, the query performance seems not satisfying. Having commonly huge geospatial data, performance problem is serious. Not surprisingly, the solution is an indexing algorithm designed based on the geo spatial requirements.
-The first point to consider related to performance issue is that when no index is used in a query, the whole database is processed, however in some queries checking part of the file and a range of geometries would be enough to get the result. For example, if we want to find the intersecting geometries of a specific geometry, there is no need to check the whole geometries and examining just the area near to this geometry is adequate. The idea behind simply comes from the characteristic of the spatial data. Since the data file is in fact written form of the geometries positioned in space and each one has a bounding box or rectangle, if two geometries have intersecting bounding boxes, they might intersect each other. Otherwis, they will not have any contact and there is no need to check them in a set of queries which needs geomettric contact of geometries.  
-This would lead to an indexing idea for such queries to decrease the number of scanned geometries and consequently, to have better timing. Moreover, functions of this module in which a big number of geometries from the database coule be involved, have the time complexity bigger than O(1) and need a spatial indexing to be handled in shorter time. %TODO conintinue
+Although the geo functions are working, the query performance seems not satisfying. Having commonly huge geospatial data, performance problem is serious. The common solution is an indexing algorithm designed to improve the efficiency. Since the data is a written form of geometries positioned in the space, an indexing structure can be designed considering the positions. In the following sections we represent the performance of the index structure in comparison with the no-index querying.?????????
 
 
-As explained in Sec.\ref{s.rwork}, there are several spatial indexing structure. The one that we use is \textit{JTS STRTree}. STRTree has the basic structure of the R-Tree, with the improved performance in comparison to R-Tree. This structure is once made, when the spatial index for a database is requested, then uses two step filtering for each time a query is executed. Again it should be considered that the only specific queries would benefit from this index, as listed bellow,
+\subsection{Geo Spatial Index in BaseX}
+\label{indexBX}
+The index avoids the process of whole database when partial checking  of the file would be enough.  For this purpose, a bounding box is computed for each  geometry by which an efficient  filtering can be applied. For example, if we want to find the objects within a specific geometry, examining just the area near to this geometry is adequate. If two geometries have intersecting bounding boxes, they might intersect each other and have to be checked weather they fulfil the query condition. Otherwis, they will not have any contact and there is no need to check them. This approach decreases the number of scanned geometries and consequently, to have a better timing, which we call it two step filtering. More clearly, the two step filtering is as follows,
+\begin{enumerate}
+\item Finding the geometries which their bounding box intersect with the bounding of query area
+\item Checking the selected geometries against the query condition
+\end{enumerate}
+%Moreover, functions of this module in which a big number of geometries from the database coule be involved, have the time complexity bigger than O(1) and need a spatial indexing to be handled in shorter time. %TODO conintinue
 
-\begin{itemize}
-\item intersects (geometry1, geometry2): checks two geometries wether they interset each other.
-\item within (geometry1, geometry2): checks if the \textit{geometry1} is within the \textit{geometry 2}.
-\item contain (geometry1, geometry2): checks if the \textit{geometry1} contains the \textit{geometry 2}.
-\item relates (geometry1, geometry2): ????? 
-\item overlaps (geometry1, geometry2): checks wether the \textit{geometry1} overlaps the \textit{geometry 2}.
-\item crosses (geometry1, geometry2): checks if the \textit{geometry1} crosses the \textit{geometry 2}.
-\item touches (geometry1, geometry2): checks if the \textit{geometry1} touches the \textit{geometry 2}.
-\item equals (geometry1, geometry2): ????
-\item disjoint* : ????
-\end{itemize}
-
-The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is written into a file on disk and each time the index is applied, the file is read into main memory (see Figure~\ref{figIndexinFile}). While doing the above mentioned queries, using spatial index, first the tree nodes with intersecting bounding box of the given geometry's bounding box or the query area is filtered and then, geometric operation is applied on geometries inside the selected areas, whether they meet the query conditions. This strategy will dramatically decrease the number of processes in database. In the following sections we represent the performance of the index structure in comparison with the no-index querying.?????????
 
  \begin{figure}
 \centering
@@ -692,52 +708,57 @@ The index tree structure, holding the bounding boxes in inner nodes and geometri
 \label{figIndexinFile}
 \end{figure}
 
-\subsection{Geo Spatial Index in BaseX}
-\label{indexBX}
-Spatial index in BaseX is added both in BaseX core and also \textit{basex-api} packages. The main structure of the index is added as a package in core, called \textit{index.spatial} ?????, defining the index builder classes, based on the core index structure of BaseX. The class \textit{SpatialBuilder} extends \textit{IndexBuilder} and builds the index tree, using pre-values ????? of the nodes for pointing to elements and serializes it into the disk, using JTS serializer. In the end, a file called \textit{STRTreeIndex} for the related database is created. 
-The other \textit{GeoIndex} class in \textit{basex-api} package extends \textit{QueryModule} class and implements the methods defined by JTS \textit{STRTree} class for reading the index file from hard disk into memory and filtering. These functions could be combined with regular geo functions, when spatial index is created for a database, to have the benefit of filtering feature and gain better performance. 
-The below example clarifies how the indexing function should be used,
 
-\begin{verbatim}
+Among the spatial index structures discussed in Sec.\ref{geospatialindex},  JTS supports the STRTree and Quad Tree. We choose the STRTree since it has better performance [?????]. As mentioned before, STRTree has the basic of R-Tree with the improved performance. The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is made once when the spatial index for the database ir requested and written into a file on disk. Each time the index is applied, the file is read into the main memory (see Figure~\ref{figIndexinFile}) and executes the two step filltering. It should be mentioned that only the following queries would benefit from this index. The definitions of these functions are provided in EXPath Geo Module specification.
+\begin{itemize}
+\item intersects (geometry1, geometry2)
+\item within (geometry1, geometry2)
+\item contain (geometry1, geometry2)
+\item overlaps (geometry1, geometry2)
+\item crosses (geometry1, geometry2)
+\item touches (geometry1, geometry2)
+\end{itemize}
+
+The spatial index is added both in BaseX core and \textit{basex-api} packages. The main structure of the index is added as a package in core, called \textit{index.spatial}. This package contains the index builder classes based on the core index structure of BaseX. The class \textit{SpatialBuilder} which extends \textit{IndexBuilder}, builds the index tree using pre-values instead of the tag names to address the database elements. Then,  JTS serializer writes the tree structure  into a file called \textit{STRTreeIndex}.
+
+The other GeoIndex class in \textit{basex-api} package extends \textit{QueryModule} class and implements the method defined by JTS STRTree class for reading the index file from hard disk into memory. Additionally, this class implements the \textit{filter} method to do the first step of two step filtering.   
+The below example clarifies how the indexing function together with geo function should be used, 
+\begin{fakeXML}[label=geoandfilter,caption=Geo function used with index function]
 import module namespace geo-index = "http://expath.org/ns/GeoIndex";
 import module namespace geo = "http://expath.org/ns/Geo";
 declare namespace gml="http://www.opengis.net/gml";
 let $a:= <gml:Polygon>
-	   <gml:outerBoundaryIs>
-              <gml:LinearRing>
-              	<gml:coordinates>
-              	  3.9,50.6 6,52.8 4.5,52.8 3.9,50.6
-              	</gml:coordinates>
-              </gml:LinearRing>
-            </gml:outerBoundaryIs>
-          </gml:Polygon>
+                <gml:outerBoundaryIs>
+                  <gml:LinearRing>
+              	    <gml:coordinates>
+              	      3.9,50.6 6,52.8 4.5,52.8 3.9,50.6
+              	    </gml:coordinates>
+                  </gml:LinearRing>
+                </gml:outerBoundaryIs>
+             </gml:Polygon>
 return ( geo-index:filter("DB", $a)[geo:intersects( $a, .)])
-\end{verbatim}
-
-As it could be seen in this sample, first the filter function from the \textit{GeoIndex} class does the first filtering step and then the selected geometries are send to the \textit{intersects} function to be checked against the intersection with the polygon \textit{a}.  
+\end{fakeXML}
 
 \subsection{Indexing Functions Implementation}
 \label{indexFunc}
-The first approach to add geospatial functions using spatial index, was implementing new signature for the forementioned functions in a new class. It means, functions like intersects are differently implemented in the \textit{GeoIndex} class, with a new signature, using the basic index functions, such as filter. In ths case XQueries just use the spatial functions and filtering is done implicitly by using the new spatial function, as in the following example,
-
-\begin{verbatim}
+To add the spatial index, we tought of two approaches. The first approach implements new signature for the forementioned functions in a new class. It means
+the index filter function is encoded directly in the geo functions. Then queries can be done with the new spatial function as follows.
+\begin{fakeXML}[label=salam,caption=My caption here]
 import module namespace geo-index = "http://expath.org/ns/GeoIndex";
 let $a:= <gml:Polygon> ... </gml:Polygon>
 return geo-index:intersects("DB", $a) 
-\end{verbatim}
+\end{fakeXML}
 
-Since this approach had some redundancies/To stop ....  ?????, the approache was changed to have the same spatial function, and using the \textit{filter} function in XQuery to benefit from the index stucture. In this way a sample query would be as bellow,
+Since having two functions with same name and functionality is redundant, we introduce a new approache. In the new approach the \textit{filter} function is used in XQuery to benefit from the index stucture. In this way a sample query would be as in Code~\ref{geoandfilter}. To summerize these approache, the former does the whole process, including the fisrt step of filtering, through the \textit{geo-index:intersects} function, while the later uses the original \textit{geo:intersects} function together with \textit{geo-index:filter} which does the first step of filtering.  
 
- (sample query ???????)
- 
-The negetaive point about the later approach is that the input polygon \textit{a} is read, parsed, and created every time that the spatial function, here intersects, is called in the \textit{for} loop, evevn though it is the same fixed object. Since, this cause redundancy and consumes a considerable amount of time, a map is used to hash the fixed input and prevet the further redundant reading. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
-
+The negetaive point about the later approach is that the input polygon, like polygon $\$a$ in Code~\ref{geoandfilter}, is read, parsed, and created every time that the spatial function, here intersects, is called in the \textit{for} loop, evevn though it is the same fixed object. Since, this cause redundancy and consumes a considerable amount of time, a map is used to hash the fixed input and prevet the further redundant reading. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
  \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{MapIndexing}
+\includegraphics[width=0.9\textwidth]{MapIndexing}
 \caption{Using Map to Cash the Input Geometry: Performance Effect}
 \label{figMap}
 \end{figure}
+
 
 \subsection{Time Complexity}
 

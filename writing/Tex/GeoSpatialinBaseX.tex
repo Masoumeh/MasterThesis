@@ -27,32 +27,32 @@ Master of Science (M.Sc.)}
 \begin{document}
 \definecolor{darkgray}{gray}{0.35}
 \lstnewenvironment{fakeXML}[1][]{
-\lstset{basicstyle=\scriptsize\sffamily,
-linewidth=0.90\linewidth,
-numbers=left,
+\lstset{basicstyle=\footnotesize\sffamily,
+linewidth=\linewidth,
+%numbers=left,
 %stepnumber=1,
 %numbersep=10pt,
 frame=single,
 framerule=1.0pt,
 %backgroundcolor=\color{darkgray},
 language=HTML,
-identifierstyle=\color[rgb]{1,0,0},
-emph={ element, complexType, choice, simpleType, sequence, restriction, pattern}, emphstyle=\color{red},
-keywordstyle=\color[rgb]{0,0,1},
-commentstyle=\color[rgb]{0.133,0.545,0.133},
-stringstyle=\color[rgb]{0.627,0.126,0.941},
+%identifierstyle=\color[rgb]{1,0,0},
+%emph={intersects}, emphstyle=\color{red},
+%keywordstyle=\color[rgb]{0,0,1},
+%commentstyle=\color[rgb]{0.133,0.545,0.133},
+%stringstyle=\color[rgb]{0.627,0.126,0.941},
 morekeywords={xml, ref, xs, version, targetNamespace, minOccurs, maxOccurs}
 }\lstset{#1}}{}
 
 \lstnewenvironment{fakeJSON}[1][]{
 \lstset{
-basicstyle=\scriptsize\sffamily,
-linewidth=0.90\linewidth,
+basicstyle=\footnotesize\sffamily,
+linewidth=\linewidth,
 %numbers=left,
 %stepnumber=1,
 %numbersep=10pt,
-frame=single,
-framerule=1.0pt,
+%frame=single,
+%framerule=1.0pt,
 language=HTML,
 emph={}
 }\lstset{#1}}{}
@@ -969,7 +969,7 @@ declare namespace gml="http://www.opengis.net/gml";
 let $a:= <gml:Polygon>
               <gml:outerBoundaryIs>
                 <gml:LinearRing>
-                  <gml:coordinates decimal="." cs="," ts=" ">
+                  <gml:coordinates>
                     6,52.6 6.1,52.6 6.1,53 6,53 6,52.6
                   </gml:coordinates>
                 </gml:LinearRing>
@@ -1109,8 +1109,8 @@ return if (geo:distance( $a, $b) le 500) then $b else ()
 
 For the data provided in a geographic coordinate system, calculations do not work with the metric values. A geographic coordinate system, such as WGS84, defines the areas and locations in a three-dimensional spherical space. Since there is not a specific unit for the current Geo Module functions, the \textit{distance} function interprets the input distance in the coordinate system of the data. For example, our sample Netherlands dataset is in a metric coordinate system. Hence,  the distance value in queries can be specified in meters. %TODO:better description
 
-Since this the forementioned feature. i.e., finding the objects in a determined distance in meter, is a wildy used usecase, To find a distance on earth we will need to work in a metric coordinate system, since the computations are based on the flat space relues which will not be accurate for the data on spherical shape of the Earth. An idea to resolve this problem could be to convert the geometry to a projected coordinate system. Then, to spacify the buffer of converted geometry up to the defined distance in meter, in the same metric system and convert the buffer back to the original geographic coordinate system to find the all geometries within this area. In this way, we could benefit from the geospatial index structure, via the \textit{within} function while \textit{distance} function do not utilize the geospaial index. 
-This procedure is expressed as bellow, using the current \textit{buffer} and \textit{within} functions and should return the same result as the previous query, 
+The forementioned \textit{near} feature as a wildy used usecase is available in BaseX only for metric coordinate systems. To provide this feature also for geographic systems via the current geo functions, we need to convert the geographic coordinates to metric ones. In this way, we convert the specified input geometry in WGS84 to a metric system. Then, we compute the buffer of converted geometry up to the input distance in the same metric system and convert the buffer back to the original geographic coordinate system. A buffer of geometry is an identified region within a specific distance of the geometry. At the end, we find the all geometries within the buffer in geographic coorsinate system. This approach benefits from the geospatial index structure, via the \textit{within} function, while the approach with the \textit{distance} function do not utilize the geospaial index. This process is illustrated in Figure~\ref{}. ???? 
+This procedure is expressed as bellow, using the \textit{buffer} and \textit{within} functions and should return the same result as the previous query, 
 
 % TODO: indention
 \begin{verbatim} 
@@ -1123,7 +1123,7 @@ within(geometry,
       )
 \end{verbatim}
 
-Having the same usecases, we have tested this feature in both databases,shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function, while \textit{nearSphere} operator finds the geometries in MongoDB. MongoDB obviously has a better performance, specifically with smaller number of results, and qurey times and number of results are directly proportional, since index is used and both chaneges accompany each other. BaseX which do not use the geospatial index returns every the results more or less in the same time.
+Having the same usecases, we have tested this feature in both databases, with the timing result shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function, while \textit{\$nearSphere} operator finds the geometries in MongoDB. Obviously, MongoDB has a better performance, specifically with smaller number of results. The qurey times and the number of results are directly proportional in MongoDB, since index is used and both chaneges accompany each other. BaseX do not use the geospatial index and consequently returns every result more or less in the same time.
 
 %TODO: figure for converion method in BX
 %TODO:change the chart for new queries of distance in BaseX
@@ -1131,25 +1131,30 @@ Having the same usecases, we have tested this feature in both databases,shown in
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth]{BXvsMongoNear.png}
-\caption{Query Timing of \textit{near} Operation}
+\includegraphics[width=0.8\textwidth]{BXvsMongoNear.png}
+\caption{Query Timing of \textit{near} Feature}
 \label{figBXvsMongoNear}
 \end{figure}
 
 
-In BaseX as mentioned earlier, the index structure is recorded in a file, and it is read into the main memory. A Point which we should contemplate is to include the time for index opening in query times, since in case of memory lack, the index file could be removed from the memory and read back again as soon as it is demanded. In the presented charts this time is not looked at.
+As mentioned in Section~\ref{indexBX}, BaseX records the index structure in a file and reads it back into the main memory, when the geospatial index is required. A Point which we should contemplate is to include the time for index opening in query times, since the index file might be removed from the memory and read back again in memory management. This time is not counted in the presented charts.
 %TODO: better explanation
 
 
 \subsection{Updating a Database}
 \label{update}
 %TODO:Complete!not good :|
-Updating a database as a significant interaction supplied by the database system generally comprise three different operation: insert, delete, and modify. In addition to the whole issues related to database update on disk and memory management, reconstructing the indexes is of great importance. That is, since the index is constructed based on the old structure and values, the updated database needs a new index. 
+Updating a database as a significant interaction supplied by the database system generally comprises three different operation: insert, delete, and modify. In addition to the whole issues related to the database update on disk and memory management, reconstructing the indexes is of great importance. That is, since the index is constructed based on the old database state, the updated database needs a new index. 
 
-Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means, the STRTree do not get updated automatically and accordingly and the geospatial index has to be rebuilt manually, which would cause redundant constructions and consequently, worse performance. Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
+Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means the STRTree do not get updated automatically and the geospatial index has to be rebuilt manually. It causes redundant constructions and consequently worse performance. Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
 
-Considering the manual update of the geospatial index in BaseX, to evaluate this process by which the database and the index are both updated, reindexing time have to be considered. This implies, the index creation time plus reopeneing the index file into the main memory should be included in the evaluation. 
-As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operations in MongoDB are obviously better. As mentioned before, reindexing in BaseX causes a huge growth in time, which individually takes the greatest amount of total time (See Figure~\ref{figBXUpdate}).  Since the current index implementation do not involves updating based on the STRTree definition, hence a new index should be designed and implemented.................
+Considering the manual update of the geospatial index in BaseX, reindexing time must be examined to evaluate the updating process. This implies the index creation time plus reopeneing the index file into the main memory should be included in the evaluation. 
+As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operations in MongoDB are apparantly better. As mentioned before, reindexing in BaseX causes a huge growth in time, which individually takes the greatest amount of total time (See Figure~\ref{figBXUpdate}). 
+
+The bad performance in the near query and the update problem lead us to a new approach to use the MongoDB index from BaseX. The strategy is explained in the next section.
+
+%TODO this is some part that we can speak about it in Conclusion
+%Since the current index implementation do not involves updating based on the STRTree definition, hence a new index should be designed and implemented.................
  
 
 
@@ -1179,6 +1184,8 @@ As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operation
 \caption{Time consumtion percentage of different tasks in update operations in BaseX.}
 \label{figBXUpdate}
 \end{figure}
+
+\subsection{Indexing in BaseX via MongoDB}
 
 \newpage
 \subsection{Conclusion}

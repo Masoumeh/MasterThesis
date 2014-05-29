@@ -856,7 +856,7 @@ To see how each part influence the performance, we examine them separately. Figu
 \end{figure}
 
 
-We have used java profiling to get more precise information. The first few methods in profile output with the highest percentage of time occupation, ordered from the most-used to the least-used, are listed in the following,
+We have used Java profiling to get more precise information. The first few methods in profile output with the highest percentage of time occupation, ordered from the most-used to the least-used, are listed in the following,
 
 \vspace{10px}
 \begin{tabular}{l l l c l}
@@ -944,9 +944,9 @@ investigated in Section~\ref{update}. Finally, Section~\ref{conc} contains the c
 
 \subsection{Querying the Databases}
 \label{query}
-To analyse and compare the databases behaviour, designing the same test queries on the identical dataset is the most straight-forward approach. Based on the MongoDB geospatial features and properties, the Netherland tese dataset must be changed. A brief explanation of the changes is provided here to clarify the rules and limitaions. The main change was to either remove \textit{MultiPolygon} from the dataset or transforming them to a set of distinct Polygons, since \textit{MultiPolygon} is not supported in MongoDB. Besides, the coordinate system is converted to WGS84. At the end, there are 12773 \textit{Polygons} and no \textit{MultiPolygon} in the data file. Since the geometries are changed in database and the results would be different, we repeate all queries with the new dataset in BaseX.  
+To analyse and compare the databases behaviour, designing the same test queries on the identical dataset is the most straight-forward approach. Based on the MongoDB geospatial features and properties, the Netherland test dataset must be changed. A brief explanation of the changes is provided here to clarify the rules and limitaions. The main change was to either remove multipolygon from the dataset or transforming them to a set of distinct polygons, since multipolygon is not supported in this version of MongoDB. Besides, the coordinate system is converted to WGS84. At the end, there are 12773 polygons and no multipolygon in the data file. Since the geometries are changed in database and the results would be different, we repeate all queries with the new dataset in BaseX.  
 
-To start with, the GeoJSON file containing the geometries, is imported into MongoDB. This can be done  using \textit{java API} or Mongo Shell with appropriate \textit{mongoimport} command. There are limitations to consider in importing the GeoJSON in MongoDB. The main one is the \textit{document} size limitation in a \textit{collection}. Document and collection are two concepts in MongoDB which are correspond with a table and a record in this table respectively. A collection can have one or more documents and a document is a set of key-values. A database contains one or more collections. To successfully import a document into a collection, it should be smaller than 16MB. Since it is common to have large geometries in real-world geographic data files, this limitation be a problem. Aother limitation is that the $z$ coordinate is not supported in MongoDB. When a coordinate contains $z$ coordinate, although those geometries are not processed, no error massage is shown during the import process and query. \textit{MultiPoint}, \textit{MultiLineString}, and \textit{MultiPolygon}, which are not supported in MongoDB, are also skipped in queries without any error massage. 
+To start with, the GeoJSON file containing the geometries, is imported into MongoDB. This can be done  using Java API or Mongo Shell with appropriate \textit{mongoimport} command. There are limitations to consider in importing the GeoJSON in MongoDB. The main one is the \textit{document} size limitation in a \textit{collection}. Document and collection are two concepts in MongoDB which are correspond with a table and a record in this table respectively. A collection can have one or more documents and a document is a set of key-values. A database contains one or more collections. To successfully import a document into a collection, it should be smaller than 16MB. Since it is common to have large geometries in real-world geographic data files, this limitation can be a problem. Aother limitation is that the $z$ coordinate is not supported in MongoDB. When a coordinate contains $z$ dimension, although those geometries are not processed, no error massage is shown during the import process and query. MultiPoint, MultiLineString, and MultiPolygon, which are not supported in MongoDB, are also skipped in queries without any error massage. 
 
 The above-mentioned size limitation made us to change the file structure again.
 When the file structure was in the form of Code~\ref{feature-collection}, 
@@ -972,11 +972,9 @@ this problem disappeared.
 After importing the file, we examined the common features, i.e., intersection, within, 
 functionalities in both databases.
 %and near  
-The following queries find the intersecting geometries from the Netherland's dataset with the given polygon in \textit{BaseX} and \textit{MongoDB}. The polygon coordinates are determined for different queries in the following way. At first, the maximum and minimum coordinates are found in the dataset. After that, we generate differet input polygons in regard to these boundaries. The polygons coordinate are altered such that the number of results differes in each query.
-
-\begin{itemize}
-\item \textit{BaseX}:
-\begin{fakeXML}
+The queries in Code~\ref{basex-query} and Code~\ref{mongo-query} find the intersecting geometries from the Netherland's dataset with the given polygon in BaseX and MongoDB. The polygon coordinates are determined for different queries in the following way. At first, the maximum and minimum coordinates are found in the dataset. After that, we generate differet input polygons in regard to these boundaries. The polygons coordinate are altered such that the number of results differes in each query.
+\vspace{10px}
+\begin{fakeXML}[label=basex-query,caption=Example query of \textit{intersects} function in BaseX]
 import module namespace geo = "http://expath.org/ns/Geo";
 declare namespace gml="http://www.opengis.net/gml";
 let $a:= <gml:Polygon>
@@ -991,8 +989,7 @@ let $a:= <gml:Polygon>
 for $b in //gml:Polygon 
 return if (geo:intersects( $a, $b)) then $b else ()
 \end{fakeXML}
-\item \textit{MongoDB}: 
-\begin{fakeXML}
+\begin{fakeXML}[label=mongo-query,caption=Example query of \textit{intersects} function in MongoDB]
 db.places.find( { geometry :
                   { $geoIntersects :
                     { $geometry :
@@ -1001,7 +998,7 @@ db.places.find( { geometry :
                         	    [6.1,53],[6,53],[6,52.6]]]
                 } } } } )
 \end{fakeXML}
-\end{itemize}
+\vspace{10px}
 
 Similar queries are designed to check the other functions. Here, we skip the queries and directly go to the results. To check the profiling in MongoDB, query plan information, such as the index type, the query time, scanned objects, etc, \textit{\$explain} operator could be specified either in the forms,
 \vspace{10px}
@@ -1029,23 +1026,24 @@ Below the profile of a sample query is shown,
 \end{fakeJSON}
 \vspace{10px}
 
-In the provided information, number of the results and the query time is implied in \textit{n} and \textit{millis} elements respectively. \textit{cursor} specifies the type of the cursor used by the operation. Here, \textit{BasicCursor} indicates that the query is only performing a normal scan to find the results.  This typical cursor reads the documents in natural order. That is, no index is used for this operation and the whole data is scanned in the original order. If a geospatial index is used, the cursor type will change. \textit{n} reflects the number of geometries that match the query condition, i.e., the number of items on the cursor. \textit{nscanned} is the number of scanned documents for this operation, when no index is used, or scanned index entry in the range, when an index is used. \textit{nscannedObjects} is the number of scanned documents in this query to obtain the results. In queries which an index structure is not used, as in the above sample, these two numbers will be equal. Otherwise, \textit{nscannedObjects} may be lower, as shown in the following query plan which uses a geospatial index. 
+In the provided information, number of the results and the query time is implied in \textit{n} and \textit{millis} elements respectively. \textit{cursor} specifies the type of the cursor used by the operation. Here, \textit{BasicCursor} indicates that the query is only performing a normal scan to find the results.  This typical cursor reads the documents in natural order. That is, no index is used for this operation and the whole data is scanned in the original order. If a geospatial index is used, the cursor type will change. The value\textit{n} reflects the number of geometries that match the query condition, i.e., the number of items on the cursor. \textit{nscanned} is the number of scanned documents for this operation, when no index is used, or scanned index entry in the range, when an index is used. \textit{nscannedObjects} is the number of scanned documents in this query to obtain the results. In queries which an index structure is not used, as in the above sample, these two numbers will be equal. Otherwise, \textit{nscannedObjects} may be lower, as shown in the following query plan which uses a geospatial index. 
 In other words, $nscanned\geq nscannedObjects\geq n$ always. Ofcourse, the most optimum state is where $nscanned=nscannedObjects=n$. 
 \vspace{10px}
 \begin{fakeJSON}
+...,
 "cursor" : "S2Cursor",
 "isMultiKey" : true,
 "n" : 2756,
 "nscannedObjects" : 3370,
 "nscanned" : 36941,
-...
+...,
 \end{fakeJSON}
 \vspace{10px}
+
 %and it could be reached with compound indexes and rephrasing the query statement in some cases as well.
+%TODO mesal for optimization from: http://Java.dzone.com/articles/optimizing-mongodb-compound
 
-%TODO mesal for optimization from: http://java.dzone.com/articles/optimizing-mongodb-compound
-
-Running the same queries in both databases, Figure ~\ref{figBXvsMongoNoIndexIntersects} shows the timing of various queries without using any geospatial index. As it could be seen, all query times are more or less the same, since the whole data is scanned when no index is used. It is also obvious from the query plan in MongoDB which specifies the cursor type, number of index keys scanned (nscsnned), and number of documents scanned to get the result (nscsnnedObjects),
+Running the same queries as before, like \textit{intersects}, in both databases, Figure~\ref{figBXvsMongoNoIndexIntersects} shows the timing of various queries without using any geospatial index. As it could be seen, all query times are more or less the same, since the whole data is scanned when no index is used. It is also obvious from the following query plan in MongoDB which specifies the cursor type, number of index keys scanned (nscsnned), and number of documents scanned to get the result (nscsnnedObjects),
 \begin{fakeJSON}
 ...
 "n" : 12773,
@@ -1067,9 +1065,13 @@ In the following section, we measure the running time again by applying the geos
 In this way, we also cover \textit{near} and \textit{nearSphere} queries in MongoDB that definately need the geospatial index.  
 %using the \textit{distance} function to find the near geometries in BaseX in which the current index structure is not applicable.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Section: Indexing in the Databases
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Indexing in the Databases}
 \label{index}
-The assessment process is continued by applying the geospatial index. In MongoDB there are two choices for using geospatial index, \textit{2d} for data expressed in legacy coordinate pairs and \textit{2dsphere} for both \textit{GeoJSON} data objects and legacy coordinate pairs. We use \textit{2dsphere} which fits to the choice of sherical maps, via the following shell command,
+The assessment process is continued by applying the geospatial index. In MongoDB there are two choices for using geospatial index, \textit{2d} for data expressed in legacy coordinate pairs and \textit{2dsphere} for both GeoJSON data objects and legacy coordinate pairs. We use \textit{2dsphere} which fits to the choice of sherical maps, via the following shell command,
 \vspace{10px}
 \begin{fakeJSON}
 db.Collection.ensureIndex({geometry:"2dsphere"}) 
@@ -1102,12 +1104,12 @@ db.collection.find({{geometry:
                        {$nearSphere:
                          {$geometry:
                            {type:"Point", coordinates:[4.5,51.95]}, 
-                             $maxDCistance : 100
+                             $maxDistance : 100
                     }}}})
 \end{fakeJSON}
 \vspace{10px}
 %TODO:reference for projected coordinate sys.
-BaseX Geo Module currently provides this feature via \textit{distance} or combination of \textit{buffer} and \textit{within} functions. In Both cases, if the coordinate system in which the data is provided is a projected coordinate system, the distance can be specified in meter or any other metric unit. In a projected coordinate system, all the areas, lengths, and angels are defined on a flat two-dimensional space. In such a system, the user is provided with this \textit{naer} feature in BaseX by using the above-mentioned functions as belows,
+BaseX Geo Module currently provides this feature via \textit{distance} or combination of \textit{buffer} and \textit{within} functions. In Both cases, if the coordinate system in which the data is provided is a projected coordinate system, the distance can be specified in meter or any other metric unit. In a projected coordinate system, all the areas, lengths, and angels are defined on a flat two-dimensional space. In such a system, the user is provided with this \textit{near} feature in BaseX by using the above-mentioned functions as belows,
 \vspace{10px}
 \begin{fakeJSON}
 import module namespace geo = "http://expath.org/ns/Geo";
@@ -1132,7 +1134,7 @@ For the data provided in a geographic coordinate system, calculations do not wor
 \label{figTransform}
 \end{figure}
 
-The forementioned \textit{near} feature as a widely used usecase is available in BaseX only for metric coordinate systems. To provide this feature also for geographic systems via the current geo functions, we need to convert the geographic coordinates to metric ones. In this way, we convert the specified input geometry in WGS84 to a metric system. Then, we compute the buffer of converted geometry up to the input distance in the same metric system and convert the buffer back to the original geographic coordinate system. A buffer of geometry is an identified region within a specific distance of the geometry. At the end, we find the all geometries within the buffer in geographic coorsinate system. This approach benefits from the geospatial index structure, via the \textit{within} function, while the approach with the \textit{distance} function do not utilize the geospaial index. This process is illustrated in Figure~\ref{figTransform}. 
+The forementioned \textit{near} feature as a common use case is available in BaseX only for metric coordinate systems. To provide this feature also for geographic systems via the current geo functions, we need to convert the geographic coordinates to metric ones. In this way, we convert the specified input geometry in WGS84 to a metric system. Then, we compute the buffer of converted geometry up to the input distance in the same metric system and convert the buffer back to the original geographic coordinate system. A buffer of geometry is an identified region within a specific distance of the geometry. At the end, we find the all geometries within the buffer in geographic coorsinate system. This approach benefits from the geospatial index structure, via the \textit{within} function, while the approach with the \textit{distance} function do not utilize the geospaial index. This process is illustrated in Figure~\ref{figTransform}. 
 This procedure is expressed as below, using the \textit{buffer} and \textit{within} functions and should return the same result as the previous query, 
 
 \vspace{10px}
@@ -1146,7 +1148,7 @@ within(geometry,
       )
 \end{fakeJSON}
 \vspace{10px}
-Having the same usecases, we have tested this feature in both databases, with the timing result shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function, while \textit{\$nearSphere} operator finds the geometries in MongoDB. Obviously, MongoDB has a better performance, specifically with smaller number of results. The qurey times and the number of results are directly proportional in MongoDB, since index is used and both chaneges accompany each other. BaseX do not use the geospatial index and consequently returns every result more or less in the same time.
+Having the same use cases, we have tested this feature in both databases, with the timing result shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function, while \textit{\$nearSphere} operator finds the geometries in MongoDB. Obviously, MongoDB has a better performance, specifically with smaller number of results. The qurey times and the number of results are directly proportional in MongoDB, since index is used and both chaneges accompany each other. BaseX do not use the geospatial index and consequently returns every results more or less in the same time.
 
 %TODO: figure for converion method in BX
 %TODO:change the chart for new queries of distance in BaseX
@@ -1220,12 +1222,14 @@ Figure~\ref{figMongoviaBX-near} implies that the performance of the \textit{near
 
 This process is done for the update operaions such that the update query modifies the database in MongoDB. Correspondingly, it should be decided to continue the querying either in MongoDB or in BaseX after repeating the update queries and rebuilding the index structure. Figure~\ref{figMongoviaBX-update} indicates the better timing result of updating by MongoDB through BaseX. 
 
-
-
 \subsection{Conclusion}
 \label{conc}
-In this section we concentrated on the geospatial features of MongoDB in order to find ways to improve the BaseX Geo Module efficiency. We started with investigation of geospatial features to see the different viewpoint in MongoDB. Based on the common features, the perofrmance of these features is discussed and to see the influence of geospatial index, we represented and discussed the timing with the use of index. Among the features, finding the geometries within a specific distance, as a widely used one, is provided through \textit{\$near} and \textit{\$nearSphere} operators. Since BaseX functions could do the calculation only on the flat space, this feature is provided just for the projected coordinate systems. To add the support of data in WGS84, new functions are implemented. Testing this feature in both databases shows better performance in MongoDB. Besides, updating a database is discussed herafter. Update in MongoDB contains implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed manually. Therefore, query time severly increases considering the time consumed by index updating. 
-Since the performance of two major functionalities, i.e., the \textit{near} feature and update, are not satisfying in BaseX and MongoDB provides them in a faster way, we tried to connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature seem convincing enough to have this alternative way in BaseX. Also, updating by MongoDB via BaseX is also faster than updating in BaseX. However a  dicussion is raised here, about the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible only in MOngoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth using while the whole update and index reconstruction process must be done. The approach sets the limitation for the usecases in which the database will be updated, to do the geospatial querying completely in MongoDB.
+In this section, we concentrated on the geospatial features of MongoDB in order to find ways to improve the BaseX Geo Module efficiency. We started with the investigation of geospatial features to see the different viewpoints in MongoDB. Based on the common features, the perofrmance of these features was discussed and we represented and discussed the timing with the use of index to see the influence of geospatial index. Among the queries, finding the geometries within a specific distance, as a widely used one, is provided through \textit{\$near} and \textit{\$nearSphere} operators. 
+Besides, updating a database was discussed. Update in MongoDB contains implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed manually. Therefore, query time severly increases considering the time consumed by index updating. 
+
+Since BaseX functions could do the calculation only on the flat space, this feature is available just for the projected coordinate systems. To add the support of data in WGS84, new functions should be implemented. Testing this feature in both databases shows better performance in MongoDB. 
+
+Since the performance of two major functionalities, i.e., the \textit{near} feature and update, are not satisfying in BaseX and MongoDB provides them in a faster way, we connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature seem convincing enough to have this alternative way in BaseX. Also, updating by MongoDB via BaseX is also faster than updating in BaseX. However, a  dicussion is raised here about the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible only in MongoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth using while the whole update and index reconstruction process must be done. The approach sets the limitation for the use cases in which the database will be updated, to do the geospatial querying completely in MongoDB.
 
 
 \newpage

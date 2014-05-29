@@ -108,7 +108,7 @@ Our goal is to empower BaseX to process the geospatial data in an efficient way.
 Since BaseX is a XML database, this means to add the support of handling 
 \emph{Geography Markup Language (GML)} data. The Open Geospatial Consortium (OGC)
 which is an internationally recognized organization for geospatial standards,
-is defined this new special XML grammer for the geographical data.
+is defined this new special XML grammar for the geographical data.
 We want to have a complete support of this language in BaseX,
 which means the abilities to read, to write, and to query on this data.
 
@@ -134,23 +134,23 @@ According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relati
 earth's surface, also \emph{Geospatial Data} is the data representing any thing on the earth's surface. Different 
 countries and organizations are using different systems to represent this data. 
 The World Geodesic System (WGS) is one of the standard system that is used world-wide 
-for space-based satellite navigation system. \emph{WGS84} is the lateset version of this standard which
+for space-based satellite navigation system. WGS84 is the latest version of this standard which
 was introduced in $1984$. However, there are many different standards like ... and .... 
-There are variuos convertors between ....
+There are various converters between ....
 
-\subsection{Geospatial Data}
-Geospatial data is the locational information describing features and locations and their characteristics having a spatial component, which means are connected to a place on the earth, such as countries, cities, buildings, population, and demographics. It also applies to three-dimnesionsl data, like above and below the Earth's surafce~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regard to specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects, which are defined in a coordinate system. Here we introduce the concepts related to the current definitions which are required in this study as well.
+\subsection{Geo spatial Data}
+Geospatial data is the locational information describing features and locations and their characteristics having a spatial component, which means are connected to a place on the earth, such as countries, cities, buildings, population, and demographics. It also applies to three-dimnesionsl data, like above and below the Earth's surface~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regard to specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects, which are defined in a coordinate system. Here we introduce the concepts related to the current definitions which are required in this study as well.
 
-\subsubsection{Terms and Definiions}
+\subsubsection{Terms and Definitions}
 \label{termsanddef}
 \begin{itemize}
 
 \item Open Geospatial Consortium (OGC) \cite{ogc}: The OGC is an international consortium, developing interface standards for geospatial content, services, data exchange and communication, and data processing and sharing.
-\item Feature: Feature represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world. A geographic feature is a feature associated with a location relative to the Earth. As a result, real-world entities could be expresed as a set of features. 
+\item Feature: Feature represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world. A geographic feature is a feature associated with a location relative to the Earth. As a result, real-world entities could be expressed as a set of features. 
 \item Geometry: A geometry is a datatype to represent a location and region. 
 %TODO \item: encodings, baghiye subitem bashan (http://www.digitalpreservation.gov/formats/fdd/gis_fdd.shtml)
-\item Geography Markup Language (GML): The XML based standard encoding defined by OGC, serves as a modeling language to express geographical features in both spatial and non-spatial charachteristic. It is used as an interchange format in internet data exchange, transport and transaction. The key to utility of GML is its ability in intergrating all forms of geographic information [] %TODO:ref az wikipedia!.
-GML encods a set of geometries, i.e. \textit{Point}, \textit{LineString}, and \textit{Polygon} in GML 1.0 and GML 2.0. GML 3 supports curve, surface, 
+\item Geography Markup Language (GML): The XML based standard encoding defined by OGC, serves as a modeling language to express geographical features in both spatial and non-spatial characteristic. It is used as an interchange format in internet data exchange, transport and transaction. The key to utility of GML is its ability in integrating all forms of geographic information [] %TODO:ref az wikipedia!.
+GML encodes a set of geometries, i.e. \textit{Point}, \textit{LineString}, and \textit{Polygon} in GML 1.0 and GML 2.0. GML 3 supports curve, surface, 
 \item KML: 
 \item WKB:
 \item WKT:
@@ -160,11 +160,11 @@ GML encods a set of geometries, i.e. \textit{Point}, \textit{LineString}, and \t
 \end{itemize}
 
 \subsection{Geospatial Data in Native XML Databases}
-As a powerful XML grammer introduced by GIS community(OGC), \textit{GML} plays an important role in spatial data modeling, integration, sharing, transission, and exchange, beacuase of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. in the XML database. 
+As a powerful XML grammar introduced by GIS community(OGC), GML plays an important role in spatial data modeling, integration, sharing, transmission, and exchange, because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. in the XML database. 
 %TODO:In classic relational databases,... In XML native databases, geospatial data are handled ...
 
 \subsection{General Spatial Requirements in Native XML Database}
-In addition to general functions and features on XML structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML format should be readed and treated as a Geometries. Therefore, just the string information is not enough to satisfy the geospatial features. In a target space with a set of geometries, the positions, locations, and relations of the geometries rises some requirements. For example, "What is the distance between two geometries?" Or, "Which geometries intersect this geometry?". Additionally, there are features related to single geometries, such as the lenght and area of a geometry, the number of interior ring of a polygon, and the start point of a line. Of course in a database the features related to a set of geometries are of more importane ...................
+In addition to general functions and features on XML structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML format should be read and treated as a Geometries. Therefore, just the string information is not enough to satisfy the geospatial features. In a target space with a set of geometries, the positions, locations, and relations of the geometries rises some requirements. For example, "What is the distance between two geometries?" Or, "Which geometries intersect this geometry?". Additionally, there are features related to single geometries, such as the length and area of a geometry, the number of interior ring of a polygon, and the start point of a line. Of course in a database the features related to a set of geometries are of more importance ...................
 %TODO: We then present spatial comparisons as XQuery functions
 %(similar to how the spatial operators are defined in spatial-enabled SQL
 %engines) so they can be mixed with standard XQuery, full-text, etc.
@@ -175,12 +175,12 @@ In addition to general functions and features on XML structure of GML data, geos
 %Well-Known Text/Binary formats used in other engines, is quite useful for
 %building new GML on the fly, and parsing/validating existing GML.
 
-\subsection{GeoSpatial Indexing}
+\subsection{geospatial Indexing}
 \label{geospatialindex}
 According to \cite{survey}, indexing would dramatically influence efficient data manipulation and storage. Like any other type of data, geospatial data need to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable for spatial objects is that they would consider the spatial objects in one dimension and do not preserve the spatial proximity.
 
 As it is examined in \cite{survey}, a large number of spatial indexes has been introduced to improve the spatial data retrieval.
-The strength or weekness of an indexing approach mostly depends on requirements, query types, and applications. In the following sections, we go through selective spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree.
+The strength or weakness of an indexing approach mostly depends on requirements, query types, and applications. In the following sections, we go through selective spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree.
 
 \subsubsection{Binary-tree Based}
 The indexes in this group are basically and conceptually derived from the binary search tree. They adopt and generalize the idea of partitioning the space. Here some of them are explained.
@@ -380,14 +380,14 @@ The vertices of this graph are geometry types and properties. The edges also
 represent the element containment, relationship between elements, and values. 
 This query language tries to provide an interface like SQL to work with GML.
 
-Xia Li~\cite{Lisa2006} defines Xquery as a language  not sutable to query GML, 
+Xia Li~\cite{Lisa2006} defines XQuery as a language  not suitable to query GML, 
 since spatial related data types and semantics need to be treated different from XML. 
-The purpose of this study is to define expand Xquery not for predefined GML elements, 
+The purpose of this study is to define expand XQuery not for predefined GML elements, 
 but more flexible.  A set of operators and functions on GML data types that cover 
 the most typical queries over spatial data. The difference with the previous one is 
 that this language is applicable not for predefined GML types, but to any type.
 
-Chen~\cite{Chen2010} introduces a new integration of GML and Xquery. In this work,
+Chen~\cite{Chen2010} introduces a new integration of GML and XQuery. In this work,
 spatial data types and operations are added to XQuery based on \emph{OGC Simple
 Features Spesification} for \emph{SQL} to achieve GML spatial data query.
 %Adding spatial data types 
@@ -552,7 +552,7 @@ Geospatial Index Positions
 Geospatial Lexicons1
 Provided by spatial index, containing unique values of  geospatial data. 
 
-“geo” Xquery Library
+“geo” XQuery Library
 geo:box
 Create a cts:point value from an element representing a box in one of the supported markup vocabularies.
 geo:circle
@@ -569,7 +569,7 @@ geo:polygon
 Create a cts:polygon value from a sequence of point elements in one of the supported markup vocabularies.
 
 
-“gml” Xquery Library
+“gml” XQuery Library
 gml:box
 Create a cts:box value from a GML Envelope element.
 gml:circle
@@ -586,7 +586,7 @@ gml:polygon
 Create a cts:polygon value from a sequence of GML Point elements or a GML Polygon element.
 
 
-“geoRss” Xquery Library
+“geoRss” XQuery Library
 georss:circle
 Create a cts:circle value from a radius and GeoRSS point element.
 georss:geospatial-query
@@ -594,7 +594,7 @@ Returns a cts:query matching points within given regions.
 georss:point
 Create a cts:point value from a GeoRSS point element.
 
-“kml” Xquery Library
+“kml” XQuery Library
 kml:box
 Create a cts:point value from a KML LatLongBox element.
 kml:circle
@@ -656,43 +656,44 @@ Storing the eospatial data in geohash ???
 %TODO tozihe bishtar dar more requirements va inke chera injuri develop shode
 %TODO:why gml:http://www.w3.org/Mobile/posdep/GMLIntroduction.html - 
 %TODO: and  http://spatialnews.geocomm.com/features/gml/topten.html
-Spatial query is a spacial type of query which requieres the processing of geometries with two certain properties in general. First, it uses geometris as inputs and ouputs as well as other primitive types, like double, integer, etc. Second, it considers spatial relations between the geometries.
-As we discussed in Sec.\ref{s.rwork,s.dbs}, there are various viewpoints in providing geospatial features in a database to fulfill expected requirements. Following the OGC Simple Feature (OGCSF)~\cite{springergeo} data model, geospatial features in BaseX adapt the EXPath geospatial API function interface specification which defines commonly used function from the OGCSF Common Access API \cite{simpleFeature}. Since the OCGSF data model is typically represented in GML, we concentrate to add the support of GML format in BaseX. However, an implementation would support the other encodings, like KML, or GeoJSON. 
+Spatial query is a spacial type of query which requires the processing of geometries with two certain properties in general. First, it has geometries as inputs and outputs as well as other primitive types, like double, integer, etc. Second, it considers spatial relations between the geometries.
+As we discussed in Section~\ref{s.dbs}, there are various viewpoints in providing geospatial features in a database to fulfill the expected requirements. Following the OGC Simple Feature (OGCSF)~\cite{springergeo} data model, geospatial features in BaseX adapt the EXPath geospatial API function interface specification which defines commonly used functions from the OGCSF Common Access API \cite{simpleFeature}. Since the OCGSF data model is typically represented in GML, we concentrate to add the support of GML format in BaseX. However, an implementation would support the other encodings, like KML. 
 
-In this section, we introduce the geospatial functions as a new module, called \textit{Geo Module}, in BaseX. Query efficiency is improved later by implementing an index structure. Indexing and the related time complexities are discussed herafter as the critical issue in this topic.
+Throughout the following sections, we discuss the integration of geospatial data processing in BaseX. We introduce geospatial functions as a new module, called \textit{Geo Module}, in Section~\ref{geomodule}. Query efficiency is improved later in Section~\ref{indexBX} by implementing an index structure. Indexing and the related time complexities are discussed hereafter in Section~\ref{indexFunc} and Section~\ref{BXevaluation}, as the critical issue in this topic. Finally the concluding is explained in Section~\ref{BXconc}.
 
 \subsection{Geo Module}
-As mentioned above, geospatial features in BaseX are implemented based on the EXPath Geo Module Specification \cite{expath}. This specification contains the difinition of functoins for widely used geographic and geometric analysis operations, from OGCSF Common Access API version 1.2 \cite{simpleFeature}. The functions apply to geometries in different formats, such as GML, KML, GeoJSON, Well Known Text (WKT), and even Well Known Binary (WKB). Based on the specification, \textit{Geo Module} in BaseX comprises a set of functions, such as intersection, within, distance, boundary, centroid, diference, union, and etc., added to the \textit{basex-api} package. The geometries supported in this module are Point, LineString, Polygon, MultiPoint, MultiLineString, and MultiPolygon. This module is an individual package with a set of classes as briefly described below,
+\label{geomodule}
+As mentioned above, geospatial features in BaseX are implemented based on the EXPath Geo Module Specification \cite{expath}. This specification contains the definition of functions for widely used geographic and geometric analysis operations, from OGCSF Common Access API version 1.2. These functions apply to geometries in different formats, such as GML, KML, GeoJSON, Well Known Text (WKT), and even Well Known Binary (WKB). Based on the specification, Geo Module in BaseX comprises a set of functions, such as intersection, within, distance, boundary, centroid, diference, union, and etc., added to the \textit{basex-api} package. The geometries supported in this module are Point, LineString, Polygon, MultiPoint, MultiLineString, and MultiPolygon. This module is an individual package with a set of classes as briefly described below,
 \begin{itemize}
-\item \textit{Geo}: This class is the main class, in which all geo spatial functions are defined. The set of functions in this class include those which are used in Xquery.
+\item \textit{Geo}: This class is the main class, in which all geo spatial functions are defined. The set of functions in this class include those which are used in XQuery. The complete list of functions and their description are available in the online BaseX documentation.
 \item \textit{GeoError}: This class defines error functions with related massages which are thrown when an error occurs.
-\item \textit{GeoTest}: Functions to test the \textit{Geo.java} class are implemented here.
-\item \textit{GmlReader}: Functions required to parse the GML geometries as XML elements, are implemented in this class.
-\item \textit{GeoIndex}: This class implements the functions related to the geospatial index. 
+\item \textit{GeoTest}: Test functions for the \textit{Geo} class are implemented here.
+\item \textit{GmlReader}: Functions required to parse GML geometries as XML elements, are implemented in this class.
+\item \textit{GeoIndex}: Besides, this class implements the functions related to the geospatial index. 
 \end{itemize}
 
-Geospatial index structure is implemented in BaseX core. Spatial indexing and related implementation details will be described in Sec.~\ref{indexBX}. Here we explain general functionalities of this module.
+Geospatial index structure is implemented in BaseX core. Spatial indexing and related implementation details will be described in Section~\ref{indexBX}. Here, we explain general functionalities of this module.
 
-The geospatial functions, defined as public methods in \textit{Geo.java} class, are accessible from BaseX GUI. They use some private methods to read geometries or write them out into the GUI. Besides, each function employs the corresponding function from the JTS library to do the required geometric operation and to provide the appropiate result. Here we briefly explain the process by which the input geometries, either from a variable or a database node, are processed.
+The geospatial functions, defined as public methods in \textit{Geo} class, are accessible from BaseX GUI. They use some private methods to read geometries or write them out into the GUI. Besides, each function employs the corresponding function from the JTS library to do the required geometric operation and to provide the appropriate result. Here, we shortly explain the process by which the input geometries, either from a variable or a database node, are processed.
 
 
-Suppose we are searching for all geometries within a specified polygon ($\$p$). The query should be written using Xquery via BaseX GUI as follows,
-
-\begin{verbatim}
+Suppose we are searching for all geometries within a specified polygon ($\$p$). The query should be written using XQuery via BaseX GUI as follows,
+\vspace{10px}
+\begin{fakeJSON}
 let $p := 
 <gml:Polygon>
-  <gml:outerBoundaryIs>… </gml:outerBoundaryIs>
-<gml:Polygon>
-	
+  <gml:outerBoundaryIs> ... </gml:outerBoundaryIs>
+</gml:Polygon>
 for $x in //gml:Polygon
   return if ( within($x, $p) ) then $x else ()
-\end{verbatim}
+\end{fakeJSON}
+\vspace{10px}
+Each geospatial function has at least one geometry as input, like the above \textit{within} function. In this example, the $\$p$ variable is provided as a docment node and the $\$x$ variable iterates all Polygon nodes in the current database. Various function are involved in processing this query. Followings, this process which is illustrated in Figure~\ref{figGeoModuleProcess} is explained in detail. 
 
-Each geospatial function has at least one geometry as input, like the above \textit{within} function. In this example, the $\$p$ variable is provided as a docment node and the $\$x$ variable iterates all \textit{Polygon} node in the current database. To read the geometries as a document node, the private function \textit{geo} first makes sure that the node name is at least a valid geometry name. It means, if the element name is something out of the set of geometry names, the function will throw an error. 
-Then, the gmlReader class is used to read and parse the whole element and to check the validity based on GML 2.0 format. Regarding the JTS limitation, geometries have to be in GML 2.0 format to be validated and analyzed for further operations. 
+To read the geometries as a document node, the private function \textit{geo} makes sure that the node name is at least a valid geometry name. It means if the element name is something out of the set of geometry names, the function will throw an error. 
+Then, the GmlReader class is used to read and parse the whole element and to check the validity based on GML 2.0 format. Regarding the JTS limitation, geometries have to be in GML 2.0 format to be validated and analyzed for further operations. 
 
-
-The reader is implemented as the \textit{GMLReader.java} class and reads the elements differently based on their types, i.e. tag names. If the element is a valid GML geometry, the function creates the corresponding geometry, using JTS constructors. Otherwise, the matching error massage will be shown. For instance, if a polygon does not have any outer ring or if the coordinates of a ring do not shape a closed ring, an error will be thrown. 
+The forementioned GmlReader class reads the elements differently based on their types, i.e., tag names. If the element is a valid GML geometry, the function creates the corresponding geometry, using JTS constructors. Otherwise, the matching error massage will be shown. For instance, if a polygon does not have any outer ring or if the coordinates of a ring do not shape a closed ring, an error will be thrown. 
 
  \begin{figure}
 \centering
@@ -701,17 +702,16 @@ The reader is implemented as the \textit{GMLReader.java} class and reads the ele
 \label{figGeoModuleProcess}
 \end{figure}
 
-Now, the geometries are ready to be processed in a geometric operation, like checking two geometries whether they intersect each other, finding the symmetric distance of two geometries, or getting the number of inner rings of a polygon. The operation is done using the JTS function. The functions output could be in any XML Schema (XSD) data types, such as integer, boolean, string, URI, and etc. or in \textit{GML 2.0} geometry type. The former is equivalet to the BaseX defined data type. It means, primitve data types like boolan, integer, and string are represented in BaseX as \textit{Bln}, \textit{Str}, and \textit{Int} classes respectively. The former type, Geometry, like the intersection, union, and diffence of two geometries, is returned as an element in the abstract node (\textit{ANode}) type to be in compliance with the specification. Having output geometries in GML format, \textit{GMLWriter} function convertes them first to a string, using JTS GmlWriter and builds a database node (DBNode) herafter. DBNode extends the ANode class, therefore the output node is sent to the GUI and is shown as a gml element, expressing the geometric result. These steps are shown in Figure~\ref{figGeoModuleProcess}.
+Now, the geometries are ready to be processed in a geometric operation, like checking two geometries whether they intersect each other, finding the symmetric distance of two geometries, or getting the number of inner rings of a polygon. The operations are done using the JTS functions. The output could be in any XML Schema (XSD) data types, such as integer, boolean, string, URI, and etc., or GML 2.0 Geometry. The XSD type are equivalet to the BaseX defined data types. That means primitve data types like boolan, integer, and string are represented in BaseX as \textit{Bln}, \textit{Str}, and \textit{Int} classes respectively. The Geometry type, which can be the output of functions like the intersection, union, and difference of two geometries, must be returned as an element in the abstract node (\textit{ANode}) type to be in compliance with the specification. Having the output geometries in GML format, GMLWriter function converts them first to a string, using JTS GmlWriter and builds a database node (DBNode) hereafter. Considering the point that DBNode extends the ANode class, the output node is sent to the GUI and is shown as a gml element, expressing the geometric result. 
 
-Although the geo functions are working, the query performance seems not satisfying. Having commonly huge geospatial data, performance problem is serious. The common solution is an indexing algorithm designed to improve the efficiency. Since the data is a written form of geometries positioned in the space, an indexing structure can be designed considering the positions. In the following sections we represent the performance of the index structure in comparison with the no-index querying.?????????
+Although the geo functions are working, the query performance seems not satisfying. Having commonly huge geospatial data, performance problem is serious. The common solution is an indexing algorithm designed to improve the efficiency. Since the geospatial data is a written form of geometries positioned in the space, an indexing structure can be designed considering the positions. In the following sections, we discuss an indexing approach and its influce on performance in comparison with the no-index querying.
 
 
-\subsection{Geo Spatial Index in BaseX}
+\subsection{Geospatial Index in BaseX}
 \label{indexBX}
-%avale paraf khub nis!
-The index avoids the process of whole database when partial checking of the file would be enough. For this purpose, a bounding box is computed for each geometry by which an efficient filtering can be applied. For example, if we want to find the objects within a specific geometry, examining just the area near to this geometry is adequate. If two geometries have intersecting bounding boxes, they might intersect each other and have to be checked weather they fulfil the query condition. Otherwis, they will not have any contact and there is no need to check them. This approach decreases the number of scanned geometries and consequently, to have a better timing, which we call it two step filtering. The two step filtering is clarified as followings,
+To enhance the geospatial query time in BaseX, we discuss an index structure. This index avoids processing the whole database when partial checking of the file would be enough. For this purpose, a bounding box is computed for each geometry by which an efficient filtering can be applied. For example, if we want to find the objects within a specific geometry, examining just the area near to this geometry is adequate. If two geometries have intersecting bounding boxes, they might intersect each other and have to be checked weather they fulfill the query condition. Otherwise, they will not have any contact and there is no need to check them. This approach decreases the number of scanned geometries and consequently gives the better timing, which we call it two step filtering. The two step filtering is clarified as followings,
 \begin{enumerate}
-\item Finding the geometries which their bounding box intersect with the bounding of query area
+\item Finding the geometries which their bounding box intersect with the bounding box of query area
 \item Checking the selected geometries against the query condition
 \end{enumerate}
 %Moreover, functions of this module in which a big number of geometries from the database coule be involved, have the time complexity bigger than O(1) and need a spatial indexing to be handled in shorter time. %TODO conintinue
@@ -725,21 +725,31 @@ The index avoids the process of whole database when partial checking of the file
 \end{figure}
 
 
-Among the spatial index structures discussed in Sec.\ref{geospatialindex}, JTS supports the STRTree and QuadTree. Davis~\cite{jts-presentation} discussed that STRTree in contrast with QuadTree can not be updated after the generation. However, we choose the STRTree since it has better performance regarding
-Davis~\cite{jts-presentation}. As mentioned before, STRTree has the basic of R-Tree with the improved performance. The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is made once when the spatial index for the database ir requested and written into a file on disk. This process is illustrated in Figure~\ref{figIndexinFile}. Each time the index is applied, the file is read into the main memory and executes the two step filltering. It should be mentioned that only the following queries would benefit from this index. The definitions of these functions are provided in EXPath Geo Module specification.
+Among the spatial index structures discussed in Section~\ref{geospatialindex}, JTS supports the STRTree and QuadTree. Davis~\cite{jts-presentation} discussed that STRTree in contrast with QuadTree can not be updated after the generation. However, we choose the STRTree since it has better performance. As mentioned before, STRTree has the basic of R-Tree with the improved performance. The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is made once when the spatial index for the database is requested and written into a file on disk. This process is illustrated in Figure~\ref{figIndexinFile}. Each time the index is demanded, the file is read into the main memory and the two step filltering is executed. It should be mentioned that only the following queries would benefit from this index. The definitions of these functions are provided in EXPath Geo Module specification.
 \begin{itemize}
 \item intersects (geometry1, geometry2)
 \item within (geometry1, geometry2)
-\item contain (geometry1, geometry2)
+\item contains (geometry1, geometry2)
 \item overlaps (geometry1, geometry2)
 \item crosses (geometry1, geometry2)
 \item touches (geometry1, geometry2)
 \end{itemize}
 
-The spatial index is added both in BaseX core and \textit{basex-api} packages. The main structure of the index is added as a package in core, called \textit{index.spatial}. This package contains the index builder classes based on the core index structure of BaseX. The class \textit{SpatialBuilder} which extends \textit{IndexBuilder}, builds the index tree using pre-values instead of the tag names to address the database elements. Then, JTS serializer writes the tree structure into a file called \textit{STRTreeIndex}.
+The spatial index is involed both in BaseX core and \textit{basex-api} packages. The main structure of the index is added as a package in core, called \textit{index.spatial}. This package contains the index builder classes based on the core index structure of BaseX. The class \textit{SpatialBuilder} which extends \textit{IndexBuilder}, builds the index tree using pre-values instead of the tag names to address the database elements. Then, JTS serializer writes the tree structure into a file called \textit{STRTreeIndex}.
 
-The other GeoIndex class in \textit{basex-api} package extends \textit{QueryModule} class and implements the method defined by JTS STRTree class for reading the index file from hard disk into memory. Additionally, this class implements the \textit{filter} method to do the first step of two step filtering. 
-The below example clarifies how the indexing function together with geo function should be used, 
+The other GeoIndex class in \textit{basex-api} package extends \textit{QueryModule} class and implements the method defined by JTS STRTree class for reading the index file from hard disk into memory. Additionally, this class implements the \textit{filter} method to do the first step of two step filtering. The datails of the index implementation is described in the following section.
+ 
+\subsection{Index Functions Implementation}
+\label{indexFunc}
+To add the spatial index, we tought of two approaches. The first approach implements new signature for the forementioned functions in a new class. It means the index filter function is encoded directly in the existing geo functions. Then queries can be done with the new spatial function as in Code~\ref{intersectIndx}.
+\vspace{10px}
+\begin{fakeXML}[label=intersectIndx,caption=The geo function containing the idex functions]
+import module namespace geo-index = "http://expath.org/ns/GeoIndex";
+let $a:= <gml:Polygon> ... </gml:Polygon>
+return geo-index:intersects("DB", $a) 
+\end{fakeXML}
+
+\vspace{10px}
 \begin{fakeXML}[label=geoandfilter,caption=Geo function used with index function]
 import module namespace geo-index = "http://expath.org/ns/GeoIndex";
 import module namespace geo = "http://expath.org/ns/Geo";
@@ -755,20 +765,12 @@ let $a:= <gml:Polygon>
              </gml:Polygon>
 return ( geo-index:filter("DB", $a)[geo:intersects( $a, .)])
 \end{fakeXML}
+\vspace{10px}
 
-\subsection{Indexing Functions Implementation}
-\label{indexFunc}
-To add the spatial index, we tought of two approaches. The first approach implements new signature for the forementioned functions in a new class. It means
-the index filter function is encoded directly in the geo functions. Then queries can be done with the new spatial function as follows.
-\begin{fakeXML}[label=salam,caption=My caption here]
-import module namespace geo-index = "http://expath.org/ns/GeoIndex";
-let $a:= <gml:Polygon> ... </gml:Polygon>
-return geo-index:intersects("DB", $a) 
-\end{fakeXML}
+Since having two functions with the same name and functionality is redundant, we introduce a new approache in which the \textit{filter} function can be used in XQuery to benefit from the index stucture. In this way, a sample query would be as in Code~\ref{geoandfilter}. To summerize these approaches, the former approach as in Code~\ref{intersectIndx}, does the whole process including the fisrt step of filtering through the \textit{geo-index:intersects} function, while the latter approach as in Code~\ref{geoandfilter}, uses the original \textit{geo:intersects} function together with \textit{geo-index:filter} which does the first step of filtering. 
 
-Since having two functions with the same name and functionality is redundant, we introduce a new approache in which the \textit{filter} function can be used in XQuery to benefit from the index stucture. In this way a sample query would be as in Code~\ref{geoandfilter}. To summerize these approache, the former does the whole process, including the fisrt step of filtering, through the \textit{geo-index:intersects} function, while the later uses the original \textit{geo:intersects} function together with \textit{geo-index:filter} which does the first step of filtering. 
 
-The negetaive point about the later approach is that the input polygon, like polygon $\$a$ in Code~\ref{geoandfilter}, is read, parsed, and created every time that the spatial function, here intersects, is called in the \textit{for} loop, evevn though it is the same fixed object. Since, this cause redundancy and consumes a considerable amount of time, a map is used to hash the fixed input and prevet the further redundant reading. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
+The negetaive point about the latter approach is that the input polygon, like polygon $\$a$ in Code~\ref{geoandfilter}, is read, parsed, and created every time that the spatial function, here \textit{intersects}, is called in the \textit{for} loop, evevn though it is the same fixed object. Since, this causes redundancy and consumes a considerable amount of time, we use a map to hash the fixed input and prevet the further redundant reading. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
  \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{MapIndexing}
@@ -776,24 +778,30 @@ The negetaive point about the later approach is that the input polygon, like pol
 \label{figMap}
 \end{figure}
 
-Figure~\ref{figMap} demonstartes the time consumed by different queries to read the single input geometry with or without cashing. It could be seen that when no map is used, as the number of results goes higher more time is taken, while by cashing the time consumption remains constant, since the input geometry is read once. In other words, without cashing the input geometry will be read each time the function \textit{geo:intersects} is called as it is one of the input arguments. In the next section, we assess the performance isues related to the geoapaial index.
+Figure~\ref{figMap} demonstartes the time consumed by different queries to read the single input geometry with or without cashing. It could be seen that when no map is used, as the number of results goes higher more time is taken, while by cashing the time consumption remains constant, since the input geometry is read once. In other words, the input geometry will be read each time the function \textit{geo:intersects} is called without cashing, as it is one of the input arguments. In the next section, we assess the performance isues related to the geoapaial index.
 
 \subsection{Evaluation and Improvement}
+\label{BXevaluation}
 %TODO:jomle aval beravad b sectione ghabl
-There is no need to emphasize on importance of the role that indexing plays in the query time and the performance improvement. Here, we use real-world data to observe the effect of the currently implemented spatial index, followed by in depth looking at the implementation from other perspectives. The aim is to find ways in order to improve the performance. This data is provided by University of Twente, Department of Geoinformation Processing and holds some real information on the Earth in \textit{GML 2.0} format. The original file is based on one of the Netherlands coordinate system (RD/NAP Amersfoort RD New) and is around $133.3$ MB including the $12773$ polygons inside the $11886$ multipolygons.
+There is no need to emphasize on the importance of the role that indexing plays in the query time and the performance improvement. Here, we use real-world data to observe the effect of the currently implemented spatial index, followed by in depth looking at the implementation from other perspectives. The aim is to find ways in order to improve the performance. This data is provided by University of Twente, Department of Geoinformation Processing and holds some real information on the Earth in GML 2.0 format. The original file is based on one of the Netherlands coordinate system (RD/NAP Amersfoort RD New) and is around $133.3$ MB including the $12773$ polygons inside the $11886$ multipolygons.
 We run different queries on this database with and without geospatial index to see time consumption dependency on the index structure. 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{IndexEfficiency}
-\caption{Query Performance Improvement by Using Spatial Index}
+\includegraphics[width=0.85\textwidth]{IndexEfficiency}
+\caption{Query performance improvement by using geospatial index}
 \label{figIndexEfficiency}
 \end{figure}
 
-Since queries have various number of results, we can see also the trend changes in regards to the number of outputs.
+Since queries have various number of results, we can see the trend changes in regards to the number of outputs.
 To start with, we take a look at the effect on index utilization in queries in comparison with queries using no spatial index. Figure~\ref{figIndexEfficiency} represents the effectiveness of index utilization.
 As shown in Figure~\ref{figIndexEfficiency}, when geospatial index is not used, the query time remains constant for every query regardless of the number of results. As we discussed in Section~\ref{indexBX}, this is because of the fact that for each query, the whole file is scanned and analyzed. In contrast, queries using geospatial index relatively take more time as the number of output objects goes higher. It confirms that filtering approach are going in the right direction, but the performance still is not satisfying. Thus, we need to investigate more ways to improve it.
-
-By monitoring the times consumed by different part of a query, we discovered that \textit{JTS GMLReader} functions also takes considerable amount of time (see Figure??????). This time is taken by \textit{JTS GMLReader} class by which the geometries are read from GML and converted to \textit{JTS} geometries. 
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{JTSReadetTimeConsumption}
+\caption{JTSReader time consumpion in total query ime}
+\label{figJTSReaderTime}
+\end{figure}
+By monitoring the times consumed by different part of a query, we discovered that JTS GMLReader functions takes considerable amount of time (see Figure~\ref{figJTSReaderTime}). This time is taken by \textit{JTS GMLReader} class by which the geometries are read from GML and converted to \textit{JTS} geometries. 
 
 \begin{figure}
 \centering
@@ -823,22 +831,22 @@ Regarding the geometry reading process by JTS, shown in Figure~\ref{figParseProc
 As it was supposed, reading time drastically reduced by using the new reader functions, although both have increasing trend proportional to the number of outputs.%gosaste
 
 A deeper look at the different parts of a query will be beneficial to find the parts where need to be concentrated more in order to achieve better performance. Suppose we run the query below,
-
-\begin{verbatim}
-let $a:= <gml:Polygon> $\ldots$ </gml:Polygon>
+\vspace{10px}
+\begin{fakeJSON}
+let $a:= <gml:Polygon> ... </gml:Polygon>
 return ( geo-index:filter("DB", $a) [geo:intersects( . , $a)]).
-\end{verbatim}
-
+\end{fakeJSON}
+\vspace{10px}
 The total query time will be divided into the following parts,
 
 \begin{enumerate}
-\item reading the input geometry \textit{a}
+\item reading the input geometry \textit{\$a}
 \item filtering the geometries using \textit{filter} function by pre values 
 \item reading the filtered geometries from the database using selected pre values
-\item apply textit{intersects} operation on the pair of input geometry and each selected geometries.
+\item apply \textit{intersects} operation on the pair of input geometry and each selected geometries.
 \end{enumerate}
 
-To see how each part influence on the performance, we examine them separately. Figure~\ref{figDetailedTiming} shows the times taken by the above-mentioned actions. It could be seen, that the biggest amount of time is spended reading the geometries. Even the single reading of the input geometry seems to be expensive. Hence, the reading function should be observed more in detail.%details or detail?
+To see how each part influence the performance, we examine them separately. Figure~\ref{figDetailedTiming} shows the times taken by the above-mentioned actions. It could be seen that the biggest amount of time is spended reading the geometries. Even the single reading of the input geometry seems to be expensive. Hence, the reading function should be observed more in detail.
 
 \begin{figure}
 \centering
@@ -850,39 +858,40 @@ To see how each part influence on the performance, we examine them separately. F
 
 We have used java profiling to get more precise information. The first few methods in profile output with the highest percentage of time occupation, ordered from the most-used to the least-used, are listed in the following,
 
-
+\vspace{10px}
 \begin{tabular}{l l l c l}
 \textbf{rank} & \textbf{self} & \textbf{accum} & \textbf{count} & \textbf{method} \\
  & & & &\\
 1 & 6.95\% & 6.95\% & 94 & org.basex.util.Token.{\color{red}split}\\
 2 & 5.33\% & 12.28\% & 72 & org.expath.ns.GmlReader.createPolygon \\
-3 & 4.59\% & 16.86\% & 62 & org.basex.util.Token.split \\
+3 & 4.59\% & 16.86\% & 62 & org.basex.util.Token.{\color{red}split} \\
 4 & 4.22\% & 21.08\% & 57 & org.basex.query.func.JavaModuleFunc.eval \\
 5 & 3.55\% & 24.63\% & 48 & org.expath.ns.Geo.geo \\
-6 & 3.18\% & 27.81\% & 43 & org.basex.util.Token.split \\
-7 & 3.03\% & 30.84\% & 41 & org.basex.util.Token.split \\
-8 & 2.96\% & 33.80\% & 40 & org.basex.util.Token.split \\
+6 & 3.18\% & 27.81\% & 43 & org.basex.util.Token.{\color{red}split} \\
+7 & 3.03\% & 30.84\% & 41 & org.basex.util.Token.{\color{red}split} \\
+8 & 2.96\% & 33.80\% & 40 & org.basex.util.Token.{\color{red}split} \\
 9 & 2.74\% & 36.54\% & 37 & org.expath.ns.Geo.geo \\
-\end{tabular}\vspace{10px}
+\end{tabular}
+\vspace{10px}
 
-As the profile output indicates, the \textit{split} function call consumes the greatest amount of time. Besides, \textit{createPolygon} and \textit{geo} functions, all used in \textit{GmlReader} class, are expensive. Therefore, these functions should be focused in performance tuning, if this approach would be taken.
+As the profile output indicates, the \textit{split} function calls consume the greatest amount of time. The \textit{split} function is called mostly Besides, \textit{createPolygon} and \textit{geo} functions, all used in \textit{GmlReader} class, are expensive. Therefore, these functions should be focused in performance tuning, if this approach would be taken.
 %TODO\CONTINUE
 
 \subsection{Conclusion}
-In this Section, we discussed the Geo Module implementation details and assessment in BaseX, which provides a set of geometric functions based on the EXPath Geo Module specification. This module employs the JTS library to compute the geometric operations. To enhance the performance, the JTS STRTree index structure is added that accelerates the execution time of queries such as intersects, within, inside, and touches. This is done by applying a filtering in the SRRTree structure and consequently reducing the number of processes. Besides the index tree, a GML Reader class is developed to parse the gml elements directly regarding the inefficieny in JTS GMLReader. Although the timing results are convincing, there are room for improvements. For example, the function \textit{split}, \textit{geo}, and \textit{createPolygon} can be modifiend in favour of better performance.
+\label{BXconc}
+In this Section, we discussed the Geo Module implementation details and assessment in BaseX which provides a set of geometric functions based on the EXPath Geo Module specification. This module employs the JTS library to compute the geometric operations. To enhance the performance, the JTS STRTree index structure is added that accelerates the execution time of queries such as intersects, within, inside, and touches. This is done by applying a filtering in the STRTree structure and consequently reducing the number of processes in the database. Besides the index tree, a GML Reader class is developed to parse the gml elements directly regarding the inefficieny in JTS GMLReader. Although the timing results are convincing, there are room for improvements. For example, the function \textit{split}, \textit{geo}, and \textit{createPolygon} can be modifiend in favour of better performance.
 
 \newpage
 \section{BaseX vs MongoDB}
 \label{s.mongo}
 %TODO:Complete
 
-An introduction of MongoDB geospatial features is provided before in \ref{mongo}. In this section, we will have a more-detailed overview of these functionalities and a comparison between BaseX and MongoDB. However these two systems follow distinct approaches, it would be beneficial to review MongoDB as a rather new, recently developed, and widely used database system and among the few NOSQL systems providing geospatial features. Here we will mainly see differences between these systems, particularly in performance of the same features. This comparision empowers us to improve the geospatial querying performance in BaseX. 
+An introduction of MongoDB geospatial features is provided before in \ref{mongo}. In this section, we will have a more-detailed overview of these functionalities and a comparison between BaseX and MongoDB. However these two systems follow distinct approaches, it would be beneficial to review MongoDB as a rather new, recently developed, and widely used database system. MongoDB is among the few NOSQL systems providing geospatial features. Here, we will mainly see differences between these systems, particularly in performance of the same features. This comparision empowers us to improve the geospatial querying performance in BaseX. 
 
-As we discussed in Section~\ref{mongo}, geospatial data can be represented in MongoDB either as planar or spherical maps. Since the earth is a spherical globe, the geospatial calculations on planar maps are only an approximation~\cite{coordsys,coordsys-mongo}. As an example, the measurement of distances in planar maps are accurate only in a small reagion. It means the spherical maps are the better representation when the calculations are expected as real ones on the Earth. As our goal is to assess some geospatial features of MongoDB and compare it with Basex Geo Module, we focus only on the spherical approach. Correspondingly, WGS84 is used instead of legacy coordinate pairs to express the spherical maps. 
+As we discussed in Section~\ref{mongo}, geospatial data can be represented in MongoDB either as planar or spherical maps. Since the earth is a spherical globe, the geospatial calculations on planar maps are only an approximation~\cite{coordsys,coordsys-mongo}. As an example, the measurement of distances in planar maps are accurate only in a small region. It means the spherical maps are the better representation when the calculations are expected as real ones on the Earth. As our goal is to assess some geospatial features of MongoDB and compare it with Basex Geo Module, we focus only on the spherical approach. Correspondingly, WGS84 is used instead of legacy coordinate pairs to express the spherical maps. 
 
-Geospatial operators of MongoDB for sherical data support the GeoJSON~\cite{www/geojson} format. GeoJSON is a human-readable encoding format for representing the geographical features, using JSON standard. GeoJSON consists of an object which escribes a geometry, Feature, or collection of Features. The type of geometries must be one of the : \textit{Point}, \textit{LineString}, \textit{Polygon}, \textit{MultiPoint}, \textit{MultiLineString}, \textit{MultiPolygon}, and \textit{GeometryCollection}. A \textit{Feature} must have members with the name \textit{geometry} and \textit{properties}. A feature collection is an object with the type \textit{FeatureCollection} which must have a member with the name \textit{features}. Below is an instance GeoJSON file with a \textit{FeatureCollection} object,
-
-\begin{fakeJSON}[label=feature-collection,caption=A GeoJSON file containing a FeatureCollection object]
+\vspace{10px}
+\begin{fakeXML}[label=feature-collection,caption=A GeoJSON file containing a FeatureCollection object]
 {
   "type": "FeatureCollection",
   "features": [
@@ -911,7 +920,11 @@ Geospatial operators of MongoDB for sherical data support the GeoJSON~\cite{www/
     }
   ]
 }
-\end{fakeJSON}
+\end{fakeXML}
+\vspace{10px}
+
+
+Geospatial operators of MongoDB for spherical data support the GeoJSON~\cite{www/geojson} format. GeoJSON is a human-readable encoding format for representing the geographical features, using JSON standard. It consists of an object which describes a geometry, Feature, or collection of Features. The type of geometries must be one of these types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. A \textit{Feature} must have members with the names \textit{geometry} and \textit{properties}. A feature collection is an object with the type \textit{FeatureCollection} which must have a member with the name \textit{features}. Code~\ref{feature-collection} is an instance GeoJSON file with a \textit{FeatureCollection} object.
 
 Current version of MongoDB supports only three geometry types Point, LineString, and Polygon. As mentioned in Section~\ref{mongo}, a geospatial query in MongoDB can use \textit{geoIntersects}, \textit{geoWithin}, \textit{near}, and \textit{nearSphere} operators. In addition, there are geometry specifiers to define geometries in query conditions of these operators. For instance, the \textit{\$center} and \textit{\$centerSphere} are specifiers for a circle area in planar and spherical maps on which the user intends to do the query. Then, the user can find all geometries within a determined circular area. Another example is the \textit{\$maxDistance} specifier that determines the maxmimum distance from a point in order to find geometries within this particular distance. Geometry specifires are limited to, \textit{\$geometry}, \textit{\$maxDistance}, \textit{\$center}, \textit{\$centerSphere}, \textit{\$box}, and \textit{\$polygon}. An example demonstrating the usage of the specifiers in a query is provided in the followings,
 \vspace{10px}
@@ -941,7 +954,7 @@ an error message regarding the size limitation was thrown.
 When the GeoJSON file structure is changed to contain individual features as below,
 this problem disappeared.
 \vspace{10px}
-\begin{fakeJSON}[label=features,caption=A GeoJSON file restructured regarding the size limitation]
+\begin{fakeXML}[label=features,caption=A GeoJSON file restructured regarding the size limitation]
     {
       "type": "Feature",
       "geometry": {...},
@@ -953,7 +966,7 @@ this problem disappeared.
       "properties": {...}
     }, 
     { ... }, ..., { ... }
-\end{fakeJSON}
+\end{fakeXML}
 \vspace{10px}
 %TODO:explain about the query difficulties and aggregation of the above structure
 After importing the file, we examined the common features, i.e., intersection, within, 
@@ -979,7 +992,7 @@ for $b in //gml:Polygon
 return if (geo:intersects( $a, $b)) then $b else ()
 \end{fakeXML}
 \item \textit{MongoDB}: 
-\begin{fakeJSON}
+\begin{fakeXML}
 db.places.find( { geometry :
                   { $geoIntersects :
                     { $geometry :
@@ -987,21 +1000,22 @@ db.places.find( { geometry :
                         coordinates:[[[6,52.6],[6.1,52.6],
                         	    [6.1,53],[6,53],[6,52.6]]]
                 } } } } )
-\end{fakeJSON}
+\end{fakeXML}
 \end{itemize}
 
 Similar queries are designed to check the other functions. Here, we skip the queries and directly go to the results. To check the profiling in MongoDB, query plan information, such as the index type, the query time, scanned objects, etc, \textit{\$explain} operator could be specified either in the forms,
+\vspace{10px}
 \begin{fakeJSON}
 db.collection.find()._addSpecial( "$explain", 1 )
 db.collection.find( { $query: {}, $explain: 1 } )
 \end{fakeJSON}
  or 
  \begin{fakeJSON}
- db.collection.find().explain().
+db.collection.find().explain().
  \end{fakeJSON}
- 
-Bellow the profile of a sample query is shown,
-
+\vspace{10px}
+Below the profile of a sample query is shown,
+\vspace{10px}
 \begin{fakeJSON}
 "cursor" : "BasicCursor",
 "isMultiKey" : false,
@@ -1013,10 +1027,11 @@ Bellow the profile of a sample query is shown,
 ...
 "server" : "MongoServer"
 \end{fakeJSON}
+\vspace{10px}
 
 In the provided information, number of the results and the query time is implied in \textit{n} and \textit{millis} elements respectively. \textit{cursor} specifies the type of the cursor used by the operation. Here, \textit{BasicCursor} indicates that the query is only performing a normal scan to find the results.  This typical cursor reads the documents in natural order. That is, no index is used for this operation and the whole data is scanned in the original order. If a geospatial index is used, the cursor type will change. \textit{n} reflects the number of geometries that match the query condition, i.e., the number of items on the cursor. \textit{nscanned} is the number of scanned documents for this operation, when no index is used, or scanned index entry in the range, when an index is used. \textit{nscannedObjects} is the number of scanned documents in this query to obtain the results. In queries which an index structure is not used, as in the above sample, these two numbers will be equal. Otherwise, \textit{nscannedObjects} may be lower, as shown in the following query plan which uses a geospatial index. 
 In other words, $nscanned\geq nscannedObjects\geq n$ always. Ofcourse, the most optimum state is where $nscanned=nscannedObjects=n$. 
-
+\vspace{10px}
 \begin{fakeJSON}
 "cursor" : "S2Cursor",
 "isMultiKey" : true,
@@ -1025,7 +1040,7 @@ In other words, $nscanned\geq nscannedObjects\geq n$ always. Ofcourse, the most 
 "nscanned" : 36941,
 ...
 \end{fakeJSON}
-
+\vspace{10px}
 %and it could be reached with compound indexes and rephrasing the query statement in some cases as well.
 
 %TODO mesal for optimization from: http://java.dzone.com/articles/optimizing-mongodb-compound
@@ -1041,7 +1056,7 @@ Running the same queries in both databases, Figure ~\ref{figBXvsMongoNoIndexInte
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth,height=0.25\textheight]{BXvsMongo-NoIndex-Intersects}
+\includegraphics[width=0.8\textwidth,height=0.25\textheight]{BXvsMongo-NoIndex-Intersects-log}
 \caption{Query Timing of \textit{intersect} Operation without Spatial Index}
 \label{figBXvsMongoNoIndexIntersects}
 \end{figure}
@@ -1055,17 +1070,17 @@ In this way, we also cover \textit{near} and \textit{nearSphere} queries in Mong
 \subsection{Indexing in the Databases}
 \label{index}
 The assessment process is continued by applying the geospatial index. In MongoDB there are two choices for using geospatial index, \textit{2d} for data expressed in legacy coordinate pairs and \textit{2dsphere} for both \textit{GeoJSON} data objects and legacy coordinate pairs. We use \textit{2dsphere} which fits to the choice of sherical maps, via the following shell command,
-
-\begin{verbatim}
+\vspace{10px}
+\begin{fakeJSON}
 db.Collection.ensureIndex({geometry:"2dsphere"}) 
-\end{verbatim}
-
+\end{fakeJSON}
+\vspace{10px}
 The same step is also taken in BaseX. Running again the same queries using a geospatial index, supposedly gives declined query times (see Figure~\ref{figBXvsMongoIndexIntersects}). As explained in Section~\ref{s.basex}, index is apllied through the \textit{filter} function in BaseX, while MongoDB follows another approach. MongoDB applies the index in casual query formats after executing the above-mentioned command and there is no need to change the queries in general. 
 
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth]{BXvsMongo-Intersects-Index}
+\includegraphics[width=0.8\textwidth]{BXvsMongo-Intersects-Index-log}
 \caption{Query Timing of \textit{intersect} Operation with Spatial Index}
 \label{figBXvsMongoIndexIntersects}
 \end{figure}
@@ -1080,8 +1095,8 @@ The same step is also taken in BaseX. Running again the same queries using a geo
 %\label{figBXvsMongoIndexIntersects}
 %\end{figure}
 
-The next wiedly used type of query is finding the near places or geometries up to a distance from a specific point. It could be also expressed as finding the geometries inside a circle with the distance value as the radius lenght. This feature is provided in MongoDB via \textit{\$near} and \textit{\$nearSphere} operators which simply get the reference point and the disance and hereafter returns the whole geometries in the specified distance from the point. Both near operators need a geospatial index, either \textit{2d} or \textit{2dsphere}. A specific distance in meter is defined as a condition to filter those geometries within this area. Below, we provide a sample query of the \textit{\$nearSphere} oprator.  
-
+The next widely used type of query is finding the near places or geometries up to a distance from a specific point. It could be also expressed as finding the geometries inside a circle with the distance value as the radius lenght. This feature is provided in MongoDB via \textit{\$near} and \textit{\$nearSphere} operators which simply get the reference point and the disance and hereafter returns the whole geometries in the specified distance from the point. Both near operators need a geospatial index, either \textit{2d} or \textit{2dsphere}. A specific distance in meter is defined as a condition to filter those geometries within this area. Below, we provide a sample query of the \textit{\$nearSphere} oprator.  
+\vspace{10px}
 \begin{fakeJSON}
 db.collection.find({{geometry:
                        {$nearSphere:
@@ -1090,11 +1105,11 @@ db.collection.find({{geometry:
                              $maxDCistance : 100
                     }}}})
 \end{fakeJSON}
-
+\vspace{10px}
 %TODO:reference for projected coordinate sys.
 BaseX Geo Module currently provides this feature via \textit{distance} or combination of \textit{buffer} and \textit{within} functions. In Both cases, if the coordinate system in which the data is provided is a projected coordinate system, the distance can be specified in meter or any other metric unit. In a projected coordinate system, all the areas, lengths, and angels are defined on a flat two-dimensional space. In such a system, the user is provided with this \textit{naer} feature in BaseX by using the above-mentioned functions as belows,
-
-\begin{fakeXML}
+\vspace{10px}
+\begin{fakeJSON}
 import module namespace geo = "http://expath.org/ns/Geo";
 declare namespace gml="http://www.opengis.net/gml";
 let $a:= <gml:Point>
@@ -1104,16 +1119,24 @@ let $a:= <gml:Point>
             </gml:Point>
 for $b in //gml:Polygon 
 return if (geo:distance( $a, $b) le 500) then $b else ()
-\end{fakeXML}
+\end{fakeJSON}
+\vspace{10px}
 
 
 For the data provided in a geographic coordinate system, calculations do not work with the metric values. A geographic coordinate system, such as WGS84, defines the areas and locations in a three-dimensional spherical space. Since there is not a specific unit for the current Geo Module functions, the \textit{distance} function interprets the input distance in the coordinate system of the data. For example, our sample Netherlands dataset is in a metric coordinate system. Hence,  the distance value in queries can be specified in meters. %TODO:better description
 
-The forementioned \textit{near} feature as a wildy used usecase is available in BaseX only for metric coordinate systems. To provide this feature also for geographic systems via the current geo functions, we need to convert the geographic coordinates to metric ones. In this way, we convert the specified input geometry in WGS84 to a metric system. Then, we compute the buffer of converted geometry up to the input distance in the same metric system and convert the buffer back to the original geographic coordinate system. A buffer of geometry is an identified region within a specific distance of the geometry. At the end, we find the all geometries within the buffer in geographic coorsinate system. This approach benefits from the geospatial index structure, via the \textit{within} function, while the approach with the \textit{distance} function do not utilize the geospaial index. This process is illustrated in Figure~\ref{}. ???? 
-This procedure is expressed as bellow, using the \textit{buffer} and \textit{within} functions and should return the same result as the previous query, 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Transform}
+\caption{Having the \textit{near} Feature for WGS84 Data using Transform in BaseX}
+\label{figTransform}
+\end{figure}
 
-% TODO: indention
-\begin{verbatim} 
+The forementioned \textit{near} feature as a widely used usecase is available in BaseX only for metric coordinate systems. To provide this feature also for geographic systems via the current geo functions, we need to convert the geographic coordinates to metric ones. In this way, we convert the specified input geometry in WGS84 to a metric system. Then, we compute the buffer of converted geometry up to the input distance in the same metric system and convert the buffer back to the original geographic coordinate system. A buffer of geometry is an identified region within a specific distance of the geometry. At the end, we find the all geometries within the buffer in geographic coorsinate system. This approach benefits from the geospatial index structure, via the \textit{within} function, while the approach with the \textit{distance} function do not utilize the geospaial index. This process is illustrated in Figure~\ref{figTransform}. 
+This procedure is expressed as below, using the \textit{buffer} and \textit{within} functions and should return the same result as the previous query, 
+
+\vspace{10px}
+\begin{fakeJSON} 
 within(geometry,
        transform(buffer(
                    transform(myPoint_in_wgs84, other_metric_cs)
@@ -1121,8 +1144,8 @@ within(geometry,
                  , wgs84
                 )
       )
-\end{verbatim}
-
+\end{fakeJSON}
+\vspace{10px}
 Having the same usecases, we have tested this feature in both databases, with the timing result shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function, while \textit{\$nearSphere} operator finds the geometries in MongoDB. Obviously, MongoDB has a better performance, specifically with smaller number of results. The qurey times and the number of results are directly proportional in MongoDB, since index is used and both chaneges accompany each other. BaseX do not use the geospatial index and consequently returns every result more or less in the same time.
 
 %TODO: figure for converion method in BX
@@ -1137,11 +1160,11 @@ Having the same usecases, we have tested this feature in both databases, with th
 \end{figure}
 
 
-As mentioned in Section~\ref{indexBX}, BaseX records the index structure in a file and reads it back into the main memory, when the geospatial index is required. A Point which we should contemplate is to include the time for index opening in query times, since the index file might be removed from the memory and read back again in memory management. This time is not counted in the presented charts.
+As mentioned in Section~\ref{indexBX}, BaseX records the index structure in a file and reads it back into the main memory, when the geospatial index is required. A Point which we should contemplate is to include the time for index opening in query times, since in memory management, the index file might be removed from the memory and read back again. This time is not counted in the presented charts.
 %TODO: better explanation
 
 
-\subsection{Updating a Database}
+\subsection{Database Update}
 \label{update}
 %TODO:Complete!not good :|
 Updating a database as a significant interaction supplied by the database system generally comprises three different operation: insert, delete, and modify. In addition to the whole issues related to the database update on disk and memory management, reconstructing the indexes is of great importance. That is, since the index is constructed based on the old database state, the updated database needs a new index. 
@@ -1149,9 +1172,9 @@ Updating a database as a significant interaction supplied by the database system
 Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means the STRTree do not get updated automatically and the geospatial index has to be rebuilt manually. It causes redundant constructions and consequently worse performance. Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
 
 Considering the manual update of the geospatial index in BaseX, reindexing time must be examined to evaluate the updating process. This implies the index creation time plus reopeneing the index file into the main memory should be included in the evaluation. 
-As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operations in MongoDB are apparantly better. As mentioned before, reindexing in BaseX causes a huge growth in time, which individually takes the greatest amount of total time (See Figure~\ref{figBXUpdate}). 
+As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operations in MongoDB are apparantly better. As mentioned before, reindexing in BaseX causes a huge growth in time, which individually takes the greatest amount of total time (See Figure~\ref{figBXUpdate}). We skip the result of deletion and insertion since they follow the similar pattern as update.
 
-The bad performance in the near query and the update problem lead us to a new approach to use the MongoDB index from BaseX. The strategy is explained in the next section.
+The unsatisfactory performance of the updating and also \textit{near} feature in BaseX lead us to a new approach to use the MongoDB index from BaseX. The strategy is explained in the next section.
 
 %TODO this is some part that we can speak about it in Conclusion
 %Since the current index implementation do not involves updating based on the STRTree definition, hence a new index should be designed and implemented.................
@@ -1160,36 +1183,50 @@ The bad performance in the near query and the update problem lead us to a new ap
 
 \begin{figure}
 \centering
-\subfigure{
-	\includegraphics[width=0.47\textwidth]{BXvsMongo-Insertion.png}
-	\label{figBXvsMongoInsert}
-}
-\centering
-\subfigure{
-	\includegraphics[width=0.47\textwidth]{BXvsMongo-Deletion.png}
-	\label{figBXvsMongoDelete}
-}
-\subfigure{
-	\includegraphics[width=0.5\textwidth]{BXvsMongo-Update.png}
-	\label{figBXvsMongoModify}
-}
-\caption{Performance of different update operations in BaseX and MongoDB.}
+\includegraphics[width=0.7\textwidth]{BXvsMongo-Update.png}
+\caption{Performance of the Update Operation in BaseX and MongoDB}
 \label{figBXvsMongoUpdate}
 \end{figure}
 
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{BXUpdate.png}
-\caption{Time consumtion percentage of different tasks in update operations in BaseX.}
+\includegraphics[width=0.7\textwidth]{BXUpdate.png}
+\caption{Time Consumtion Percentage of the Update Operations in BaseX.}
 \label{figBXUpdate}
 \end{figure}
 
-\subsection{Indexing in BaseX via MongoDB}
+\subsection{Querying by MongoDB via BaseX}
+Up to this point we have investigated both BaseX and MongoDB to gain some improvement ideas for BaseX. We go further in this way by querying the data with MongoDB through BaseX. A conceivable goal for this approach could be supplying the missing features or make the features with better performance in MongoDB accessible from BaseX. In this approach, BaseX could be used as a coonector to MongoDB, then the provided queries in MongoDB syntax are executed by MongoDB and the results are shown through BaseX. For the missing feature, this would add a functionality to BaseX. But, for the common queries we should evaluate the new query times to see how the performance changes. 
+The test implementation is done by defining a connection string and the intended query in a function. However, these tasks could be specified through the XQuery by user and we just have done it as a test. 
+In regards to the unsatisfactory query times in the \textit{near} feature, we have tried the \textit{\$nearSphere} operator. The performance modification of this feature is demonstrated in Figure~\ref{figMongoviaBX-near}.
+ 
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{MongoviaBX-near.png}
+\caption{Performance Comparision of the \textit{near} Feature in BaseX vs. MongoDB through BaseX}
+\label{figMongoviaBX-near}
+\end{figure}
 
-\newpage
+Figure~\ref{figMongoviaBX-near} implies that the performance of the \textit{near} query executed by MongoDB is preferable. The constant performance trend in BaseX is because of the no index inclusion. Hence, the user can benefit from this functionality in MongoDB through BaseX. 
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{MongoviaBX-Update.png}
+\caption{Performance Comparision of the Update Operation in BaseX vs. MongoDB through BaseX}
+\label{figMongoviaBX-update}
+\end{figure}
+
+This process is done for the update operaions such that the update query modifies the database in MongoDB. Correspondingly, it should be decided to continue the querying either in MongoDB or in BaseX after repeating the update queries and rebuilding the index structure. Figure~\ref{figMongoviaBX-update} indicates the better timing result of updating by MongoDB through BaseX. 
+
+
+
 \subsection{Conclusion}
 \label{conc}
+In this section we concentrated on the geospatial features of MongoDB in order to find ways to improve the BaseX Geo Module efficiency. We started with investigation of geospatial features to see the different viewpoint in MongoDB. Based on the common features, the perofrmance of these features is discussed and to see the influence of geospatial index, we represented and discussed the timing with the use of index. Among the features, finding the geometries within a specific distance, as a widely used one, is provided through \textit{\$near} and \textit{\$nearSphere} operators. Since BaseX functions could do the calculation only on the flat space, this feature is provided just for the projected coordinate systems. To add the support of data in WGS84, new functions are implemented. Testing this feature in both databases shows better performance in MongoDB. Besides, updating a database is discussed herafter. Update in MongoDB contains implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed manually. Therefore, query time severly increases considering the time consumed by index updating. 
+Since the performance of two major functionalities, i.e., the \textit{near} feature and update, are not satisfying in BaseX and MongoDB provides them in a faster way, we tried to connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature seem convincing enough to have this alternative way in BaseX. Also, updating by MongoDB via BaseX is also faster than updating in BaseX. However a  dicussion is raised here, about the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible only in MOngoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth using while the whole update and index reconstruction process must be done. The approach sets the limitation for the usecases in which the database will be updated, to do the geospatial querying completely in MongoDB.
+
 
 \newpage
 \section{Future Work}
@@ -1198,4 +1235,4 @@ The bad performance in the near query and the update problem lead us to a new ap
 \bibliographystyle{unsrt}
 \bibliography{refs}
 
-\end{document}
+\end{document}	

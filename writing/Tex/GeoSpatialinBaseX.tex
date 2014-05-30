@@ -232,7 +232,7 @@ This structure is introduced for non-point objects and an extensive duplication 
 The point is that this structure is not suitable for large objects since duplication and redundant storage of objects would result in high overhead.
 
 \emph{4D-tree}
-Indexes rectangular objects using kd-tree by mapping the objects into points in a four-dimensional space. Each 2D rectangle with (x1, y1) and (x2, y2) is considered as a 4D (x1, y1, x2, y2). As kd-tree the discriminators are chosen cyclically from this set. For each node, a discriminator, discriminator value and pointers to two children are stored. 
+Indexes rectangular objects using kd-tree by mapping the objects into points in a four-dimensional space. Each 2D rectangle with (x1, y1) and (x2, y2) is considered as a 4D (x1, y1, x2, y2). As kd-tree the discriminators are choosen cyclically from this set. For each node, a discriminator, discriminator value and pointers to two children are stored. 
 For a region search (qx 1, qx 2, qy 1, qy 2), depending on the discriminator, one of the x1 <= qx2, x2  >=  qx1, y1 <= qy2 or y2 >= qy1 has to be done to determine which subtree (or both) has to be searched.
 The major problem associated with the 4-d-tree is its intersection search, which can be very costly due to the need for traversal of both subtrees when a query region lies in a subspace that cannot not bounded tightly using the discriminator values.
 
@@ -284,7 +284,7 @@ very high fan out of the directory nodes)
 
 \emph{The Packed R-Tree}
 
-In order to minimize storage space, coverages and overlaps in R-Tree, constructing a static tree is proposed. To make this tree, first the objects are ordered along a coordinate. The object with the minimum value then is chosen to find the M nearest objects to that one, and assigns them to a node. Here M is the maximum number of objects that are allowed in a page. This step is repeated until the whole objects are assigned to a node. The bounding box of the leaf nodes are higher level objects. These are also ordered and assigned to the nodes. The process repeats until the number of the remained nodes is less than M. If so, they are assigned to the root.
+In order to minimize storage space, coverages and overlaps in R-Tree, constructing a static tree is proposed. To make this tree, first the objects are ordered along a coordinate. The object with the minimum value then is choosen to find the M nearest objects to that one, and assigns them to a node. Here M is the maximum number of objects that are allowed in a page. This step is repeated until the whole objects are assigned to a node. The bounding box of the leaf nodes are higher level objects. These are also ordered and assigned to the nodes. The process repeats until the number of the remained nodes is less than M. If so, they are assigned to the root.
 The main objective of the algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 
 \emph{R+-Tree}
@@ -459,7 +459,7 @@ When an index is created, geohash values for coordinate pairs are calculated and
 Geohash is calculated by recursively dividing the a 2D map into quadrants and assigning each area a 2-bit value.
 
 
-If the file contains just flat data, the 2d Index has to be used, but for those which also contain spherical data, 2sphere Index has to be chosen, since the distance function differs respectively.
+If the file contains just flat data, the 2d Index has to be used, but for those which also contain spherical data, 2sphere Index has to be choosen, since the distance function differs respectively.
 
 Later on geohash values will be index using B-Tree. 
 MongoDB also used B-Tree structure for other type of index, such as Single Field (e.g. indexing over names), Compound, Text Index. (Probably this point effect on the structure of geospatial index.)
@@ -698,7 +698,7 @@ The forementioned GmlReader class reads the elements differently based on their 
  \begin{figure}
 \centering
 \includegraphics[width=0.95\textwidth]{GeoModuleProcess}
-\caption{Converting GML elements to geometris.}
+\caption{Converting GML elements to geometris}
 \label{figGeoModuleProcess}
 \end{figure}
 
@@ -774,7 +774,7 @@ The negetaive point about the latter approach is that the input polygon, like po
  \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{MapIndexing}
-\caption{Using Map to Cash the Input Geometry: Performance Effect}
+\caption{Using a Map to cash the input geometry: performance effect}
 \label{figMap}
 \end{figure}
 
@@ -815,7 +815,7 @@ By monitoring the times consumed by different part of a query, we discovered tha
 	\label{figParseProcess2}
 	
 }
-\caption{GML Elements Parsing Process}
+\caption{Parsing process of the GML elements}
 \label{figParseProcess}
 \end{figure}
 
@@ -851,7 +851,7 @@ To see how each part influence the performance, we examine them separately. Figu
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth,height=0.25\textheight]{detailedTiming}
-\caption{Detaled Timing in Index Structure}
+\caption{Detailed timing in a query using geospatial index}
 \label{figDetailedTiming}
 \end{figure}
 
@@ -891,7 +891,7 @@ An introduction of MongoDB geospatial features is provided before in \ref{mongo}
 As we discussed in Section~\ref{mongo}, geospatial data can be represented in MongoDB either as planar or spherical maps. Since the earth is a spherical globe, the geospatial calculations on planar maps are only an approximation~\cite{coordsys,coordsys-mongo}. As an example, the measurement of distances in planar maps are accurate only in a small region. It means the spherical maps are the better representation when the calculations are expected as real ones on the Earth. As our goal is to assess some geospatial features of MongoDB and compare it with Basex Geo Module, we focus only on the spherical approach. Correspondingly, WGS84 is used instead of legacy coordinate pairs to express the spherical maps. 
 
 \vspace{10px}
-\begin{fakeXML}[label=feature-collection,caption=A GeoJSON file containing a FeatureCollection object]
+\begin{fakeXML}[label=feature-collection,caption=A GeoJSON file containing a \textit{FeatureCollection} object]
 {
   "type": "FeatureCollection",
   "features": [
@@ -1055,7 +1055,7 @@ Running the same queries as before, like \textit{intersects}, in both databases,
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth,height=0.25\textheight]{BXvsMongo-NoIndex-Intersects-log}
-\caption{Query Timing of \textit{intersect} Operation without Spatial Index}
+\caption{Query timing of \textit{intersect} operation without geospatial index}
 \label{figBXvsMongoNoIndexIntersects}
 \end{figure}
 
@@ -1083,7 +1083,7 @@ The same step is also taken in BaseX. Running again the same queries using a geo
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{BXvsMongo-Intersects-Index-log}
-\caption{Query Timing of \textit{intersect} Operation with Spatial Index}
+\caption{Query timing of \textit{intersect} operation with geospatial index}
 \label{figBXvsMongoIndexIntersects}
 \end{figure}
 
@@ -1093,7 +1093,7 @@ The same step is also taken in BaseX. Running again the same queries using a geo
 %\begin{figure}
 %\centering
 %\includegraphics[width=0.7\textwidth]{BXvsMongo-Within-Index}
-%\caption{Query Timing of \textit{intersect} Operation with Spatial Index}
+%\caption{Query timing of \textit{intersect} operation with geospatial index}
 %\label{figBXvsMongoIndexIntersects}
 %\end{figure}
 
@@ -1130,7 +1130,7 @@ For the data provided in a geographic coordinate system, calculations do not wor
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{Transform}
-\caption{Having the \textit{near} Feature for WGS84 Data using Transform in BaseX}
+\caption{Having the \textit{near} feature for WGS84 data using transformation in BaseX}
 \label{figTransform}
 \end{figure}
 
@@ -1157,7 +1157,7 @@ Having the same use cases, we have tested this feature in both databases, with t
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{BXvsMongoNear.png}
-\caption{Query Timing of \textit{near} Feature}
+\caption{Query timing of the \textit{near} feature}
 \label{figBXvsMongoNear}
 \end{figure}
 
@@ -1186,7 +1186,7 @@ The unsatisfactory performance of the updating and also \textit{near} feature in
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{BXvsMongo-Update.png}
-\caption{Performance of the Update Operation in BaseX and MongoDB}
+\caption{Performance of the update operation in BaseX and MongoDB}
 \label{figBXvsMongoUpdate}
 \end{figure}
 
@@ -1194,11 +1194,12 @@ The unsatisfactory performance of the updating and also \textit{near} feature in
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{BXUpdate.png}
-\caption{Time Consumtion Percentage of the Update Operations in BaseX.}
+\caption{Time consumtion percentage of the update operations in BaseX.}
 \label{figBXUpdate}
 \end{figure}
 
 \subsection{Querying by MongoDB via BaseX}
+\label{MongoviaBX}
 Up to this point we have investigated both BaseX and MongoDB to gain some improvement ideas for BaseX. We go further in this way by querying the data with MongoDB through BaseX. A conceivable goal for this approach could be supplying the missing features or make the features with better performance in MongoDB accessible from BaseX. In this approach, BaseX could be used as a coonector to MongoDB, then the provided queries in MongoDB syntax are executed by MongoDB and the results are shown through BaseX. For the missing feature, this would add a functionality to BaseX. But, for the common queries we should evaluate the new query times to see how the performance changes. 
 The test implementation is done by defining a connection string and the intended query in a function. However, these tasks could be specified through the XQuery by user and we just have done it as a test. 
 In regards to the unsatisfactory query times in the \textit{near} feature, we have tried the \textit{\$nearSphere} operator. The performance modification of this feature is demonstrated in Figure~\ref{figMongoviaBX-near}.
@@ -1206,7 +1207,7 @@ In regards to the unsatisfactory query times in the \textit{near} feature, we ha
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{MongoviaBX-near.png}
-\caption{Performance Comparision of the \textit{near} Feature in BaseX vs. MongoDB through BaseX}
+\caption{Performance comparision of the \textit{near} feature in BaseX vs. MongoDB through BaseX}
 \label{figMongoviaBX-near}
 \end{figure}
 
@@ -1216,7 +1217,7 @@ Figure~\ref{figMongoviaBX-near} implies that the performance of the \textit{near
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{MongoviaBX-Update.png}
-\caption{Performance Comparision of the Update Operation in BaseX vs. MongoDB through BaseX}
+\caption{Performance comparision of the update operation in BaseX vs. MongoDB through BaseX}
 \label{figMongoviaBX-update}
 \end{figure}
 
@@ -1224,19 +1225,22 @@ This process is done for the update operaions such that the update query modifie
 
 \subsection{Discussion}
 \label{s.disc}
-Throughout this section we investigated different strategies to process the geospatial data in BaseX efficiently.
-Although BaseX can handle the non-geospatial queries as well as some geospatial queries like intersects and within
-almost efficiently using Index, the near query and the database update decreases the efficiency dramatically.
-Table~\ref{t.comparisonBaseXMongo} summerizes this statement. As we discussed, \textit{BaseX through MongoDB} means
-BaseX connects to MongoDB for the Indexing the geospatial data. Also, the results of queries will be
-sent back to BaseX. The notation $\times$ in this table means that option is better in efficiency. 
-With $\times\times$, we mean that option is very efficient.
+Throughout this section we investigated different strategies to efficiently process the geospatial data in BaseX. Related to the most recent strategy in Section~\ref{MongoviaBX}, one might raise a question. The question could be, "Why not to choose the querying completely in MongoDB and to forget about querying MongoDB through BaseX, while MongoDB provides specific features more efficient?". To answer this question we start with a the point that a database might contain non-geospatial data in addition to the geospatial one. 
+%Although BaseX can handle the non-geospatial queries as well as some geospatial queries like intersects %and within
+%almost efficiently using Index, the near query and the database update decreases the efficiency dramatically. 
+Therefore, besides the geospatial queries there might be some non-geospatial queries as well, e.g. finding the point elements or the number of polygons in a dataset. It means the geospatial queries are not necessarily the only focuse of the queries and the user can mix both types in a piece of code. Hence, these so-called non-geospatial queries should be considered in the set of user requiremets, however analysing them are not our focuse. This point is important when the user wants to choose between BaseX and MongoDB for geospatial queries while the non-geospaial queries will be done by BaseX. In this case the user can benefi from both databases while the most requirements are fulfilled by BaseX. 
+%TODO:inja gosastegi ijad shode!!
+To summerize the results observed outputs of the investigations, the near query and the geospatial index updating in BaseX are far from the ......???, though geospatial query times which are the focuse of the index structure, like intersects, seem that could be satisfying in some cases/some how.???  
+Table~\ref{t.comparisonBaseXMongo} represents this statement based. \textit{MongoDB through BaseX} in this table means
+BaseX connects to MongoDB to benefit by the features are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. The notation $"\times"$ in this table indicates better efficiency of that option. We suppose te user is satisfied with the above-mentioned non-geospatial queries.
+% is better in efficiency. 
+With $"\times\times"$, we mean that option is very efficient.
 
 \begin{table}
 \centering
 \begin{tabular}{|l | c | c|}\hline
-\textbf{Tasks} & \textbf{BaseX} & \textbf{BaseX through MongoDB}\\\hline
- Non-geospatial Queries & $\times$ &\\\hline
+\textbf{Tasks} & \textbf{BaseX} & \textbf{MongoDB through BaseX}\\\hline
+ %Non-geospatial Queries & $\times$ &\\\hline
  Geospatial Queries  & $\times$ &\\
 like intersects/within & & \\\hline
  Near Query & &$\times\times$ \\\hline
@@ -1247,19 +1251,14 @@ like update/insert/delete &&\\\hline
 \label{t.comparisonBaseXMongo}
 \end{table}
 
-Some fast conclusion from this table suggests the advantage of using BaseX through MongoDB. However,
-the issue of synchronization between the database instace of BaseX and the database instance of MongoDB
-should be precisely examined. If the user wants to modify the database which means also the modification of index, 
-it seems that the better strategy is to update the MongoDB instace, while the database instance in BaseX remains unchanged.
+Some fast conclusion (A fast conclusion???) from this table suggests the advantage of using BaseX through MongoDB. However, the issue of synchronization between the database instace of BaseX and the database instance of MongoDB should be precisely examined. If the user wants to modify the database which means also the modification of index, 
+it seems that the faster strategy is to update the MongoDB instace, while the database instance in BaseX remains untouched. But, in case that the user wants to do further querying based on the changes, this approach do not seem optimized.  
 
-This problem can be solved by limiting the user such that he can only do all queries regarding the index in MongoDB.
-However, as we see in Table~\ref{t.comparisonBaseXMongo} some queries are more efficient in BaseX as the connection time to MongoDB is added.
-Also, the dependency of BaseX on MongoDB for all geospatial queries would be a big limitation for this software
-regarding the geospatial processing. Then, both possiblities should be available for the user in our mind.
+A solution to this problem can be limiting the user such that they only do all queries regarding the index in MongoDB. ???
+However, as we see in Table~\ref{t.comparisonBaseXMongo} some queries are more efficient in BaseX as the connection time to MongoDB is added. ???
+Furthermore, the dependency of BaseX on MongoDB for all geospatial queries would be a big limitation for this software regarding the geospatial processing. Then, it will be more appropriate to provide the user with both possiblities.
 
-Table~\ref{t.possiblities} summerizes different scenarios that can be happened when 
-a geospatial data wants to be processed. Also, this table shows the different actions 
-that user can do for a efficient strategy toward her/his goal.
+Table~\ref{t.possibilities} summerizes the scenarios that can happen based on the existing features and investigations when the geospatial data wants to be processed. In addition, this table shows the relevant/appropriate actions the user can apply as an efficient strategy toward her/his goal.
 
 
 \begin{table}
@@ -1267,11 +1266,11 @@ that user can do for a efficient strategy toward her/his goal.
 \begin{tabular}{|l | l | }\hline
 \textbf{Scenarios} & \textbf{What to do?}\\\hline
  Needs a \textit{instersects/within} query  & Using BaseX only\\
-and no update and no \textit{near} query & \\\hline
+and no update and no \textit{near} query (? near mitune bashe!) & \\\hline
  Needs a \textit{near} query and no update & Using BaseX and MongoDB together\\\hline
- Needs a \textit{update/insert/delete} query& Using MongoDB only\\\hline
+ Needs modifications in the database& Using MongoDB only\\\hline
 \end{tabular}
-\caption{Different scenarios that can be happened and different actions that user can take}
+\caption{Possible scenarios and suggested appropriate actions to take}
 \label{t.possibilities}
 \end{table}
  

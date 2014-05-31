@@ -874,7 +874,9 @@ We have used Java profiling to get more precise information. The first few metho
 \end{tabular}
 \vspace{10px}
 
-As the profile output indicates, the \textit{split} function calls consume the greatest amount of time. The \textit{split} function is called mostly Besides, \textit{createPolygon} and \textit{geo} functions, all used in \textit{GmlReader} class, are expensive. Therefore, these functions should be focused in performance tuning, if this approach would be taken.
+As the profile output indicates, the \textit{split} function calls consume the greatest amount of time. Besides, \textit{createPolygon} and \textit{geo} functions, all used in \textit{GmlReader} class, are expensive. Therefore, these functions should be focused in performance tuning. 
+
+We started to replace the \textit{split} function with a ... function 
 %TODO\CONTINUE
 
 \subsection{Conclusion}
@@ -1257,7 +1259,7 @@ like \textit{intersects/within} & & \\\hline
 
 As is expressed in Table~\ref{t.comparisonBaseXMongo}, the geospatial queries like \textit{intersects} and \textit{within} are working with an acceptable performance????. On the other hand, for the \textit{near} and update queries connecting to MongoDB seems to be the appropriate approach. Hence, a fast conclusion would be to have the advantage of using MongoDB through BaseX. However, the synchronization of the database instace in BaseX and the database instance in MongoDB should be precisely examined. If the user intends to modify the database which means also the modification of index without any further querying regarding the changes, the faster strategy is to update the MongoDB instace, while the database instance in BaseX remains untouched. But, in case that the user wants to do further querying based on the changes, this approach is not optimized.  
 
-One way to discard the above-mentioned problem could be limiting the user to do all geospatial queries regarding the index in MongoDB and use BaseX just as a connector for these types of queries. 
+One way to discard the above-mentioned problem could be limiting the user to do all geospatial queries regarding the index in MongoDB and use BaseX just as a connector. 
 However, as we see in Table~\ref{t.comparisonBaseXMongo} doing some queries in BaseX are more efficient and connecting to MongoDB might be a disadvantage, since this adds at least the connection time to the query time. Moreover, the complete dependency of BaseX on MongoDB for all geospatial queries would be too much and disadvantageous while each system is designed for different requirements and follow various goals. 
 %a big limitation for this software regarding the geospatial processing. 
 Thus, it will be more appropriate to provide the user with both possiblities.
@@ -1283,14 +1285,14 @@ The first scenario in Table~\ref{t.possibilities} is the use cases in which the 
 
 \subsection{Conclusion}
 \label{conc}
-In this section, we concentrated on the geospatial features of MongoDB in order to find ways to improve the BaseX Geo Module efficiency. We started with the investigation of geospatial features to see the different viewpoints in MongoDB. Based on the common features, the perofrmance of these features was discussed and we represented and discussed the timing with the use of index to see the influence of geospatial index. Among the queries, finding the geometries within a specific distance, as a widely used one, is provided through \textit{\$near} and \textit{\$nearSphere} operators. 
-Besides, updating a database was discussed. Update in MongoDB contains implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed manually. Therefore, query time severly increases considering the time consumed by index updating. 
+In this section, we mainly concentrated on the geospatial features of MongoDB in order to find ways to improve the BaseX Geo Module efficiency. We started with the investigation of geospatial features to see the different viewpoints in MongoDB. Based on the common features in both databases, the perofrmances was represented and explained both with and without the index, to see the influence of geospatial index on them.
+Among the queries, finding the geometries within a specific distance, called the \textit{near} feature, is of a great importance, as it is widely used. MongoDB provides this feature in both WGS84 for the data on the Earth as well as legacy cordinate pairs, while BaseX supports only for the projected coordinate systems, since geospatial functions in BaseX do the calculation only on the flat space. To add the support of data in WGS84 in BaseX, new functions should be implemented. Testing this feature in both databases shows better performance in MongoDB. 
 
-Since BaseX functions could do the calculation only on the flat space, this feature is available just for the projected coordinate systems. To add the support of data in WGS84, new functions should be implemented. Testing this feature in both databases shows better performance in MongoDB. 
+%through \textit{\$near} and \textit{\$nearSphere} operators in MongoDB, while BaseX. 
+Besides, updating in both databases is discussed. Update in MongoDB implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed. Therefore, query time severly increases considering the time consumed by index updating. 
 
-Since the performance of two major functionalities, i.e., the \textit{near} feature and update, are not satisfying in BaseX and MongoDB provides them in a faster way, we connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature seem convincing enough to have this alternative way in BaseX. Also, updating by MongoDB via BaseX is also faster than updating in BaseX. 
 
-We discussed about differnet issues in the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible only in MongoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth using while the whole update and index reconstruction process must be done. The approach sets the limitation for the use cases in which the database will be updated, to do the geospatial querying completely in MongoDB.
+Since the performance of two major functionalities, i.e., the \textit{near} feature and update, are not satisfying in BaseX and MongoDB provides them in a faster way, we connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature by this approach seem convincing enough to have this alternative way of querying in BaseX. In addition, updating the database by MongoDB via BaseX is faster than updating in BaseX. However, using this approach is controversial. The discussion is in regards to the subsequent queries after the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible only in MongoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth trying, because the whole update and index reconstruction process must be repeated in BaseX. The approach sets the limitation for the use cases in which the database will be updated, to do the geospatial querying completely in MongoDB.
 
 
 \newpage

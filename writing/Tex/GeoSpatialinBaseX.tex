@@ -875,9 +875,26 @@ We have used Java profiling to get more precise information. The first few metho
 \vspace{10px}
 
 As the profile output indicates, the \textit{split} function calls consume the greatest amount of time. Besides, \textit{createPolygon} and \textit{geo} functions, all used in \textit{GmlReader} class, are expensive. Therefore, these functions should be focused in performance tuning. 
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth,height=0.2\textheight]{BXSplit}
+\caption{The query times of the selected queries before and after the removing of \textit{split} function}
+\label{figBXSplit}
+\end{figure}
+Since the \textit{split} function has the most frequent call, we tried to discard it. Since this function is used to divide a "coordinate" string regarding the delimiters to make coordinate pairs, we replaced it with a piece of code to parse this string. A "coordinate" value in GML 2.0 is a set of $X$,$Y$,$Z$, seprated with a space. The $X$, $Y$, and $Z$ values of a coordinate are also seprated with a comma. The new code reads the "coordinate" string and acts based on the position and type of delimiters and numbers. Therefore, the coordinate pairs are constructed from a valid string. Otherwise, an error massage will be shown. Figure~\ref{figBXSplit} shows the effect of removing the \textit{split} function on the query times. As can be seen in this Figure, this effect grows as the number of results gets bigger.
 
-We started to replace the \textit{split} function with a ... function 
-%TODO\CONTINUE
+
+
+In addition to the \textit{split} function, we tried to omit the $Z$ values in parsing process, since the $Z$ value is ignored with the geospatial function and reading it is useless. Basically, this is the limitation of GML 2.0 format. Not surprisingly, excluding the $Z$ values from the parsing process declines the query time that is displayed in Figure~\ref{figBXZvalue}. This effect is minor in the smaller number of results and is more obvious with more output numbers.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth,height=0.2\textheight]{BXZvalue}
+\caption{The effect of ignoring the $Z$ values of coorinates in GML parsing on query times}
+\label{figBXZvalue}
+\end{figure}
+
+Up to this point we have tried various ways to decrease the query times in Geo Module. Further attemps could be done following the feorementioned Java profiling list, if the implementation will be continued in the current direction.
 
 \subsection{Conclusion}
 \label{BXconc}

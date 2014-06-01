@@ -886,9 +886,9 @@ A "coordinate" value in GML 2.0 can include different points which are separated
  
 \vspace{10px}
 \begin{fakeXML}[label=coord-example,caption=An example of GML 2.0 coordinate]
-              	    <gml:coordinates>
-              	      3.9,50.6 6,52.8 4.5,52.8 3.9,50.6
-              	    </gml:coordinates>
+<gml:coordinates>
+  3.9,50.6 6,52.8 4.5,52.8 3.9,50.6
+</gml:coordinates>
 \end{fakeXML}
 \vspace{10px}
 
@@ -970,7 +970,7 @@ investigated in Section~\ref{update}. Finally, Section~\ref{conc} contains the c
 
 \subsection{Querying the Databases}
 \label{s.query}
-To analyse and compare the databases behaviour, designing the same test queries on the identical dataset is the most straight-forward approach. Based on the MongoDB geospatial features and properties, the Netherland test dataset must be changed. A brief explanation of the changes is provided here to clarify the rules and limitaions. The main change was to either remove multipolygon from the dataset or transforming them to a set of distinct polygons, since multipolygon is not supported in this version of MongoDB. Besides, the coordinate system is converted to WGS84. At the end, there are 12773 polygons and no multipolygon in the data file. Since the geometries are changed in database and the results would be different, we repeate all queries with the new dataset in BaseX.  
+To analyse and compare the databases behaviour, designing the same test queries on the identical dataset is the most straight-forward approach. Based on the MongoDB geospatial features and properties, the Netherland test dataset must be changed. A brief explanation of the changes is provided here to clarify the rules and limitaions. The main change was to either remove multipolygon from the dataset or transforming them to a set of distinct polygons, since multipolygon is not supported in this version of MongoDB. Besides, the coordinate system is converted to WGS84. At the end, there are 12773 polygons and no multipolygon in the data file. Since the geometries are changed in database and the results would be different, we repeate all queries with the new dataset in BaseX.
 
 To start with, the GeoJSON file containing the geometries, is imported into MongoDB. This can be done  using Java API or Mongo Shell with appropriate \textit{mongoimport} command. There are limitations to consider in importing the GeoJSON in MongoDB. The main one is the \textit{document} size limitation in a \textit{collection}. Document and collection are two concepts in MongoDB which are correspond with a table and a record in this table respectively. A collection can have one or more documents and a document is a set of key-values. A database contains one or more collections. To successfully import a document into a collection, it should be smaller than 16MB. Since it is common to have large geometries in real-world geographic data files, this limitation can be a problem. Aother limitation is that the $z$ coordinate is not supported in MongoDB. When a coordinate contains $z$ dimension, although those geometries are not processed, no error massage is shown during the import process and query. MultiPoint, MultiLineString, and MultiPolygon, which are not supported in MongoDB, are also skipped in queries without any error massage. 
 
@@ -1261,7 +1261,7 @@ To start with, we suppose that a user has a geospatial dataset in GML and they w
 
 Table~\ref{t.comparisonBaseXMongo} summerizes the statement above. \textit{MongoDB through BaseX} in this table means BaseX connects to MongoDB to benefit by the features which are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the forementioned features which are supposed here to be satisfying enough for the user, indicatd with the notation $"\times"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
 %Otherwise, the user might choose to work with another system, like MongoDB.
-% is better in efficiency. 
+% is better in efficiency.
 With $"\times\times"$, we mean that option is very efficient.
 \vspace{10px}
 \begin{table}
@@ -1316,7 +1316,7 @@ Among the queries, finding the geometries within a specific distance, called the
 Besides, updating in both databases is discussed. Update in MongoDB implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed. Therefore, query time severly increases considering the time consumed by index updating. 
 
 
-Since the performance of two major functionalities, i.e., the \textit{near} feature and update, are not satisfying in BaseX and MongoDB provides them in a faster way, we connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature by this approach seem convincing enough to have this alternative way of querying in BaseX. In addition, updating the database by MongoDB via BaseX is faster than updating in BaseX. However, using this approach is controversial. The discussion is in regards to the subsequent queries after the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible only in MongoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth trying, because the whole update and index reconstruction process must be repeated in BaseX. The approach sets the limitation for the use cases in which the database will be updated, to do the geospatial querying completely in MongoDB.
+Since the performance of two major functionalities, i.e., the \textit{near} feature and updating, are not satisfying in BaseX and MongoDB provides them in a faster way, we connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature by this approach seem convincing enough to have this alternative way of querying in BaseX. In addition, updating the database by MongoDB via BaseX is faster than updating in BaseX. However, using this approach is controversial. The discussion is in regards to the subsequent queries after the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible only in MongoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth trying, because the whole update and index reconstruction process must be repeated in BaseX. The approach sets the limitation for the use cases in which the database will be updated, to do the geospatial querying completely in MongoDB.
 
 
 \newpage

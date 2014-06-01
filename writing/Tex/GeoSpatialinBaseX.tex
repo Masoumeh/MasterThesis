@@ -332,7 +332,7 @@ to store and process GML~\cite{gml} data. Section~\ref{storage} studies
 different approaches to store GML. These approaches are investigated
 with respect to the effectiveness of storage models in terms of query processing.
 After the discussion over storage, the different proposed query languages
-will be explained in Section~\ref{query}. Finally, we will look at the
+will be explained in Section~\ref{queryLang}. Finally, we will look at the
 famous databases in Section~\ref{s.dbs} and what they did to handle
 GML data.
   
@@ -358,7 +358,7 @@ and JTS~\cite{jts}, containing schema mapping constructor, document storage tool
 and spatial analyzer.
 
 \subsection{Query Languages}
-\label{query}
+\label{queryLang}
 XQuery language, recommended by \emph{W3C}, is only 
 applicable to non-spatial data. To query spatial data in GML,
 Fubao~\cite{Fubao2010} expanded the data model, algebra, functions, operations, 
@@ -743,7 +743,7 @@ The other GeoIndex class in \textit{basex-api} package extends \textit{QueryModu
 \label{indexFunc}
 To add the spatial index, we tought of two approaches. The first approach implements new signature for the forementioned functions in a new class. It means the index filter function is encoded directly in the existing geo functions. Then queries can be done with the new spatial function as in Code~\ref{intersectIndx}.
 \vspace{10px}
-\begin{fakeXML}[label=intersectIndx,caption=The geo function containing the idex functions]
+\begin{fakeXML}[label=intersectIndx,caption=The geo function containing the index functions]
 import module namespace geo-index = "http://expath.org/ns/GeoIndex";
 let $a:= <gml:Polygon> ... </gml:Polygon>
 return geo-index:intersects("DB", $a) 
@@ -881,11 +881,18 @@ As the profile output indicates, the \textit{split} function calls consume the g
 \caption{The query times of the selected queries before and after the removing of \textit{split} function}
 \label{figBXSplit}
 \end{figure}
-Since the \textit{split} function has the most frequent call, we tried to discard it. Since this function is used to divide a "coordinate" string regarding the delimiters to make coordinate pairs, we replaced it with a piece of code to parse this string. A "coordinate" value in GML 2.0 is a set of $X$,$Y$,$Z$, seprated with a space. The $X$, $Y$, and $Z$ values of a coordinate are also seprated with a comma. The new code reads the "coordinate" string and acts based on the position and type of delimiters and numbers. Therefore, the coordinate pairs are constructed from a valid string. Otherwise, an error massage will be shown. Figure~\ref{figBXSplit} shows the effect of removing the \textit{split} function on the query times. As can be seen in this Figure, this effect grows as the number of results gets bigger.
+Since the \textit{split} function has the most frequent call, we discard it in favour of better performance. This function is used to divide a "coordinate" string regarding the delimiters to make coordinate pairs. We replaced it with a piece of code to parse this string. 
+A "coordinate" value in GML 2.0 can include different points which are separated with a space. Each point in the coordinate of GML 2.0 have two dimensions $X$ and $Y$ seprated with a comma. Code~\ref{coord-example} shows an example of the GML 2.0 coordinate. Based on this format, the new code reads the "coordinate" string and acts based on the position and type of delimiters and numbers. Therefore, the coordinate pairs are constructed from a valid string. Otherwise, an error massage will be shown. Figure~\ref{figBXSplit} shows the effect of removing the \textit{split} function on the query times. As can be seen in this Figure, this effect grows as the number of results gets bigger.
+ 
+\vspace{10px}
+\begin{fakeXML}[label=coord-example,caption=An example of GML 2.0 coordinate]
+              	    <gml:coordinates>
+              	      3.9,50.6 6,52.8 4.5,52.8 3.9,50.6
+              	    </gml:coordinates>
+\end{fakeXML}
+\vspace{10px}
 
-
-
-In addition to the \textit{split} function, we tried to omit the $Z$ values in parsing process, since the $Z$ value is ignored with the geospatial function and reading it is useless. Basically, this is the limitation of GML 2.0 format. Not surprisingly, excluding the $Z$ values from the parsing process declines the query time that is displayed in Figure~\ref{figBXZvalue}. This effect is minor in the smaller number of results and is more obvious with more output numbers.
+In addition to the \textit{split} function, we omit the $Z$ values in parsing process, since the $Z$ value is ignored with the geospatial function. It means it is useless to read this $Z$ value. It can be considered as a limitation of GML 2.0 which is improved in GML 3.0. Not surprisingly, excluding the $Z$ values from the parsing process declines the query time that is displayed in Figure~\ref{figBXZvalue}. This effect is minor in the smaller number of results and is more obvious with more output numbers.
 
 \begin{figure}
 \centering
@@ -957,12 +964,12 @@ db.<collection>.find( { <location field> :
  \vspace{10px}
  
 In the following sections we will compare these two databases regarding the query performance. 
-In Section~\ref{query}, we analyze specific test queries. Then, the assessment continues
+In Section~\ref{s.query}, we analyze specific test queries. Then, the assessment continues
 utilizing the indexing structure in Section~\ref{index}. Later, the update functionality of databases is 
 investigated in Section~\ref{update}. Finally, Section~\ref{conc} contains the conclusion and further work.
 
 \subsection{Querying the Databases}
-\label{query}
+\label{s.query}
 To analyse and compare the databases behaviour, designing the same test queries on the identical dataset is the most straight-forward approach. Based on the MongoDB geospatial features and properties, the Netherland test dataset must be changed. A brief explanation of the changes is provided here to clarify the rules and limitaions. The main change was to either remove multipolygon from the dataset or transforming them to a set of distinct polygons, since multipolygon is not supported in this version of MongoDB. Besides, the coordinate system is converted to WGS84. At the end, there are 12773 polygons and no multipolygon in the data file. Since the geometries are changed in database and the results would be different, we repeate all queries with the new dataset in BaseX.  
 
 To start with, the GeoJSON file containing the geometries, is imported into MongoDB. This can be done  using Java API or Mongo Shell with appropriate \textit{mongoimport} command. There are limitations to consider in importing the GeoJSON in MongoDB. The main one is the \textit{document} size limitation in a \textit{collection}. Document and collection are two concepts in MongoDB which are correspond with a table and a record in this table respectively. A collection can have one or more documents and a document is a set of key-values. A database contains one or more collections. To successfully import a document into a collection, it should be smaller than 16MB. Since it is common to have large geometries in real-world geographic data files, this limitation can be a problem. Aother limitation is that the $z$ coordinate is not supported in MongoDB. When a coordinate contains $z$ dimension, although those geometries are not processed, no error massage is shown during the import process and query. MultiPoint, MultiLineString, and MultiPolygon, which are not supported in MongoDB, are also skipped in queries without any error massage. 
@@ -1244,15 +1251,15 @@ This process is done for the update operaions such that the update query modifie
 
 \subsection{Discussion}
 \label{s.disc}
-Throughout this section we investigated two strategies to efficiently process the geospatial data in BaseX. Based on these investigations, here we will discuss the some points of the geospatial processing in BaseX and try to cover the pros and cons of the available approaches, particularly the most recent one in Section~\ref{MongoviaBX}. 
+Throughout this section we investigated two strategies to efficiently process the geospatial data in BaseX. Based on these investigations, here we will discuss the  previously-mentioned approaches of the geospatial processing in BaseX and cover the pros and cons of the available approaches, particularly the most recent one in Section~\ref{MongoviaBX}. 
 
-To start with, we suppose that a user has a geospatial dataset in GML and they would like to work in this format in BaseX, since their general requirements are met by BaseX. Based on our examinations, there are some cases in which BaseX is not able to cover them or can not provide some features in a proper timing. It means those cases either are not covered, like updating the index structure or are covered with an apparently poor performance in comparision with the other similar query times, such as the \textit{near} feature. Therefore, geospatial queries such as \textit{intersects} or \textit{within}, can be applied efficiently while some other like \textit{near} and update, can not. Furthermore, regarding to our assumption, some funtionalities of BaseX convinces the user to work with GML. We call them \textit{GML-related} features. We consider these co-called \textit{GML-related} features in our discussion, as they might influnce the geospatial processing approch that wil be preferred.
+To start with, we suppose that a user has a geospatial dataset in GML and they would like to work in this format in BaseX, since their general requirements are met by BaseX. Based on our examinations, there are some queries in which BaseX is not able to cover them or can not provide some features in a proper timing. It means those cases either are not covered, like updating the index structure or are covered with an apparently poor performance in comparision with the other similar query times, such as the \textit{near} feature. Therefore, geospatial queries such as \textit{intersects} or \textit{within}, can be applied efficiently while some other like \textit{near} and update, can not. Furthermore, regarding to our assumption, some funtionalities of BaseX convinces the user to work with GML. We call them \textit{GML-related} features. We consider these co-called \textit{GML-related} features in our discussion, as they might influnce the geospatial processing approch that wil be preferred.
 
 %Although BaseX can handle the non-geospatial queries as well as some geospatial queries like intersects %and within almost efficiently using Index, the near query and the database update decreases the efficiency dramatically. Therefore, besides the geospatial queries there might be some non-geospatial queries as well, e.g. finding the point elements or the number of polygons in a dataset. It means the geospatial queries are not necessarily the only focuse of the queries and the user can mix both types in a piece of code. Hence, these so-called non-geospatial queries should be considered in the set of user requiremets, however analysing them are not our focuse. This point is important when the user wants to choose between BaseX and MongoDB for geospatial queries while the non-geospaial queries will be done by BaseX. In this case the user can benefi from both databases while the most requirements are fulfilled by BaseX. 
 
 %To summerize the results of our investigations, the near query and the geospatial index updating in BaseX are far from the ......???, though geospatial query times which are the focuse of the index structure, like intersects, seem that could be satisfying in some cases/some how.???  
 
-Table~\ref{t.comparisonBaseXMongo} summerizes the statement above. \textit{MongoDB through BaseX} in this table means BaseX connects to MongoDB to benefit by the features are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the forementioned features which are supposed here to be satisfying enough for the user, indicatd with the notation $"\times"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
+Table~\ref{t.comparisonBaseXMongo} summerizes the statement above. \textit{MongoDB through BaseX} in this table means BaseX connects to MongoDB to benefit by the features which are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the forementioned features which are supposed here to be satisfying enough for the user, indicatd with the notation $"\times"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
 %Otherwise, the user might choose to work with another system, like MongoDB.
 % is better in efficiency. 
 With $"\times\times"$, we mean that option is very efficient.
@@ -1274,7 +1281,7 @@ like \textit{intersects/within} & & \\\hline
 \end{table}
 \vspace{10px}
 
-As is expressed in Table~\ref{t.comparisonBaseXMongo}, the geospatial queries like \textit{intersects} and \textit{within} are working with an acceptable performance????. On the other hand, for the \textit{near} and update queries connecting to MongoDB seems to be the appropriate approach. Hence, a fast conclusion would be to have the advantage of using MongoDB through BaseX. However, the synchronization of the database instace in BaseX and the database instance in MongoDB should be precisely examined. If the user intends to modify the database which means also the modification of index without any further querying regarding the changes, the faster strategy is to update the MongoDB instace, while the database instance in BaseX remains untouched. But, in case that the user wants to do further querying based on the changes, this approach is not optimized.  
+As is expressed in Table~\ref{t.comparisonBaseXMongo}, the geospatial queries like \textit{intersects} and \textit{within} are working with an acceptable performance in BaseX. On the other hand, for the \textit{near} and update queries connecting to MongoDB seems to be the appropriate approach. Hence, a fast conclusion would be to have the advantage of using MongoDB through BaseX. However, the synchronization of the database instace in BaseX and the database instance in MongoDB should be precisely examined. If the user intends to modify the database which means also the modification of index without any further querying regarding the changes, the faster strategy is to update the MongoDB instace, while the database instance in BaseX remains untouched. But, in case that the user wants to do further querying based on the changes, this approach is not optimized.  
 
 One way to discard the above-mentioned problem could be limiting the user to do all geospatial queries regarding the index in MongoDB and use BaseX just as a connector. 
 However, as we see in Table~\ref{t.comparisonBaseXMongo} doing some queries in BaseX are more efficient and connecting to MongoDB might be a disadvantage, since this adds at least the connection time to the query time. Moreover, the complete dependency of BaseX on MongoDB for all geospatial queries would be too much and disadvantageous while each system is designed for different requirements and follow various goals. 
@@ -1322,5 +1329,7 @@ Since the performance of two major functionalities, i.e., the \textit{near} feat
 \listoffigures
 \newpage
 \listoftables
+\newpage
+\lstlistoflistings
 
 \end{document}	

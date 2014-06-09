@@ -126,32 +126,38 @@ Sec.~\ref{s.future}.
 
 
 \newpage
-\section{Methodology}
+\section{Geospatial Data Processing}
 \label{s.method}
 %TODO:in tarifa bere bakhshe badi, inja chanta jomle koli begam
-According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{Geospatial Data} is the data representing any thing on the Earth's surface. Different countries and organizations are using different systems and standards to represent this data. The World Geodesic System (WGS) is one of the standard system that is commonly used all around the world. WGS84 is the latest version of this standard which
-was introduced in $1984$ and is widely used for mapping locations on the earth, and is used by a wide range of services, including many satellite services (notably: Global Positioning System--GPS) and Google Maps. However, there are many different standards like ... and .... 
+According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{Geospatial Data} is the data representing any thing on the Earth's surface. Different countries and organizations are using different systems and standards to represent this data. The World Geodesic System (WGS) is one of the standard geospatial systems that is commonly used all around the world. WGS84 is the latest version of this standard which
+was introduced in $1984$ and is widely used for mapping locations on the earth. A wide range of services, including many satellite services, notably Global Positioning System (GPS) and Google Maps, employs this system . However, there are many different standards like ... and .... 
 There are various converters between ....
 
-\subsection{Geospatial Data}
-As defined before, Geospatial data is the locational information describing features and locations and their characteristics that have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. It also applies to three-dimnesionsl data, like above and below the Earth's surface~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regards to specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects, which are defined in a coordinate system. Here we introduce the concepts and terms related to the current definitions and are required in this study as well.
+In this section, we go through the existing concepts and technologies about the geospatial data processing. After some definitions
+in Section \ref{termsanddef}, the process of these data in the native databases are investigated in Section \ref{s.geo-data-in-xml-data}.
+Finally, the geospatial indexing and its major methods are introduced in Section \ref{s.geospatial-index}.
 
-\subsubsection{Terms and Definitions}
+
+\subsection{Terms and Definitions}
 \label{termsanddef}
-\begin{itemize}
+As defined before, Geospatial data is the locational information describing \textit{features} and locations and their characteristics that have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers.  \textit{Feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world, such as geometries, attributes, and relationships. A geographic feature is a feature associated with a location relative to the Earth. As a result, real-world entities could be expressed as a set of features. 
+ It also applies to three-dimnesionsl data, like above and below the Earth's surface~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regards to specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects, which are defined in a coordinate system. Here we introduce the concepts and terms related to the current definitions and are required in this study as well.
 
-\item Open Geospatial Consortium (OGC) \cite{ogc}: The OGC is an international consortium, developing interface standards for geospatial content, services, data exchange and communication, and data processing and sharing.
-\item Coordinate System: A coordinate system is a method to uniquely determine the position of an object in space of given dimension by cordinates. It uses the definitions, components, and properties to determine the coordinates which specify the linear and angular positions. Coordinate systems are defined by vaious organization, countries, governments, and etc. based on the geodetic datums, units, projections, and some other parameters and each meets a specific requirements. For example, WGS coordinate system is defined to visualize the geographic data on map or on the Earth. A country may have more than one coordinate system for its national-wide geographic data. DHDN, ETRS89 UTM zone 32N, and PD/83 Zone 3 are examples of Germany's coordinate systems. These are considered as local coordinate systems while there are world Coordinate System which has the coordinates in the world space. WGS is an example of the world coordinate system. 
-The coordinates may differ for the same object from a system to another. In other words, various coordinates from different coordinate systems could point to the same location. As an example, the coordinates of Berlin in WGS84 coordinate system with longitude and latitude is (52.520007, 13.404954) while in Germany's ETRS89 UTM zone 32N coordinate system is (32798809.64, 5828000.49). Accordingly, it is necessary to know how the coordinate systems are related in concepts and definitions to make the conversion possible. Conversion needs some parameters ....
+Open Geospatial Consortium (OGC) \cite{ogc} is an international consortium, developing interface standards for geospatial content, services, data exchange, data communication, and data processing. Geospatial data is given usually by its position its coordinate.
+A coordinate system is a method to uniquely determine the position of an object in space of given dimension. It uses the definitions, components, and properties to determine the coordinates which specify the linear and angular positions. Coordinate systems are defined by various organization, countries, or governments based on the geodetic datums, units, projections, and some other parameters and specific requirements. For example, WGS coordinate system is defined to visualize the geographic data on map or on the Earth. 
+
+A country may have more than one coordinate system for its national-wide geographic data. DHDN, ETRS89 UTM zone 32N, and PD/83 Zone 3 are examples of Germany's coordinate systems. These are considered as local ones while there are the world coordinate system for the coordinates in the world space. WGS is an example of the world coordinate system. The coordinates may differ for the same object from a system to another. As an example, the coordinates of Berlin in WGS84 coordinate system with longitude and latitude is $(52.520007, 13.404954)$ while in Germany's ETRS89 UTM zone 32N coordinate system is $(32798809.64, 5828000.49)$. Accordingly, it is necessary to know how the coordinate systems are related in concepts and definitions to make the conversion possible. Conversion needs some parameters ....
 
 In geographic information systems (GIS) coordinate systems are categorized in two common types:
 %http://edndoc.esri.com/arcobjects/9.2/NET/89b720a5-7339-44b0-8b58-0f5bf2843393.htm
 %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323
 %http://www.gps.caltech.edu/gislab/HowTo/ESRI%20-%20Map%20Projections.pdf
 \begin{itemize}
-\item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are, WGS 1984, NAD 1927, and NAD 1983. 
+\item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are WGS 1984, NAD 1927, and NAD 1983. 
 
 \item Projected coordinate system: A cordinate system representing the Earth's round surface on a 2D flat surface, after the projection process based on a map projection (see Figure~\ref{figproject}). A projected coordinate system always is based on a geographic coordinate system. Each projections distorts in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323 
+\end{itemize}
+
 \begin{figure}
 \centering
 \includegraphics[width=0.4\textwidth]{sphere_to_cylinder}
@@ -159,11 +165,11 @@ In geographic information systems (GIS) coordinate systems are categorized in tw
 \label{figproject}
 \end{figure}
 
-\end{itemize}
 
-\item Feature: Feature represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world, such as geometries, attributes, relationships, and etc. A geographic feature is a feature associated with a location relative to the Earth. As a result, real-world entities could be expressed as a set of features. 
+Additionally, there are terms for representing a geospatial data which a list of them is as follows,
+\begin{itemize}
 
-\item Geometry: A geometry is a datatype to represent a location or a region. 
+%\item Geometry: A geometry is a datatype to represent a location or a region. 
 %TODO \item: encodings, baghiye subitem bashan (http://www.digitalpreservation.gov/formats/fdd/gis_fdd.shtml)
 
 \item Geography Markup Language (GML): The XML based standard encoding defined by OGC, serves as a modeling language to express geographical features in both spatial and non-spatial characteristic. It is used as an interchange format in internet data storage, exchange, transport and transaction. The key to utility of GML is its ability in integrating all forms of geographic information []. %TODO:ref az wikipedia!.
@@ -194,7 +200,7 @@ GML versions 1.0 and 2 encodes a set of 2D geometries, i.e. Point, LineString, a
 			(2 3, 3 3, 3 2, 2 3))
 \end{itemize}
 \item Well-known Binary (WKB): The binary represenation of WKT data to be used in a database system.
-\item GeoJSON: A geospatial data encoding to represent a based on the JavaScript Object Notation (JSON). Supported geometries are Point, LineString, Polygon, and related multi-part geometries. An object is represented by a set of name/value pairs. The whole data are encoded as tex and no advanced numeric data types are employed. It is mainly used as a lightweight text for the data interchange. The default coordinate system is WGS84, however other systems could be defined. A sample point in GeoJSON is as belows,
+\item GeoJSON~\cite{www/geojson}: A geospatial data encoding to represent a based on the JavaScript Object Notation (JSON). Supported geometries are Point, LineString, Polygon, and related multi-part geometries. An object is represented by a set of name/value pairs. The whole data are encoded as tex and no advanced numeric data types are employed. It is mainly used as a lightweight text for the data interchange. The default coordinate system is WGS84, however other systems could be defined. A sample point in GeoJSON is as belows,
 \vspace{10px} 
 \begin{fakeJSON}
 {
@@ -206,10 +212,10 @@ GML versions 1.0 and 2 encodes a set of 2D geometries, i.e. Point, LineString, a
 \end{itemize}
 
 \subsection{Geospatial Data in Native XML Databases}
+\label{s.geo-data-in-xml-data}
 As a powerful platform independent XML grammar introduced by GIS community(OGC), GML plays an important role in the spatial data modeling, integration, sharing, transmission, and exchange, because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. in the XML database. 
 %TODO:In classic relational databases,... In XML native databases, geospatial data are handled ...
 
-\subsection{General Spatial Requirements in Native XML Database}
 In addition to general functions and features on the structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML elements should be read and treated as geometries. Therefore, just the string information is not enough to satisfy the geospatial features. In the field of geoscience In a target space with a set of geometries, the positions, locations, and relations of the geometries raises some requirements regarding to the topics and definitions in related scientific fields like Geometry and Geoscience. For example, "What is the distance between two geometries?" or "Which geometries intersect a particular geometry?". Additionally, there are features related to single geometries, such as the length and area of a geometry, the number of interior ring of a polygon, and the start point of a line. These features could be provided by a database system as XQuery functions so they can be mixed wih standard XQuery, full-text, etc. functions.
 
 %Indeed in a database system the features related to a set of geometries are of more importance ...................
@@ -224,7 +230,7 @@ In addition to general functions and features on the structure of GML data, geos
 %building new GML on the fly, and parsing/validating existing GML.
 
 \subsection{Geospatial Indexing}
-\label{geospatialindex}
+\label{s.geospatial-index}
 According to \cite{survey}, indexing would dramatically influence on data manipulation and storage. Like any other type of data, geospatial data need to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable for spatial objects is those indexing stratgeies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
 
 As it is examined in \cite{survey}, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the spatial data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. In the following sections, we introduce selective spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree to see how various viewpoints are employed to meet particular requirements and design the relative and appropriate index.
@@ -1009,7 +1015,7 @@ As we discussed in Section~\ref{mongo}, geospatial data can be represented in Mo
 \vspace{10px}
 
 
-Geospatial operators of MongoDB for spherical data support the GeoJSON~\cite{www/geojson} format. GeoJSON is a human-readable encoding format for representing the geographical features, using JSON standard. It consists of an object which describes a geometry, Feature, or collection of Features. The type of geometries must be one of these types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. A \textit{Feature} must have members with the names \textit{geometry} and \textit{properties}. A feature collection is an object with the type \textit{FeatureCollection} which must have a member with the name \textit{features}. Code~\ref{feature-collection} is an instance GeoJSON file with a \textit{FeatureCollection} object.
+Geospatial operators of MongoDB for spherical data support the GeoJSON \cite{www/geojson} format. GeoJSON is a human-readable encoding format for representing the geographical features, using JSON standard. It consists of an object which describes a geometry, Feature, or collection of Features. The type of geometries must be one of these types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. A \textit{Feature} must have members with the names \textit{geometry} and \textit{properties}. A feature collection is an object with the type \textit{FeatureCollection} which must have a member with the name \textit{features}. Code~\ref{feature-collection} is an instance GeoJSON file with a \textit{FeatureCollection} object.
 
 Current version of MongoDB supports only three geometry types Point, LineString, and Polygon. As mentioned in Section~\ref{mongo}, a geospatial query in MongoDB can use \textit{geoIntersects}, \textit{geoWithin}, \textit{near}, and \textit{nearSphere} operators. In addition, there are geometry specifiers to define geometries in query conditions of these operators. For instance, the \textit{\$center} and \textit{\$centerSphere} are specifiers for a circle area in planar and spherical maps on which the user intends to do the query. Then, the user can find all geometries within a determined circular area. Another example is the \textit{\$maxDistance} specifier that determines the maxmimum distance from a point in order to find geometries within this particular distance. Geometry specifires are limited to, \textit{\$geometry}, \textit{\$maxDistance}, \textit{\$center}, \textit{\$centerSphere}, \textit{\$box}, and \textit{\$polygon}. An example demonstrating the usage of the specifiers in a query is provided in the followings,
 \vspace{10px}
@@ -1254,7 +1260,7 @@ As mentioned in Section~\ref{indexBX}, BaseX records the index structure in a fi
 \subsection{Database Update}
 \label{update}
 %TODO:Complete!not good :|
-Updating a database as a significant interaction supplied by the database system generally comprises three different operation: insert, delete, and modify. In addition to the whole issues related to the database update on disk and memory management, reconstructing the indexes is of great importance. That is, since the index is constructed based on the old database state, the updated database needs a new index. 
+Updating a database as a significant interaction supplied by the database system generally comprises three different operation: insert, delete, and modify. In addition to the whole issues related to the database update on disk and memory management, reconstructing the indexes is of great importance. That is, since the index is constructed based on the old database state, the updated database needs a new index. ya masal
 
 Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means the STRTree do not get updated automatically and the geospatial index has to be rebuilt manually. It causes redundant constructions and consequently worse performance. Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
 
@@ -1382,7 +1388,7 @@ Since the performance of two major functionalities, i.e., the \textit{near} feat
 \section{Future Work}
 \label{s.future}
 \newpage
-\bibliographystyle{unsrt}
+\bibliographystyle{apalike}
 \bibliography{refs}
 \newpage
 \listoffigures

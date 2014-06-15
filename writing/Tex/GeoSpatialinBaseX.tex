@@ -12,17 +12,24 @@
 \usepackage{listings}
 \usepackage[tight,footnotesize]{subfigure}  
 \usepackage[top=2cm, bottom=2cm, left=4cm, right=2cm]{geometry}
+%\begin{titlepage}
+%\begin{center}
 \title{Processing GeoSpatial Data in BaseX}
 \subtitle{Master Thesis in fulfillment of the requirements for the degree of
 Master of Science (M.Sc.)}
-
+%\subtitle{Submitted to the Department of Computer and Information Science at the
+%University of Konstanz
+%}
+%{ \huge \bfseries Processing GeoSpatial Data in BaseX \\[0.4cm] }
+%\includegraphics[width=0.15\textwidth]{./unisignet-klein}~\\[1cm]
 \author{\\\\Author: \\
 	Masoumeh Seydi
-	\\\\\\Supervisors: \\
+	\\\\\\Supervisor: \\
 	Prof. Dr. Marc H. Scholl \\ 
 	\\\\\\
 	Konstanz University}
-
+%\end{center}
+%\end{titlepage}
 \begin{document}
 \definecolor{darkgray}{gray}{0.35}
 \lstnewenvironment{fakeXML}[1][]{
@@ -114,7 +121,7 @@ which means the abilities to read, to write, and to query on this data.
 
 \subsection{Overview}
 This essay will first define the concepts needed later in the discussion, called
-Methodology, in Sec.~\ref{s.method}. In this section, the basic geospatioal data
+Methodology, in Sec.~\ref{s.method}. In this section, the basic geospatial data
 and it's application areas will be introduced. Also, various ways that other works
 are processing this data will be investigated in Sec.~\ref{s.rwork}. BaseX,
 as a native XML database, which is our focus in this essay, is studies and extended
@@ -564,19 +571,10 @@ To do the geospatial queries there are geospatial query constructors as well as 
 \item shortest-distance: Returns the great circle distance (in miles) between a point and an region. The region such as a circle, box, polygon, linestring, or complex-polygon is defined by a \textit{region} constructor.
 \item destination: Returns the point at the given distance (in miles) along the given bearing (in radians) from the starting point.
 \end{itemize}
-The geospatial queries need some primitive types to be used in query conditions inside the query constructors. If these types contain matching data requested by the query, the result will be true. Below is the list of these types as instances of the base type \textit{region},
-\begin{itemize}
-\item box
-\item circle
-\item complex-polygon
-\item linestring
-\item point
-\item polygon
-\end{itemize}
+The geospatial queries need some primitive types to be used in query conditions inside the query constructors. If these types contain matching data requested by the query, the result will be true. These types as instances of the base type \textit{region}, encompassing \textit{box}, \textit{circle}, \textit{complex-polygon}, \textit{linestring}, \textit{point}, and \textit{polygon}. 
+%Latitudes and longitude pairs shape points. Points shape other geometries, like circle or polygon. Boxes are formed by 4 points which on the surface of the Earth. The edges of the box are arcs, but when those arcs are projected into a plane, they become two-dimensional latitude and longitude lines, and the space defined by those lines forms a rectangle. A linestring is a sequence of connected joined arcs that do not necessarily form a closed loop. 
 
-Here is a short definition of the types. Latitudes and longitude pairs shape point. Points shape other geometries, like circle or polygon. Boxes are formed by 4 points which on the surface of the Earth. The edges of the box are arcs, but when those arcs are projected into a plane, they become two-dimensional latitude and longitude lines, and the space defined by those lines forms a rectangle. A linestring is a sequence of connected joined arcs that do not necessarily form a closed loop. 
-
-WKT is another geospatial format supported for geospatial data representation. \textit{parse-wkt} function is defined to read WKT into the \textit{region} items and use them in queries and conversly \textit{to-wkt} function converts \textit{region} type to WKT.
+WKT is another geospatial supported format for geospatial data representation. \textit{parse-wkt} function is defined to read WKT into the \textit{region} items and use them in queries and conversly \textit{to-wkt} function converts \textit{region} type to WKT.
 
 \emph{The Geospatial Index}
 
@@ -589,9 +587,11 @@ MarkLogic supports different geospatial indexes, as shown below,
 \item Geospatial Element Child Indexes: With this index, the data comes only from elements that are a specific child of a specific element which contains whitespace or punctuation separated content.
 \item Geospatial Element Pair Indexes: In this index, the data is considered from specific pair of elements that are a child of another specific element.
 \item Geospatial Attribute Pair Indexes: With this index, the data is involved in a pair of specific attributes of a particular element.
-\item Geospatial Path Range Indexes: With this index, the data is expressed in the same manner as a geospatial element index and the element or attribute index is defined by a path expression. The following examples show the data as an element and attribute and related paths for indexing each one. It should be mentioned that a defined path cannot be replaced with a new one unless it is removed.
+\item Geospatial Path Range Indexes: With this index, the data is expressed in the same manner as a geospatial element index and the element or attribute index is defined by a path expression. \ref{t.pathindexmarklogic} shows two examples of the data as an element and attribute and related paths for indexing each one. It should be mentioned that a defined path cannot be replaced with a new one unless it is removed.
 \end{itemize}
 \vspace{10px}
+\begin{table}
+\centering
 \begin{tabular}{|l |l |}\hline
 \textbf{Data} & \textbf{Path}\\\hline
 \begin{fakeJSON}
@@ -612,6 +612,9 @@ MarkLogic supports different geospatial indexes, as shown below,
 \end{fakeJSON}
 \\\hline
 \end{tabular}
+\caption{Data and the related path for indexing in MarkLogic}
+\label{t.pathindexmarklogic}
+\end{table}
 \vspace{10px}
 
 
@@ -694,11 +697,20 @@ The geospatial index in eXist-db is made by the relational db (uses an SQL datab
  
 %In other words, the spatial data is stored in the DB, but geometries, as JTS Geometry instances, are held in memory, waiting for a special mode to be flushed into a relational DB, insertion or removal. The Geometry WKT representation would be serialized and deserialized to and from the database.
 
+\subsection{MonetDB}
+MonetDB has implemented a seprate modeule to suport the objects and functions in the OGC "Simple Features for SQL" specification (ref??), using the open source GEOS libraries(http://trac.osgeo.org/geos/)an available via the MonetDB/SQL engine. The supported format for geospatial objects is WKT. Geospatial queries are in the SQL-based language with the use of geospatial data types from SQL. 
+MonetDB benefits from column-oriented storage approach (ref)
+%\begin{itemize}
+%\item The column-store aproach of MonetDB is advantagous for geospatial data, since skips the unnecessary %attributes. This becomes important as only a fraction of data is needed in most of 
+%\end{itemize}
 
 
 \subsection{Others}
 In addition to the storage and querying, here is a brief description of some ideas which might me advantagous for geospatial features and also processing in a database. 
-Regarding the \cite{Schwarz2004} introduces a library for geospatial data management which allows usage of different coordinate systems. This library provides geospatial functions which are delegated to JTS library. As JTS library only supports the cartesian coordinate systems and the input geometries should be in a common systems to be processed. This study disciusses the input geometries transformation issues, such as choosing the common coordinate system and the conversion impercisions.
+Regarding the \cite{Schwarz2004} introduces a library for geospatial data management which allows usage of different coordinate systems. This library provides geospatial functions which are delegated to JTS library. As JTS library only supports the cartesian coordinate systems and the input geometries should be in a common systems to be processed. This system is chosen considering the the transformation issues, such as choosing the common coordinate system and the conversion imprecisions. The common coordinate system is considered to have the minimum differences from the original data, since projections an d transformations always lose the percision.
+
+Another topic related to geospatial requirements related to databases is path finding between two points.~\cite{} introduces an alternative way of finding the shortest path regarding existing cost. The K shortest path and many other path finding algorithms are efficient as long as the effecting cost factors do not change dynamically. The provided method first finds the shortest paths wthout considering the cost factors. At the end, the factors are used to rank the paths. All paths between each two points could be stored in database in pre-processing stage to reduce the furthe combinations. To find the paths, each edge in the network of the connected points should be provided with the start and end points. The process starts from the starting point and finds the whole connected ones and continues till reaches the destination. The paths would be obtained by joining the edges detected in each step
+%These points would be either the final diestination as the final output or a middle point to proceed the algorithm to find new connected points. This process is continued to find the destination and the path would be joined edges which are detected in easch step  
 
 
 
@@ -715,7 +727,7 @@ Regarding the \cite{Schwarz2004} introduces a library for geospatial data manage
 
 
 
-
+\newpage
 \section{Spatial Querying in BaseX}
 \label{s.basex}
 %TODO tozihe bishtar dar more requirements va inke chera injuri develop shode
@@ -979,7 +991,7 @@ In this Section, we discussed the Geo Module implementation details and assessme
 
 An introduction of MongoDB geospatial features is provided before in \ref{mongo}. In this section, we will have a more-detailed overview of these functionalities and a comparison between BaseX and MongoDB. However these two systems follow distinct approaches, it would be beneficial to review MongoDB as a rather new, recently developed, and widely used database system. MongoDB is among the few NOSQL systems providing geospatial features. Here, we will mainly see differences between these systems, particularly in performance of the same features. This comparision empowers us to improve the geospatial querying performance in BaseX. 
 
-As we discussed in Section~\ref{mongo}, geospatial data can be represented in MongoDB either as planar or spherical maps. Since the earth is a spherical globe, the geospatial calculations on planar maps are only an approximation~\cite{coordsys,coordsys-mongo}. As an example, the measurement of distances in planar maps are accurate only in a small region. It means the spherical maps are the better representation when the calculations are expected as real ones on the Earth. As our goal is to assess some geospatial features of MongoDB and compare it with Basex Geo Module, we focus only on the spherical approach. Correspondingly, WGS84 is used instead of legacy coordinate pairs to express the spherical maps. 
+As we discussed in Section~\ref{mongo}, geospatial data can be represented in MongoDB either as planar or spherical maps. Since the earth is a spherical globe, the geospatial calculations on planar maps are only an approximation~\cite{coordsys,coordsys-mongo}. As an example, the measurement of distances in planar maps are accurate only in a small region. It means the spherical maps are the better representation when the calculations are expected as real ones on the Earth. As our goal is to assess some geospatial features of MongoDB and compare it with Basex Geo Module, we focus merely on the spherical approach. Correspondingly, WGS84 is used instead of legacy coordinate pairs to express the spherical maps. 
 
 \vspace{10px}
 \begin{fakeXML}[label=feature-collection,caption=A GeoJSON file containing a \textit{FeatureCollection} object]
@@ -1117,7 +1129,7 @@ Below the profile of a sample query is shown,
 \end{fakeJSON}
 \vspace{10px}
 
-In the provided information, number of the results and the query time is implied in \textit{n} and \textit{millis} elements respectively. \textit{cursor} specifies the type of the cursor used by the operation. Here, \textit{BasicCursor} indicates that the query is only performing a normal scan to find the results.  This typical cursor reads the documents in natural order. That is, no index is used for this operation and the whole data is scanned in the original order. If a geospatial index is used, the cursor type will change. The value\textit{n} reflects the number of geometries that match the query condition, i.e., the number of items on the cursor. \textit{nscanned} is the number of scanned documents for this operation, when no index is used, or scanned index entry in the range, when an index is used. \textit{nscannedObjects} is the number of scanned documents in this query to obtain the results. In queries which an index structure is not used, as in the above sample, these two numbers will be equal. Otherwise, \textit{nscannedObjects} may be lower, as shown in the following query plan which uses a geospatial index. 
+In the provided information, number of the results and the query time is implied in \textit{n} and \textit{millis} elements respectively. \textit{cursor} specifies the type of the cursor used by the operation. Here, \textit{BasicCursor} indicates that the query is merely performing a normal scan to find the results.  This typical cursor reads the documents in natural order. That is, no index is used for this operation and the whole data is scanned in the original order. If a geospatial index is used, the cursor type will change. The value\textit{n} reflects the number of geometries that match the query condition, i.e., the number of items on the cursor. \textit{nscanned} is the number of scanned documents for this operation, when no index is used, or scanned index entry in the range, when an index is used. \textit{nscannedObjects} is the number of scanned documents in this query to obtain the results. In queries which an index structure is not used, as in the above sample, these two numbers will be equal. Otherwise, \textit{nscannedObjects} may be lower, as shown in the following query plan which uses a geospatial index. 
 In other words, $nscanned\geq nscannedObjects\geq n$ always. Ofcourse, the most optimum state is where $nscanned=nscannedObjects=n$. 
 \vspace{10px}
 \begin{fakeJSON}
@@ -1375,13 +1387,13 @@ The first scenario in Table~\ref{t.possibilities} is the use cases in which the 
 \subsection{Conclusion}
 \label{conc}
 In this section, we mainly concentrated on the geospatial features of MongoDB in order to find ways to improve the BaseX Geo Module efficiency. We started with the investigation of geospatial features to see the different viewpoints in MongoDB. Based on the common features in both databases, the perofrmances was represented and explained both with and without the index, to see the influence of geospatial index on them.
-Among the queries, finding the geometries within a specific distance, called the \textit{near} feature, is of a great importance, as it is widely used. MongoDB provides this feature in both WGS84 for the data on the Earth as well as legacy cordinate pairs, while BaseX supports only for the projected coordinate systems, since geospatial functions in BaseX do the calculation only on the flat space. To add the support of data in WGS84 in BaseX, new functions should be implemented. Testing this feature in both databases shows better performance in MongoDB. 
+Among the queries, finding the geometries within a specific distance, called the \textit{near} feature, is of a great importance, as it is widely used. MongoDB provides this feature in both WGS84 for the data on the Earth as well as legacy cordinate pairs, while BaseX supports only for the projected coordinate systems, since geospatial functions in BaseX do the calculation on the flat space. To add the support of data in WGS84 in BaseX, new functions should be implemented. Testing this feature in both databases shows better performance in MongoDB. 
 
 %through \textit{\$near} and \textit{\$nearSphere} operators in MongoDB, while BaseX. 
 Besides, updating in both databases is discussed. Update in MongoDB implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed. Therefore, query time severly increases considering the time consumed by index updating. 
 
 
-Since the performance of two major functionalities, i.e., the \textit{near} feature and updating, are not satisfying in BaseX and MongoDB provides them in a faster way, we connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature by this approach seem convincing enough to have this alternative way of querying in BaseX. In addition, updating the database by MongoDB via BaseX is faster than updating in BaseX. However, using this approach is controversial. The discussion is in regards to the subsequent queries after the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible only in MongoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth trying, because the whole update and index reconstruction process must be repeated in BaseX. The approach sets the limitation for the use cases in which the database will be updated, to do the geospatial querying completely in MongoDB.
+Since the performance of two major functionalities, i.e., the \textit{near} feature and updating, are not satisfying in BaseX and MongoDB provides them in a faster way, we connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature by this approach seem convincing enough to have this alternative way of querying in BaseX. In addition, updating the database by MongoDB via BaseX is faster than updating in BaseX. However, using this approach is controversial. The discussion is in regards to the subsequent queries after the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible merely in MongoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth trying, because the whole update and index reconstruction process must be repeated in BaseX. The approach sets the limitation for the use cases in which the database will be updated, to do the geospatial querying completely in MongoDB.
 
 
 \newpage

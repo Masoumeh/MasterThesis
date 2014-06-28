@@ -160,6 +160,7 @@ In geographic information systems (GIS) coordinate systems are categorized in tw
 \item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are WGS 1984, NAD 1927, and NAD 1983. 
 
 \item Projected coordinate system: A cordinate system representing the Earth's round surface on a 2D flat surface, after the projection process based on a map projection (see Figure~\ref{figproject}). A projected coordinate system is always based on a geographic coordinate system. Each projections distorts in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323 
+%source for image: https://developer.apple.com/library/ios/documentation/userexperience/conceptual/LocationAwarenessPG/LocationAwarenessPG.pdf
 \end{itemize}
 
 \begin{figure}
@@ -388,40 +389,24 @@ It is organized in a way similar to the region quad-tree. A region is recursivel
 %Investigating the various algorithms and ideas helps to gain an insight into developing a convenient way of indexing in BaseX which suits the systems. However, 
 Investigating the various concepts of the geospatial processing in XML databases, 
 helps to gain an insight into the further solutions and developments. 
-Based on our investigations, the earliest topics in geospatial processing are discussing three main area: storage, querying, and indexing. There are a large amount of researches and literature which we summerize them here. Besides, the geospatial processing issues in well-know XML databases are reviewd. This would be beneficial to designing the properly fitting solutions in BaseX. 
+Based on our investigations, the earliest topics of geospatial processing in databases are discussing three main area: storage, querying, and indexing. There are a large amount of researches and literature in these topics which we summerize the selected ones here. Besides, the geospatial processing issues in three famous databases are reviewed which might be beneficial to design the properly fitting solutions in BaseX. 
 
-This section is organized as follows.
-Since GML data type is our focus, we introduce different approaches 
-in Section~\ref{storage} to store the geospatial data in GML. 
-These approaches are investigated
-with respect to the effectiveness of storage models in terms of query processing. 
-The proposed querying ideas will be explained in Section~\ref{queryLang}. 
-Finally, we will look at
-famous databases in Section~\ref{s.dbs} and what they did to handle the geospatial data.
+%This section is organized as follows.
+Since GML data type is our focus, we mainly concentrate on the topics related to this standard. Section~\ref{storage} introduces the approaches regarding the storage of geospatial data in GML. 
+These approaches are investigated with respect to the effectiveness of storage models in terms of query processing. The proposed querying ideas will be explained in Section~\ref{queryLang}. 
+Finally, we will look at the databases in Section~\ref{s.dbs} and how they handle the geospatial data and provide the related features.
   
 \subsection{Storage}
 \label{storage}
-One of the basic approaches to store GML data is proposed in \cite{Li2004}. 
-In this approach, a spatial database, like Oracle Spatial and PostGIS/Postgres SQL, 
-is used to store the spatial and non-spatial data. 
-The schema tree is first generated and then mapped into the relational schema to store all spatial objects as 
+One of the basic approaches to store GML data is proposed in \cite{Li2004} to store both spatial and non-spatial data in a spatial database, like Oracle Spatial and PostGIS/Postgres SQL. This approach first generates the schema tree and then maps it into the relational schema to store all spatial objects as 
 the values of table fields in the spatial database. Geospatial queries can be submitted 
-in a XQuery\cite{xquery}-like language with spatial functional extensions.
-These GML queries are translated into equivalent SQL queries which are evaluated 
-using the management system of the spatial database.
-Another similar approach is discussed in \cite{Zhu2011} to store and query GML 
-focusing on non-schema documents. After the generation of GML parse tree, 
-the nodes are analyzed and schema mapping is generated to store the document in object-relational database. 
+in a XQuery\cite{xquery}-like language with spatial functional extensions. These GML queries are translated into the equivalent SQL queries which are evaluated using the spatial database management system. 
+A similar approach is discussed in \cite{Zhu2011} to store and query the GML data focusing on non-schema documents. After the generation of GML parse tree, the nodes are analyzed and schema mapping is generated to store the document in an object-relational database. 
 Both spatial and non-spatial queries are supported in this approach.
 
-In constrast to the previous approaches,
-Shulian Zhang et al~\cite{Zhang2008} considered the characteristics of XML databases 
-and stored the GML data in the original format
-without any conversion or mapping to a relational or object-orineted database. 
+In constrast to these two approaches, Shulian Zhang et al~\cite{Zhang2008} considers the characteristics of XML databases and stores the GML data in the original format without any conversion or mapping to a relational or object-orineted database. 
 It supports also the self-descriptive and semi-structural characteristics of XML.
-This is only one of the strategy which proposed a native XML database based on GML storage and querying.
-The corresponding strategy based on the~\cite{Zhang2008} and other similar works follows the
-following steps:
+This is only one of the strategies which propose a native XML database, considering the GML structure in storage and querying. The corresponding strategy based on the~\cite{Zhang2008} and other similar works follows the below steps:
 \begin{enumerate}
 \item Import and parse the GML schema
 \item Map the feature object and document schema
@@ -431,26 +416,24 @@ following steps:
 \item Record the log file containing the GML partitioning information
 \end{enumerate}
 To implement these steps, a prototype system is developed on JAXP (Java API for XML Processing) 
-and JTS~\cite{jts} library, containing schema mapping constructor, document storage tool, 
-and spatial analyzer.
+and JTS~\cite{jts} library, containing the schema mapping constructor, the document storage tool, 
+and the spatial analyzer.
 
-Another important issue in storage is the data size. It is common to have a 
-huge GML file. We bring one example of several research papers in this area 
-to have a complete discussion over the storage.
-Wei~\cite{Wei2011} introduces a query-friendly compression of GML file in SAX document 
+Another challenging issue in storage is the size of GML data that is commonly huge. We bring one example of several research papers in this area to have a complete discussion over the storage.
+Wei~\cite{Wei2011} discusses a query-friendly compression of GML file in SAX document 
 parsing which will not need full decompression for direct and spatial path querying. 
 Briefly, this approach generates three different structure from the SAX parsing event
 which are an event hierarchy, an event dictionary, and a binary event tree.
-All these three structure together with the document contents are stored in a compact
-representation.
+All these three structures together with the document contents are stored in a compact
+representation to be used in partial decompression for querying.%in "to be used ..." ro az khodam neveshtam, akhe jomle ye juri nesfe nime b nazar miresid.
 
 \subsection{Geospatial Query Languages}
 \label{queryLang}
 Numerous contributions have done toward introducing a GML query language.
-Here, we summerize just a short list of them based on different approaches. 
-Section~\ref{xquery-based} starts the discussion with the XQuery based languages which extend XQuery
+Here, we summerize just a short list of them trying to cover the various ideas we have met.%based on different approaches. 
+Section~\ref{xquery-based} starts the discussion with the XQuery based languages which extends the XQuery
 to process the GML data.
-Then, we bring related work regarding the integration of the geospatial and non-geospatial
+Then, we bring related work regarding the integration of geospatial and non-geospatial
 data from different sources in Section~\ref{integration}. This integration is a matter of interest
 as the data is mostly is a mixed data. The knowledge- or ontology-based approaches 
 come next in Section~\ref{ontology}.

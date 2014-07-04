@@ -136,51 +136,50 @@ Sec.~\ref{s.future}.
 \section{Geospatial Data Processing}
 \label{s.method}
 %TODO:in tarifa bere bakhshe badi, inja chanta jomle koli begam
-According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{Geospatial Data} is the data representing any thing on the Earth's surface. Regarding the importance of the geospatial data, many standards and systems have been developed  during the years, to represent and make use of this data. Different countries and organizations are using different systems and standards to represent this data and consequently there are numerous systems to fulfill a range of target requirements. The World Geodesic System (WGS) is one of the standard geospatial systems that is commonly used all around the world. WGS84 is the latest version of this standard which
-was introduced in $1984$ and is widely used for expresing the locations on Earth in wide range of services, including many satellite services, notably Global Positioning System (GPS), and Google Maps employ this system as a refrence.
+According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{Geospatial Data} is the data representing any thing on the Earth's surface. Regarding the importance of the geospatial data, many standards and systems have been developed  during the years to represent and make use of this data. Different countries and organizations are using different systems and standards to represent this data and consequently there are numerous systems to fulfill a range of target requirements. The World Geodesic System (WGS) is one of the standard geospatial systems that is commonly used all around the world. WGS84 is the latest version of this standard which
+was introduced in $1984$ and is widely used for expresing the locations on Earth in wide range of services, including satellite services, notably Global Positioning System (GPS), and Google Maps which employ this system as a refrence.
 
 In this section, we go through the existing concepts and technologies about the geospatial data processing. After some basic definitions in Section \ref{termsanddef}, the process of these data in the native databases are investigated in Section \ref{s.geo-data-in-xml-data}.
-Finally, the geospatial indexing and a set of indexing algorithms are introduced in Section \ref{s.geospatial-index}.
+Finally, the geospatial indexing and a set of related algorithms are introduced in Section \ref{s.geospatial-index}.
 
 
 \subsection{Terms and Definitions}
 \label{termsanddef}
-As defined before, Geospatial data is the locational information describing \textit{features} and locations and their characteristics that have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. Hence, a \textit{feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world, such as geometries, attributes, and relationships and real-world entities could be expressed as a set of \textit{feature}s.
-Geospatial data also applies to three-dimnesionsl data, like above and below the Earth's surface~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regards to the specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects, which are defined in a coordinate system. Here we introduce the concepts and terms related to the current definitions that are required in this study as well.
-
+As defined before, Geospatial data is the locational information describing \textit{features} and locations and their characteristics that have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. Here, a \textit{feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world, such as geometries, attributes, and relationships. Hence, real-world entities could be expressed as a set of \textit{feature}s.
+Geospatial data also applies to the three-dimnesionsl data, like above and below the Earth's surface~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regards to the specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects, which are defined in a coordinate system. 
 %Open Geospatial Consortium (OGC)~\cite{ogc} is an international consortium, developing interface standards for geospatial content, services, data exchange, data communication, and data processing. Geospatial data is given usually by its position its coordinate.
-A \emph{coordinate system} as a basic concept, is a method to uniquely determine the position of an object in space of given dimension. It uses the definitions, components, and properties to determine the coordinates which specify the linear and angular positions. Coordinate systems are defined by various organization, countries, or governments based on the geodetic datums, units, projections, and some other parameters and specific requirements. For example, WGS coordinate system is defined to visualize the geographic data on map or on the Earth. 
+A \emph{coordinate system} as a basic concept, is a method to uniquely determine the position of an object in a space of a given dimension. It uses the definitions, components, and properties to determine the coordinates which specify the linear and angular positions. Coordinate systems are defined by various organization, countries, or governments based on the geodetic datums, units, projections, and some other parameters. For example, WGS coordinate system is defined to visualize the geographic data on a map or on the Earth. 
 
 A country may have more than one coordinate system for its national-wide geographic data. DHDN, ETRS89 UTM zone 32N, and PD/83 Zone 3 are examples of Germany's coordinate systems. These are considered as local ones while there are the world coordinate system for the coordinates in the world space. WGS is an example of the world coordinate system. The coordinates may differ for the same object from a system to another. As an example, the coordinates of Berlin in WGS84 coordinate system with longitude and latitude is $(52.520007, 13.404954)$ while in Germany's ETRS89 UTM zone 32N coordinate system is $(32798809.64, 5828000.49)$. Accordingly, it is necessary to know how the coordinate systems are related in concepts and definitions to make the conversion possible. 
-In geographic information systems (GIS) coordinate systems are categorized in two major and common types:
+In geographic information systems (GIS), coordinate systems are categorized in two major and common types:
 %http://edndoc.esri.com/arcobjects/9.2/NET/89b720a5-7339-44b0-8b58-0f5bf2843393.htm
 %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323
 %http://www.gps.caltech.edu/gislab/HowTo/ESRI%20-%20Map%20Projections.pdf
 \begin{itemize}
-\item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are WGS 1984, NAD 1927, and NAD 1983. 
+\item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are WGS84, NAD 1927, and NAD 1983. 
 
-\item Projected coordinate system: A cordinate system representing the Earth's round surface on a 2D flat surface, after the projection process based on a map projection (see Figure~\ref{figproject}). A projected coordinate system is always based on a geographic coordinate system. Each projections distorts in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323 
+\item Projected coordinate system: This cordinate system represents the Earth's round surface on a 2D flat surface, based on a map projection as shown in Figure~\ref{figproject}). A projected coordinate system is always based on a geographic coordinate system. Each projections distorts in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323 
 %source for image: https://developer.apple.com/library/ios/documentation/userexperience/conceptual/LocationAwarenessPG/LocationAwarenessPG.pdf
 \end{itemize}
 
 \begin{figure}
 \centering
 \includegraphics[width=0.4\textwidth]{sphere_to_cylinder}
-\caption{Projection of a geographic coordinate system to the flat map}
+\caption{Projection of a geographic coordinate system to a 2D flat map (source~\ref{projected})}
 \label{figproject}
 \end{figure}
 
-In order to express the data by coordinate systems, various encodings have been developed by Open Geospatial Consortium (OGC)~\cite{ogc} as an international consortium, each following different goals. OGC is the main reference to develope interface standards for geospatial content, services, data exchange, data communication, and data processing. However, there are numerous encondings, here we introduce a short list of some common data representation standards which are related to our study in the followings.
+In order to express the data by coordinate systems, various encodings have been developed by Open Geospatial Consortium (OGC)~\cite{ogc}, while following different goals. OGC  as an international consortium is the main reference to develope interface standards for geospatial content, services, data exchange, data communication, and data processing. Here we introduce only a short list of common data representation standards which are related to our study in the followings,
 %Additionally, there are terms for representing a geospatial data which a list of them is as follows,
 \begin{itemize}
 
 %\item Geometry: A geometry is a datatype to represent a location or a region. 
 %TODO \item: encodings, baghiye subitem bashan (http://www.digitalpreservation.gov/formats/fdd/gis_fdd.shtml)
 
-\item Geography Markup Language (GML): The XML based standard encoding defined by OGC, serves as a modeling language to express geographical features in both spatial and non-spatial characteristic. It is used as an interchange format in internet data storage, exchange, transport and transaction. The key to utility of GML is its ability in integrating all forms of geographic information []. %TODO:ref az wikipedia!.
-GML versions 1.0 and 2 encodes a set of 2D geometries, i.e. Point, LineString, and Polygon. GML 3 introduces Curve and Surface as new geometries, plus the support of geometries in 3D.
+\item Geography Markup Language (GML): The XML based standard encoding defined by OGC, serves as a modeling language to express geographical features in both spatial and non-spatial characteristic. It is used as an interchange format in internet data storage, exchange, transport and transaction. The key to the effectiveness of GML is its capability in integrating all forms of geographic information. %TODO:ref az wikipedia!.
+GML versions before the version 3.0 encodes a set of 2D geometries, i.e. Point, LineString, and Polygon. GML 3.0 introduces Curve and Surface as new geometries, plus the support of geometries in 3D.
 
-\item Keyhole Markup Language (KML)~\cite{kml}: An XML-based grammer to encode and represent the geographic data in an 3D earth viewer such as Google Earth, on a 2D map like Google Maps. KML has adopted as an international standard by OGC. The 3D geographic coordinates for each place are represented with longitude, latitude, and if available altitude. KML uses plain unprojected World Geodetic System of 1984 (WGS84) longitude and latitude. The altitude could be omitted and assumed as $0$. KML mainly focuses on visualizations and expresses what and how to show. Code~\ref{kml} shows a sample data in KML. 
+\item Keyhole Markup Language (KML)~\cite{kml}: An XML-based grammer to encode and represent the geographic data in an 3D earth viewer such as Google Earth, also on a 2D map like Google Maps. KML has adopted as an international standard by OGC. The 3D geographic coordinates for each place are represented with longitude, latitude, and if available altitude. Coordinates are provided using the plain unprojected WGS84 longitude and latitude. The altitude could be omitted and assumed as $0$. KML mainly focuses on visualizations and expresses what and how to show. Code~\ref{kml} shows a sample data in KML. 
 \vspace{10px}
 \begin{fakeXML}[label=kml,caption=A simple KML example representing a Point]
 <?xml version="1.0" encoding="UTF-8"?>
@@ -197,7 +196,7 @@ GML versions 1.0 and 2 encodes a set of 2D geometries, i.e. Point, LineString, a
 </kml>
 \end{fakeXML} 
 \vspace{10px}
-\item Well-known Text (WKT): Text-based markup language to represent the vector geometries. It represent a big range of objects like Geometry, Point, LineString, Curve, Polygon, Surface, curvePolygon, and multi-per geometries such as MultiPoint, MultiCurve, MultiSurface, and etc. Below is examples of the WKT representaion for a Point, LineString and Polygon,
+\item Well-known Text (WKT): Text-based markup language to represent the vector geometries which supports a big range of objects like Geometry, Point, LineString, Curve, Polygon, Surface, curvePolygon, and multi-per geometries such as MultiPoint, MultiCurve, MultiSurface, and etc. Below is examples of the WKT representaion for a Point, LineString and Polygon,
 \begin{itemize}
 \item Point: POINT (1 2)
 \item LineSting: LINESTRING (3 1, 1 3, 4 4)
@@ -219,10 +218,12 @@ GML versions 1.0 and 2 encodes a set of 2D geometries, i.e. Point, LineString, a
 
 \subsection{Geospatial Data in Native XML Databases}
 \label{s.geo-data-in-xml-data}
-As a powerful platform independent XML grammar introduced by GIS community(OGC), GML plays an important role in the spatial data modeling, integration, sharing, transmission, and exchange, because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. in the XML database. 
+As a powerful platform-independent XML grammar introduced by GIS community(OGC), GML plays an important role in the spatial data modeling, integration, sharing, transmission, and exchange, because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. 
 %TODO:In classic relational databases,... In XML native databases, geospatial data are handled ...
 
-In addition to general functions and features on the structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML elements should be read and treated as geometries. Therefore, just the string information is not enough to satisfy the geospatial features. The positions, locations, and relations of an arbitrary set of geometries raises some requirements regarding to the topics and definitions in related scientific fields like Geometry and Geoscience. For example, "What is the distance between two geometries?" or "Which geometries intersect a particular geometry?". Additionally, there are features related to single geometries, such as the length and area of a geometry, the number of interior ring of a polygon, and the starting point of a line. These features could be provided by a database system as XQuery functions so they can be mixed wih standard XQuery, full-text, and etc. functions.
+In addition to the general functions and features on the structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML elements should be read and treated as geometries. Therefore, the string information is not enough to satisfy the geospatial features. The positions, locations, and relations of between an arbitrary set of geometries raises some requirements regarding to the topics and definitions in related scientific fields like Geometry and Geoscience. For example, "What is the distance between two geometries?" or "Which geometries intersect a particular geometry?". Additionally, there are features related to single geometries, such as the length and area of a geometry, the number of interior ring of a polygon, and the starting point of a line. These features could be provided by a database system as XQuery functions so they can be mixed wih standard XQuery, full-text, and other functions.
+To this date, numerous ideas have been introduced for geospatial functionalities as well as indexing. Here we discuss the geospatial index design and then we see the sample implementations in Section~\ref{s.dbs}.
+%In order to investigate the related functionalities we start with the existing approaches in the indexing and the 
 
 %Indeed in a database system the features related to a set of geometries are of more importance ...................
 %TODO: We then present spatial comparisons as XQuery functions

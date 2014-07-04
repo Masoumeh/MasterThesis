@@ -158,7 +158,9 @@ In geographic information systems (GIS), coordinate systems are categorized in t
 \begin{itemize}
 \item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are WGS84, NAD 1927, and NAD 1983. 
 
-\item Projected coordinate system: This cordinate system represents the Earth's round surface on a 2D flat surface, based on a map projection as shown in Figure~\ref{figproject}). A projected coordinate system is always based on a geographic coordinate system. Each projections distorts in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323 
+\item Projected coordinate system: This cordinate system represents the Earth's round surface on a 2D flat surface, based on a map projection as shown in Figure~\ref{figproject}). A projected coordinate system is always based on a geographic coordinate system. Each projections distorts in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. 
+In some references, this coordinate system is also called raw coordinate system.
+%http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323 
 %source for image: https://developer.apple.com/library/ios/documentation/userexperience/conceptual/LocationAwarenessPG/LocationAwarenessPG.pdf
 \end{itemize}
 
@@ -399,15 +401,15 @@ Finally, we will look at the databases in Section~\ref{s.dbs} and how they handl
   
 \subsection{Storage}
 \label{storage}
-One of the basic approaches to store GML data is proposed in \cite{Li2004} to store both spatial and non-spatial data in a spatial database, like Oracle Spatial and PostGIS/Postgres SQL. This approach first generates the schema tree and then maps it into the relational schema to store all spatial objects as 
-the values of table fields in the spatial database. Geospatial queries can be submitted 
-in a XQuery\cite{xquery}-like language with spatial functional extensions. These GML queries are translated into the equivalent SQL queries which are evaluated using the spatial database management system. 
-A similar approach is discussed in \cite{Zhu2011} to store and query the GML data focusing on non-schema documents. After the generation of GML parse tree, the nodes are analyzed and schema mapping is generated to store the document in an object-relational database. 
-Both spatial and non-spatial queries are supported in this approach.
+One of the basic approaches to store GML data is proposed in \cite{Li2004} to store both spatial and non-spatial data in a spatial database, like Oracle Spatial and PostGIS/Postgres SQL. This approach first generates the schema tree and then maps it into the relational schema to store all spatial objects as the values of table fields in the spatial database. Geospatial queries can be submitted 
+in a XQuery-like language with spatial functional extensions. These GML queries are translated into the equivalent SQL queries which are evaluated using the spatial database management system. 
+A similar approach is discussed in Xu et al~\cite{Zhu2011} to store and query the GML data focusing on non-schema documents. After the generation of GML parse tree, the nodes are analyzed and schema mapping is generated to store the document in an object-relational database. 
+Both spatial and non-spatial queries are also supported in this approach.
 
-In constrast to these two approaches, Shulian Zhang et al~\cite{Zhang2008} considers the characteristics of XML databases and stores the GML data in the original format without any conversion or mapping to a relational or object-orineted database. 
+In constrast to these two approaches, Zhang et al~\cite{Zhang2008} considers the characteristics of XML databases and stores the GML data in the original format without any conversion or mapping to a relational or object-orineted database. 
 It supports also the self-descriptive and semi-structural characteristics of XML.
-This is only one of the strategies which propose a native XML database, considering the GML structure in storage and querying. The corresponding strategy based on the~\cite{Zhang2008} and other similar works follows the below steps:
+This is only one of the strategies which propose a native XML database, considering the GML structure in storage and querying. 
+These strategies follow the below steps:
 \begin{enumerate}
 \item Import and parse the GML schema
 \item Map the feature object and document schema
@@ -416,13 +418,14 @@ This is only one of the strategies which propose a native XML database, consider
 \item Partition and store the GML document into the corresponding collection
 \item Record the log file containing the GML partitioning information
 \end{enumerate}
-To implement these steps, a prototype system is developed on JAXP (Java API for XML Processing) 
+To implement these steps, a prototype system is developed based on \textit{Java API for XML Processing} (JAXP) 
 and JTS~\cite{jts} library, containing the schema mapping constructor, the document storage tool, 
 and the spatial analyzer.
 
-Another challenging issue in storage is the size of GML data that is commonly huge. We bring one example of several research papers in this area to have a complete discussion over the storage.
+Another challenging issue in storage is the size of GML data that is commonly huge. 
+We bring one example of several research papers in this area to complete the discussion over the storage.
 Wei~\cite{Wei2011} discusses a query-friendly compression of GML file in SAX document 
-parsing which will not need full decompression for direct and spatial path querying. 
+parsing which does not full decompression for both the direct and the spatial path querying. 
 Briefly, this approach generates three different structure from the SAX parsing event
 which are an event hierarchy, an event dictionary, and a binary event tree.
 All these three structures together with the document contents are stored in a compact
@@ -438,17 +441,17 @@ Then, we bring related work regarding the integration of geospatial and non-geos
 data from different sources in Section~\ref{integration}. This integration is a matter of interest
 as the data is mostly is a mixed data. The knowledge- or ontology-based approaches 
 come next in Section~\ref{ontology}.
-Finally, we discuss other nonrelated approaches in Section~\ref{others}.
+Finally, we discuss other interesting approaches in Section~\ref{others}.
 
 \subsubsection{XQuery-based languages}
 \label{xquery-based}
 XQuery language, recommended by \emph{W3C}, as a powerfull query programming language for structured and non-structured data, 
-is not applicable to spatial data, as it discusses in~\cite{Lisa2006,Chen2010}.
-However, Li~\cite{Lisa2006} discusses that XQuery is suitable to be expanded in order to develop a spatial query language.
+is not applicable to spatial data, as it is discussed in~\cite{Lisa2006,Chen2010}.
+However, Li~\cite{Lisa2006} concludes that XQuery is suitable to be expanded in order to develop a spatial query language.
 It is emphasized that the GML data should be treated different than XML data 
 Hence, Li~\cite{Lisa2006} chooses XQuery as the base language to expand into a GML query language. 
 The proposed language supports not only predefined GML elements
-but also it is more flexible to handle various GML data. 
+but also it is flexible to handle various GML data. 
 It means a query can be designed without knowing the concrete elements of the GML document.
 Code~\ref{qlang1} is an example of this language and its flexibility
 which retrieves all geometries within a region. As it is seen, 
@@ -468,14 +471,15 @@ return $feature
 Another contribution which supports the idea of integrating GML and XQuery is presented in Chen~\cite{Chen2010}.
 It introduces a new GML query language, named GXQuery. 
 Adding spatial data types and operations to XQuery based on OGC Simple Features Spesification for SQL, 
-\cite{Chen2010} represents the architecture and implementation methods of GXQuery 
+Chen~\cite{Chen2010} represents the architecture and implementation methods of GXQuery 
 which supports spatial, non-spatial, and mixed spatial and non-spatial queries. 
 The GXQuery engine is composed of XQuery engine, GML parser, spatial extension module 
 and a module of GML index interface. 
-JTS API component is implemented in this engine
+A component based on JTS API is implemented in this engine
 to be used as the base of the spatial extension. 
 A typical spatial and non-spatial query example of GXQuery is given in Code~\ref{qlang2}.
-This query checks if two geometries corresponding to the "Building" features from the "Campus.gml" are spatially equal.
+This query checks if two geometries corresponding to the "Building" features from 
+"Campus.gml" file, which is correspondant to a compus facilities, are spatially equal.
 \vspace{10px}
 \begin{fakeXML}[label=qlang2,caption=A typical example of combined spatial and non-spatial query in GXQuery.]
 FOR $var1 IN doc(“Campus.gml”)//Building,
@@ -488,13 +492,17 @@ AND $var2/@fid = “l0028” RETURN geo:Equals($var1, $var2)
 A final example of XQuery-based GML database is Fubao~\cite{Fubao2010}
 which expands the data model, algebra, functions, operations, and formal semantics in XQuery 
 to achieve a GML query processor. 
-A new spatial datatypes and operators are added to XQuery to support both spatial and mix queries, 
-which include both spatial and non-spatial queries. 
+New spatial datatypes and operators are added to XQuery to support both spatial and mix (spatial and nonspatial) queries. 
 Supported data types are  Geometry, Coord, Coordinates, Point, LineString, LinearRing, Polygon, Box, 
 GeometryCollection, MultiPoint, MultiLineString, and MultiPolygon. 
-The defined spatial operations are simple geometry operation, 
-spatial relation operation, spatial analysis operations, and geometry-specific operations.
-The spatial computations are handled by the spatial funcions of JTS in background.
+The spatial operations defined in this database are as follows,
+\begin{itemize}
+\item simple geometry operation 
+\item spatial relation operation
+\item spatial analysis operations
+\item geometry-specific operations.
+\end{itemize}
+The spatial computations are handled again by the spatial funcions of JTS in background.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %in paraf khub nis, bayad ba deghat paper ro bekhunam
@@ -516,40 +524,48 @@ The spatial computations are handled by the spatial funcions of JTS in backgroun
 \label{ontology}
 In addition to the XQuery-based language developments, 
 other concepts of spatial query languages were developed. 
-Alemdros~\cite{Alemdros2011, Alemdros2013} defines a semantic version of Xpath 
+Alemdros~\cite{Alemdros2011, Alemdros2013} defines a semantic version of XPath 
 which is not based on the tree-based (syntactic) structure of GML. 
 In this approach, a system based on the semantic structure of GML is developed to store GML by PostGIS database system. 
-Xpath queries are translated into SQL language considering the GML schema and the resulted query is represented in KML.
+XPath queries are translated into SQL language considering the GML schema.
+It should be mentioned that the resulted query in this approach is represented in KML.
 
-Also, \cite{Gutierrez2004} brings a new idea and presents a knowledge-based approach 
-to query heterogeneous spatial databases by identifying not only the entity classes, also the similar instances. 
+Also, {Gutiérrez et al}~\cite{Gutierrez2004} brings a new idea and presents a knowledge-based approach 
+to query heterogeneous spatial databases by identifying not only the entity classes but also the similar instances. 
 It means the database uses a conceptual schema and the queries are done based on it. 
 The queries that are based on the ontology and conceptual similarities, 
-are transformed into a formal specification of entity classes, which are compared against the definitions in the database. 
+are transformed into a formal specification of entity classes which are compared against the definitions in the database. 
 This process is carried out by determining the conceptual similarity between entities in a user ontology and 
 by comparing the entities in ontology with the entities in conceptual models of databases. 
 In addition to the specification of idea, system architecture, user ontology and conceptual schema are provided.
 
 Ontology-based queries cannot be applied directly to legacy data stored in databases or shape ﬁles, 
 or to feature data in WFS services when data access to distributed and heterogeneous geospatial data is querid. 
-\cite{Zhao2008} presents a method to spatial data interoperability at semantic level by an interface in RDF ontology. This method enables ontology querying on geospatial data available from WFS services and on data stored in databases. There is no need to replicate legacy data stored in relational databases, shapefiles, or GML data accessible through WFS. Instead, the queries are written to WFS \textit{getFeature} request and SQL statements in databases. The interface provides an ontology layer for geospatial data accessible through WFS services or databases. The queries are wirtten in the common terms of the domain and application ontology. The interface uses the spatial query functions of WFS servers for feature rendering and also relational databases as sources for non-spatial data, since this can improve the performance of non-spatial queries. By enabling querying based on ontology, this method can utilize quering tool in databases, WFS, and GML. 
+Zhao et al~\cite{Zhao2008} presents a method to spatial data interoperability at semantic level by an interface in RDF ontology. This method enables ontology querying on geospatial data available from WFS services and on data stored in databases. There is no need to replicate legacy data stored in relational databases, shapefiles, or GML data accessible through WFS. Instead, the queries are written to WFS \textit{getFeature} request and SQL statements in databases. The interface provides an ontology layer for geospatial data accessible through WFS services or databases. The queries are wirtten in the common terms of the domain and application ontology. 
+The interface uses the spatial query functions of WFS servers for feature rendering and relational databases as sources for non-spatial data, since this can improve the performance of non-spatial queries. By enabling querying based on ontology, this method can utilize quering tool in databases, WFS servers, and GML databases. 
 
 \subsubsection{Integration of Spatial and non-Spatial data}
 \label{integration}
 Toward integrating spatial and non-spatial data from different sources, 
 it is necessary to develop an integration system. 
-\cite{corcoles2004} discusses a prototype of an integration mediator for querying the spatial XML resources. 
+Corcoles~\cite{corcoles2004} discusses a prototype of an integration mediator for querying the spatial XML resources. 
 This approach mainly provides an interface or global schema for querying the resources with different schema. 
 This global schema is a simple object-oriented structure in RDF described as an ontology. 
 More clearly, this work provides the infrastructure for formulating structured spatial queries 
-considering the conceptual representation of a specific domain like the information of New York, 
+considering the conceptual representation of a specific domain, like the information of New York, 
 in the form of an ontology. The mediator translates the queries in terms of RDFS to queries which refer to the schemas of GML resources.
  % The resources are integrated using RDF. The most novel and critical feature of this approach is the querying of spatial XML resources, because it uses a different way from that of querying and relating non-spatial resources.
 
-Regarding the integration issues, \cite{belussi2006} explains a problem which arises from different representation of the spatial data in various resources or even in integration scenarios or architectures. For example, one dataset represents roads and bridges as regions, another dataset represents roads as regions and bridges as lines, and a third dataset represents both as lines. In cases the user wants to query this spatial data, integrated with non-spatialdata, indeed there would be some gaps about the stored data. Here, this gap might cause difficulties in querying as well as some inaccuracies in the results. \cite{belussi2006} introduces a solution based on a query relaxation mechanism to return approximated results with possibility of specifying maximal error allowed
+Regarding the integration issues, Belussi et al\cite{belussi2006} explains a problem which arises from different representation of the spatial data in various resources or even in integration scenarios or architectures. For example, one dataset represents roads and bridges as regions, another dataset represents roads as regions and bridges as lines, and a third dataset represents both as lines. 
+In cases the user wants to query this spatial data integrated with non-spatialdata, 
+there would be indeed some gaps about the stored data. 
+Here, this gap might cause difficulties in querying as well as some inaccuracies in the results. 
+This integration approach introduces a solution based on a query relaxation mechanism 
+to return approximated results with possibility of specifying maximal error allowed
 in the execution by the user. 
 %In this study, the relaxation problem for spatial topological queries is considered. 
-In particular, some relaxed topological predicates, called \textit{weak}, and the related application contexts in terms of application scenarios to show their usability are presented. Moreover, an existing XQuery-based GML query language is extended to support similarity-based queries through the proposed operators and to handle the \textit{weak} topological predicates, from the syntax and implementation perspective. his language also uses JTS API to provide spatial object model and fundamental topological
+In particular, some relaxed topological predicates, called \textit{weak}, and the related application contexts in terms of application scenarios to show their usability are presented. Moreover, an existing XQuery-based GML query language is extended to support similarity-based queries through the proposed operators and to handle the \textit{weak} topological predicates, from the syntax and implementation perspective. 
+This language uses also JTS API to provide spatial object model and fundamental topological
 function and relations. Below sample queries in this language are shown,  
 %In order to make such predicates effectively usable, the way that GQuery, an XML-based spatial query language, can be extended to support similarity-based queries through the proposed operators is also discussed.
 \vspace{10px}
@@ -568,17 +584,18 @@ return $x
 \end{fakeJSON}
 \end{itemize}
 
-\subsubsection{Others}
+\subsubsection{Other Approaches}
 \label{others}
 Since the web technologies are used widely nowadayas, 
 Corcoles~\cite{corcoles2003} proposes an approach to integrate geospatial data 
 on the Web by focusing on the definition of a mapping between the ontology and the DTD/Schemas. 
 Geospatial data in this work is stored in GML format and a query language is designed for querying each GML document in the same way. 
-Besides, ontologies solve the semantic heterogeneity of different GML documents by defining a catalog in RDF such that the RDF establishes a correspondence.
+Besides, ontologies solve the semantic heterogeneity of different GML documents 
+by defining a catalog in RDF such that this catalog establishes a correspondence.
 
 Besides the geospatial data representation and exchange, GML format benefits from its XML-based model in interoperability, 
 and more importantly, in querying. 
-\cite{corcoles2001} discusses a query language the an SQL-like interface to work with GML. 
+Corcoles et al~\cite{corcoles2001} discusses a query language with an SQL-like interface to work with GML. 
 The data model and the algebra behind the language are based on a previously proposed model 
 in which components and interrelations are represented as a directed graph. 
 The vertices of this graph are geometry types and properties. 
@@ -593,7 +610,9 @@ this databases in the following sections.
 
 \subsubsection{MongoDB}
 \label{mongo}
-MongoDB~\cite{mongogeneral2010,mongoinaction2011} supports both flat and spherical space in geospatial processings. 
+MongoDB~\cite{mongogeneral2010,mongoinaction2011} is one of the leading databases used specially in web programs.
+Here, we consider the version $2.4$ of this software.
+MongoDB supports both flat and spherical space in geospatial processings. 
 Geospatial fetures in MongoDB are mainly limited to a few operators which can be combined based on the use cases. 
 The operators are \textit{\$geoIntersects}, \textit{\$geoWithin}, \textit{\$near}, and \textit{\$nearSphere}. 
 In addition, there are some geometry specifiers which can be used form the query conditions, like 
@@ -608,7 +627,7 @@ such as the distance of each returned item from the given point or some troubles
 \textit{geoSearch} is an interface to use the haystack index and \textit{geoWalk} is an internal command.
 
 \textbf{Geospatial Index.}
-The geospatial index in Mongo is based on the data structure \textit{geohash}\cite{www/geohash}.
+The geospatial index in Mongo is based on the data structure \textit{geohash}~\cite{www/geohash}.
 The geohash data structure divides the space into buckets of grids and assign to each part a two-bit value. 
 The number does not really point to the coordinates, rather the bounding of coordinate is represented. 
 As the division goes further, the geohash values will get longer and the areas smaller. 
@@ -618,15 +637,23 @@ At the end, we will have a hierarchical spatial structure. Here are some propert
 \item It simply groups the points by giving the whole places of a quadrant the same value. Nearby places often share similar prefixes. Conversely, the longer a shared prefix is, the closer the two places are. 
 \item Arbitrary precision and the possibility of gradually removing characters from the end of the code to reduce its size and precision is properties that geohash offers. Therefore, it allows to zoom into the areas to select the level of percision.
 \item It facillitates the unique identification for points and locations.
-\item It could represent databases as data points.
-\item All data points belonging to a grid square can be cashed using the related geohash value.
-\item For finding the nearest neighbour, an index on geohash which sorts them alphanumerically, could return the result directly, as the closest string is the nearest point. However, here we could spot a problem with finding nearest neighbours which will be discussed in the followings.
+\item It could represent databases as data points. All data points belonging to a grid square can be cashed using the related geohash value.
+\item For finding the nearest neighbour, an index on geohash which sorts them alphanumerically, returns the result directly, as the closest string is the nearest point. However, here we could spot a problem with finding nearest neighbours which will be discussed in the followings.
 \end{itemize}
 
-Using geohash as a structure for storing the data structure in database has some advantages based on the above-mention properties. It saves the resources as stores two value of longitude and latitude in a single string value without any space and puctualtion signs. Having geohashes as strings is useful since the length of the string correlates to its precision, strings can be grouped by prefix, they’re easier to store in databases, and they’re faster to query. On the other hand, the indexed data with geohash are positioned in adjacant quadrants and consequently the queris will be faster when tracking them down with the single index than multiple-index on longitude/latitude values. This index can be used in quick proximity searches which do not have to be precise.
+Using geohash as a structure for storing the data structure in database has some advantages based on the above-mention properties. It saves the resources as stores two value of longitude and latitude in a single string value without any space and puctualtion signs. 
+Having geohashes as strings is an important issue which some of the advantages are as follows, 
+\begin{itemize}
+\item the length of the string correlates to its precision,
+\item strings can be grouped by prefix
+\item  they are easier to store in databases
+\item  they are faster to query. 
+\end{itemize}
+On the other hand, the indexed data with geohash are positioned in adjacant quadrants and consequently the queris will be faster when tracking them down with the single index than multiple-index on longitude/latitude values. This index can be used in quick proximity searches which do not have to be precise.
 
-Geohash algorithm has a shortcoming when attempts to find the near points based on the common geohash prefix. When points are close but are located on opposite sides of a common boundary of two quadrants, they have not only distinct prefixes, also wildly different geohashes, such as point located on the other sides of the Equator or a meridian. This would cause inefficient proximity searches. To solve this problem, thegeohash of the eight sourranding quadrants must be calculated to find the matching locations residing on the other side of boundaries. 
-Another problem comes from the projection-based model of the geohashing. This means a geoashe of a specified prefix lenght will represent the areas with big diference in size near the pole than near the Equator. ????
+Geohash algorithm has a shortcoming when attempts to find the near points based on the common geohash prefix. When points are close but are located on opposite sides of a common boundary of two quadrants, they have not only distinct prefixes, also wildly different geohashes, such as point located on the other sides of the Equator or a meridian. This would cause inefficient proximity searches. To solve this problem, the geohash of the eight sourranding quadrants must be calculated to find the matching locations residing on the other side of boundaries. 
+Another problem comes from the projection-based model of the geohashing. This means a geoashe of a specified prefix length will represent the areas with big diference in size near the pole than near the Equator. 
+Rogers~\cite{www/geohash-limit} discusses the limitations of geohashing and possible design aspects to improve the efficiency.
 % Depending on how you use geohashes, this skews the apparent data distribution in a way that might have to be accounted for in software design. Technically it is possible to design a geohash-like algorithm that does not have this problem. (http://www.quora.com/What-are-the-limitations-of-geohashing)
 
 %Geohashing allows for arbitrary precision. You can geohash a quadrant and then search for all points within the hashed quadrant. If my reading is correct this should return a hash table in constant time [O(1)]. Indexing a map is inflexible. If you want to search a subspace of a quadrant or parts of two adjacent quadrants, you'll have to search all your data again unless you've sorted the data in each quadrant which would be linear time [O(n)].
@@ -664,46 +691,44 @@ MongoDB also provide another 2d index optimized, called Haystack index, to retur
 %http://batchgeocode.net/what-is-geohash/
 %http://blog.cobrain.com/2013/09/18/intro-to-geohashing/
 
-\subsubsection{MarkLogic}
-Geospatial data in MarkLogic is encoded as XML elements and/or attributes in different representations. MarkLogic handles the geospatial data in GML, KML, GeoRss, WKT and even general format for geometric data which are not based on a specified format. Like MongoDB, WGS84 and Raw coordinate systems are supported for geospatial data. WGS84 is used for data on the Earth and raw coordinate system is suitable for the data on flat plane.
+\subsubsection{MarkLogic 7}
+Geospatial data in MarkLogic is encoded as XML elements and/or attributes in different representations. MarkLogic handles the geospatial data in GML, KML, GeoRss, WKT and even general format for geometric data which are not based on a specified format. Like MongoDB, WGS84 and the raw coordinate systems are supported for geospatial data. WGS84 is used for data on the Earth and the raw coordinate system is suitable for the data on the flat plane.
 
 Regarding the geospatial queries, the following types are supported,
 \begin{itemize}
-\item Point query: Queries that match a single point.
-\item Box query: Queries for searching any point within a rectangular box.
-\item Radius query: Searching for any point within a specified distance around a point.
-\item Polygon query: Queries for any point within a specified n-sided polygon.
+\item Point query: Queries matching a single point.
+\item Box query: Queries searching for any point within a rectangular box.
+\item Radius query: Queries searching for any point within a specified distance around a point.
+\item Polygon query: Queries finding any point within a specified n-sided polygon.
 \end{itemize}
 
-To do the geospatial queries there are geospatial query constructors as well as some Geospatial operations as built-in functions to perform geospatial operations, as below,
+To do the geospatial queries, there are geospatial query constructors as well as some 
+geospatial operations as built-in functions to perform getospatial operations as below,
 \begin{itemize}
 \item box-intersects: Returns true if the box intersects with a region.
 \item circle-intersects: Returns true if the circle intersects with a region.
 \item polygon-intersects: Returns true if the polygon intersects with a region.
 \item complex-polygon-intersects: Returns true if the complex-polygon intersects with a region.
 \item polygon-contains: Returns true if the polygon contains a region.
-\item complex-polygon-contains: Returns true if the complex-polygon contains a region.
+\item complex-polygon-contains: Returns true if the complex-polygon contains a region. A complex polygon
+is a polygon which is not convex or concave.
 \item distance: Returns the distance (in miles) between two points.
 \item shortest-distance: Returns the great circle distance (in miles) between a point and an region. The region such as a circle, box, polygon, linestring, or complex-polygon is defined by a \textit{region} constructor.
 \item destination: Returns the point at the given distance (in miles) along the given bearing (in radians) from the starting point.
 \end{itemize}
-The geospatial queries need some primitive types to be used in query conditions inside the query constructors. If these types contain matching data requested by the query, the result will be true. These types as instances of the base type \textit{region}, encompassing \textit{box}, \textit{circle}, \textit{complex-polygon}, \textit{linestring}, \textit{point}, and \textit{polygon}. 
+The geospatial queries need some primitive types to be used in query conditions inside the query constructors. If these types contain matching data requested by the query, the result will be true. These types as instancs of the base type \textit{region}, encompassing \textit{box}, \textit{circle}, \textit{complex-polygon}, \textit{linestring}, \textit{point}, and \textit{polygon}. 
 %Latitudes and longitude pairs shape points. Points shape other geometries, like circle or polygon. Boxes are formed by 4 points which on the surface of the Earth. The edges of the box are arcs, but when those arcs are projected into a plane, they become two-dimensional latitude and longitude lines, and the space defined by those lines forms a rectangle. A linestring is a sequence of connected joined arcs that do not necessarily form a closed loop. 
 
-WKT is another geospatial supported format for geospatial data representation. \textit{parse-wkt} function is defined to read WKT into the \textit{region} items and use them in queries and conversly \textit{to-wkt} function converts \textit{region} type to WKT.
+As we discussed before, WKT is another geospatial supported format for geospatial data representation. 
+This database support the handling of WKT. The function \textit{parse-wkt} is defined to read WKT into the \textit{region} items and use them in queries and conversly the function \textit{to-wkt} converts \textit{region} type to WKT.
 
 \textbf{The Geospatial Index.}
-Geospatial index in MarkLogic is not based on quad or R-tree. It works like a range index with points as data values. In this range index, every value is a pair of latitude and longitude. Like an array of x,y values, sorted mainly based on lat and then long values. The values in array also are connected to the corresponding document.
-The points would be founded easily in a sorted structure. Boxes could be found first by finding the lat range, then checking for the long range. For circles and polygon as more complex ones, the bounding box is used to find the region they belong to. Also, to check if a point is inside the polygon, the number of intersections with the northward or southward arc of the point is counted. 
+Geospatial index in MarkLogic is not based on neither the quad tree nor R-tree. It works like a range index with points as data values. In this range index, every value is a pair of latitude (lat) and longitude (long). Like an array of x,y values, sorted mainly based on lat and then long values. The values in array also are connected to the corresponding document.
+The points would be founded easily in a sorted structure. 
+Boxes could be found first by finding the lat range, then checking for the long range. 
+For circles and polygon as well as more complex ones, the bounding box is used to find the region they belong to. 
+Also, to check if a point is inside the polygon, the number of intersections with the northward or southward arc of the point is counted. 
 
-MarkLogic supports different geospatial indexes, as shown below,
-\begin{itemize}
-\item Geospatial Element Indexes: With this index, the data is represented by whitespace or punctuation separated element content. The lat-long or long-lat point formats could represent a point. Other entries such as z-coordinate or altitudes will be omitted.
-\item Geospatial Element Child Indexes: With this index, the data comes only from elements that are a specific child of a specific element which contains whitespace or punctuation separated content.
-\item Geospatial Element Pair Indexes: In this index, the data is considered from specific pair of elements that are a child of another specific element.
-\item Geospatial Attribute Pair Indexes: With this index, the data is involved in a pair of specific attributes of a particular element.
-\item Geospatial Path Range Indexes: With this index, the data is expressed in the same manner as a geospatial element index and the element or attribute index is defined by a path expression. \ref{t.pathindexmarklogic} shows two examples of the data as an element and attribute and related paths for indexing each one. It should be mentioned that a defined path cannot be replaced with a new one unless it is removed.
-\end{itemize}
 \vspace{10px}
 \begin{table}
 \centering
@@ -731,6 +756,14 @@ MarkLogic supports different geospatial indexes, as shown below,
 \label{t.pathindexmarklogic}
 \end{table}
 \vspace{10px}
+MarkLogic supports different geospatial indexes, as shown below,
+\begin{itemize}
+\item Geospatial Element Indexes: With this index, the data is represented by whitespace or punctuation separated element content. The lat-long or long-lat point formats could represent a point. Other entries such as z-coordinate or altitudes will be omitted.
+\item Geospatial Element Child Indexes: With this index, the data comes only from elements that are a specific child of a specific element which contains whitespace or punctuation separated content.
+\item Geospatial Element Pair Indexes: In this index, the data is considered from specific pair of elements that are a child of another specific element.
+\item Geospatial Attribute Pair Indexes: With this index, the data is involved in a pair of specific attributes of a particular element.
+\item Geospatial Path Range Indexes: With this index, the data is expressed in the same manner as a geospatial element index and the element or attribute index is defined by a path expression. Table~\ref{t.pathindexmarklogic} shows two examples of the data as an element and attribute and related paths for indexing each one. It should be mentioned that a defined path cannot be replaced with a new one unless it is removed.
+\end{itemize}
 
 
 %Geospatial Index Positions
@@ -802,14 +835,14 @@ MarkLogic supports different geospatial indexes, as shown below,
 %“cts” Functions
 %Part of these functions also contain geospatial function: 1 2
 %----------------------------------------------------------------------------------------------------------------------------
-For querying on geospatial data in MarkLogic, after loading the data into the DB and making the indexes, primitive types should be constructed to be used in the geospatial query functions. Then, geospatial queries needs to be constructed, using primitive types. 
+For querying on geospatial data in MarkLogic, after loading the data into the database and making the indexes, primitive types should be constructed to be used in the geospatial query functions. Then, geospatial queries are constructed using these primitive types. 
 
 \subsubsection{eXist-db}
-Here, we briefly describe the general ideas of geospatial support to see the properties and implementation model of the functions and the index structure. 
-\footnote{The Spatial Module in eXist-db is still in experimental satus.}
-The eXist-db database supports geospatial data in GML 2.1.2 format. The geospatial features are provided using JTS API in geospatial computations. 
+Here, we briefly describe the concepts of geospatial support in eXist-db\footnote{The Spatial Module in eXist-db is still in experimental satus.}
+to see the properties and implementation model of the functions and the index structure. 
+The eXist-db database supports geospatial data in GML $2.1.2$ format. The geospatial features are provided using JTS API in geospatial computations. 
 The general development idea of indexing in eXist-db follows a modular architecture and the geospatial index could be developed based on this model and maintained as a pluggable extension. To create the geospatial index, it must be configured in collection-specific configuration XML files that are located in the system collection: /db/system/config. 
-The geospatial index in eXist-db is made by the relational db (uses an SQL database to index spatial data). The index doesn't store character data from the document. It stores WKB index entries in a JDBC database, namely a HSQLDB which could be any other one like PostGIS. The index relies on the open source libraries of the GeoTools~cite{geotools} project. ?????reference???? Geometries are stored both in the original coordinate system and WGS84 system in index structure to allow the operations on data originated in different systems and in this way transformations between coordinate systems is included using GeoTools library.
+The geospatial index in eXist-db is made by the relational db (uses an SQL database to index spatial data). The index doesn't store character data from the document. It stores WKB index entries in a JDBC database, namely a HSQLDB which could be any other one like PostGIS. The index relies on the open source libraries of the GeoTools~\cite{geotools} project. Geometries are stored both in the original coordinate system and WGS84 system in index structure to allow the operations on data originated in different systems. In this way, transformations between coordinate systems are included using GeoTools library.
  
 %In other words, the spatial data is stored in the DB, but geometries, as JTS Geometry instances, are held in memory, waiting for a special mode to be flushed into a relational DB, insertion or removal. The Geometry WKT representation would be serialized and deserialized to and from the database.
 

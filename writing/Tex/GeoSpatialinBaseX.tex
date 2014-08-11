@@ -444,8 +444,6 @@ Then, we bring related work regarding the integration of geospatial and non-geos
 data from different sources in Section~\ref{integration}. This integration is a matter of interest
 as the data is mostly is a mixed of both types. The knowledge- or ontology-based approaches 
 come next in Section~\ref{ontology}.
-Finally, Section~\ref{others} discusses other approaches which can not be included in the previous
-ones.
 
 \subsubsection{XQuery-based Languages}
 \label{xquery-based}
@@ -552,6 +550,15 @@ This interface provides an ontology layer for geospatial data accessible through
 The queries are wirtten in the common terms of the domain and application ontology. 
 The interface uses the spatial query functions of WFS servers for feature rendering and relational databases as sources for non-spatial data, since this can improve the performance of non-spatial queries. 
 
+As a completion to the discussion from the previous paragram, a work is presented here to 
+discuss the whole idea of the goespatial processing from wen.
+The web technology which is widely used nowadayas, 
+was an area investigated by Corcoles~\cite{corcoles2003} for the geospatial data. 
+This effort proposes an approach to integrate geospatial data on the Web by focusing on the definition of a mapping between the ontology and the DTD/Schemas. 
+Geospatial data in this work is stored in GML format and a query language is designed for querying each GML document in the same way. 
+Moreover, ontologies solve the semantic heterogeneity of different GML documents 
+by defining a catalog in RDF such that this catalog establishes a correspondence.
+
 \subsubsection{Integration of Spatial and Non-Spatial Data}
 \label{integration}
 Toward integrating spatial and non-spatial data from different sources, 
@@ -592,37 +599,23 @@ return $x
 \end{fakeJSON}
 \end{itemize}
 
-\subsubsection{Other Approaches}
-\label{others}
-In addition to the forementioned topics, some other areas have been discovered as well in this reseach line. The web technology which is widely used nowadayas, was an area discoverd by Corcoles~\cite{corcoles2003}. This effort proposes an approach to integrate geospatial data 
-on the Web by focusing on the definition of a mapping between the ontology and the DTD/Schemas. 
-Geospatial data in this work is stored in GML format and a query language is designed for querying each GML document in the same way. 
-Moreover, ontologies solve the semantic heterogeneity of different GML documents 
-by defining a catalog in RDF such that this catalog establishes a correspondence.
-
-Besides the geospatial data representation and exchange, GML format benefits from its XML-based model in interoperability, and more importantly, in querying. Corcoles et al~\cite{corcoles2001} discusses a query language with an SQL-like interface to work with GML. The data model and the algebra behind the language are based on a previously proposed model in which components and interrelations are represented as a directed graph. The vertices of this graph are geometry types and properties. 
-The edges represent the element containment, relationship between elements, and values. 
-
 \subsection{Geospatial Processing in Databases} 
 \label{s.dbs}
-Besides analyzing various general ideas of geospatial processing in databases, it would be advantagous to know the geospatial features and functionalities in well-known database systems. In this section, we briefly introduce the geospatial issues in the widely used databases, MongoDB, eXist, MarkLogic, and MonetDB as all of them have geospatial functionalities. We will see how the different ideas are provided and used in practice. 
-%These databases are selected since they are leading databases in the field of XML data processing and
-all of them have geospatial functionalities.
-%We give a brief introduction of the geospatial processing in this databases in the following sections.
+Besides analyzing various general ideas of geospatial processing in databases, it would be advantagous to know the geospatial features and functionalities in well-known database systems. In this section, we briefly introduce the geospatial issues in the widely used databases, MongoDB, eXist, MarkLogic, and MonetDB as all of them have geospatial functionalities. We will see how the different ideas are provided and used in practice.
 
 \subsubsection{MongoDB}
 \label{mongo}
 MongoDB~\cite{mongogeneral2010,mongoinaction2011} is one of the leading databases used specially in web applications. Here, we consider the $2.4$ version series of this software. MongoDB supports both flat and spherical space in geospatial processings. Geospatial features in MongoDB are mainly executed by a few operators which can be combined to produce more advance queries based on the use cases. 
-The operators are \textit{\$geoIntersects}, \textit{\$geoWithin}, \textit{\$near}, and \textit{\$nearSphere} which first indicate the query operation. Then, the geometry specifiers serve to form the query conditions. These specifiers, \textit{\$geometry}, \textit{\$maxDistance}, \textit{\$center}, \textit{\$box}, \textit{\$centerSphere}, \textit{\$polygon}, and \textit{\$uniqueDocs}, define the various geometries and conditions in GeoJSON or in legacy coordinate pairs to filter the results. The calculation units in the spherical space is meter and radian and in the flat space the units is determined by the coordinate system. 
+The operators are \textit{\$geoIntersects}, \textit{\$geoWithin}, \textit{\$near}, and \textit{\$nearSphere} which first indicate the query operation. Then, the geometry specifiers serve to form the query conditions. These specifiers, \textit{\$geometry}, \textit{\$maxDistance}, \textit{\$center}, \textit{\$box}, \textit{\$centerSphere}, \textit{\$polygon}, and \textit{\$uniqueDocs}, define the various geometries and conditions in GeoJSON or in legacy coordinate pairs to filter the results. The calculation units in the spherical space can be meter or radian. The units in the flat space are determined by the given coordinate system. 
 
 Apart from the operators, some particular geospatial queries can be done through the geospatial commands, 
-\textit{geoNear}, \textit{geoSearch}, and \textit{geoWalk}. \textit{geoNear} is an alternative to the \textit{\$near} operator which returns additional information, for example the distance of each returned item from the given point or some troubleshooting diagnostic information. \textit{geoSearch} is an interface to use the haystack index and \textit{geoWalk} is an internal command.
+\textit{geoNear}, \textit{geoSearch}, and \textit{geoWalk}. The command \textit{geoNear} is an alternative to the \textit{\$near} operator which returns additional information, for example the distance of each returned item from the given point or some troubleshooting diagnostic information. The command \textit{geoSearch} is an interface to use the haystack index and \textit{geoWalk} is an internal command.
 
 \textbf{The Geospatial Index.}
 The geospatial index in MongoDB is based on the \textit{geohash}~\cite{www/geohash} data structure. Regarding the importance of geohash, we shortly explain it before discussing the index in detail.
 
-The geohash value is calculated by recursively dividing the space into buckets of grids and assigns a two-bit value to each part (Figure~\ref{figmongoindex}). This number, called geohash value, does not really point to the coordinates, rather the bounding of coordinate is represented. 
-As the division goes further, the geohash values will get longer and the areas smaller. 
+The geohash value is calculated by recursively dividing the space into buckets of grids and assigns a two-bit value to each part (Figure~\ref{figmongoindex}). This number, called geohash value, does not really point to the coordinates, rather the boundings of the coordinate is represented. 
+As the division goes further, the geohash values are becoming longer and the areas are becoming smaller. 
 At the end, we will have a hierarchical spatial structure. Here are some properties of geohashing,
 \begin{itemize}
 \item It provides a short, concise, expressive, and as accurate as necessary representation of locations which have not to be a precise point.
@@ -633,8 +626,8 @@ At the end, we will have a hierarchical spatial structure. Here are some propert
 \item For finding the nearest neighbour, an index on geohash which sorts them alphanumerically, returns the result directly, as the closest string is the nearest point. However, here we could spot a problem with finding nearest neighbours which will be discussed in the followings.
 \end{itemize}
 
-Using geohash as a structure for storing the data structure in database has some advantages based on the above-mention properties. It saves the resources as stores two value of longitude and latitude in a single string value without any space and punctuation signs. 
-Having geohashes as strings is an important issue which some of the advantages are as follows, 
+Using geohash as a structure for storing, the data structure in database has some advantages based on the above-mention properties. It saves the resources due to storing the two values of longitude and latitude in a single string value without any space and punctuation signs. 
+In addition, having geohashes as strings is an important issue which some of the advantages are as follows, 
 \begin{itemize}
 \item the length of the string correlates to its precision,
 \item strings can be grouped by prefix
@@ -643,7 +636,7 @@ Having geohashes as strings is an important issue which some of the advantages a
 \end{itemize}
 On the other hand, the indexed data with geohash are positioned in adjacant quadrants and consequently the queris will be faster when tracking them down with the single index than multiple-index on longitude/latitude values. This index can be used in quick proximity searches which do not have to be precise.
 
-Geohash algorithm has a shortcoming when attempts to find the near points based on the common geohash prefix. When points are close but located on opposite sides of a common boundary of two quadrants, they have not only distinct prefixes, but wildly distinct geohashes, such as points located on the other sides of the Equator or a meridian. This would cause inefficient proximity searches. To solve this problem, the geohash of the eight sourranding quadrants must be calculated to find the matching locations residing on both sides of boundaries. 
+Geohash algorithm has a shortcoming when attempts to find the near points based on the common geohash prefix. When points are close but located on opposite sides of a common boundary of two quadrants, they have not only distinct prefixes but wildly distinct geohashes, such as points located on the other sides of the Equator or a meridian. This would cause inefficient proximity searches. To solve this problem, the geohash of the eight sourranding quadrants must be calculated to find the matching locations residing on both sides of boundaries. 
 Another problem comes from the projection-based model of the geohashing. This means a geoashe of a specified prefix length will represent the areas with big difference in size near the pole than near the Equator. 
 Rogers~\cite{www/geohash-limit} discusses the limitations of geohashing and possible design aspects to improve the efficiency.
 % Depending on how you use geohashes, this skews the apparent data distribution in a way that might have to be accounted for in software design. Technically it is possible to design a geohash-like algorithm that does not have this problem. (http://www.quora.com/What-are-the-limitations-of-geohashing)
@@ -655,9 +648,8 @@ Rogers~\cite{www/geohash-limit} discusses the limitations of geohashing and poss
 %http://www.slideshare.net/nknize/rtree-spatial-indexing-with-mongodb-mongodc
 %http://www.mongodb.com/presentations/webinar-compliance-and-data-protection-big-data-age-mongodb-security-architecture
 %http://docs.mongodb.org/master/MongoDB-indexes-guide.pdf
-Using the geohash values, MongoDB provides two special indexes, \textit{2d index} for planar geometries with legacy coordinate pairs and related calculations and \textit{2sphere index} for spherical calculations. The 2d index is required when we need an index structure for the flat data and 
-2sphere index must be chosen for the spherical data expressed in GeoJSON, since the distance function differs respectively.
-%MongoDB has a spatial way of indexing.
+Using the geohash values, MongoDB provides two special indexes, \textit{2d index} for planar geometries with legacy coordinate pairs and related calculations and \textit{2dsphere index} for spherical calculations. The 2d index is required when we need an index structure for the flat data and 
+2dsphere index must be chosen for the spherical data expressed in GeoJSON, since the distance function differs respectively.
 
 To define the 2d index, geohash values are generated for legacy coordinate pairs and the geohash values are indexed using B-Tree instead of the coordinate pairs. 
 %Geohash is calculated by recursively dividing the 2D map into quadrants 
@@ -669,8 +661,8 @@ To define the 2d index, geohash values are generated for legacy coordinate pairs
 \caption{Representation of geohash values for eight quadrants}
 \label{figmongoindex}
 \end{figure}
-MongoDB also provide another 2d index optimized, called Haystack index, to return the results in small areas and is not supported by spherical query operations. To use haystack index in queries, \textit{\$geoSearch} command should be used and the ways which 2d and 2dsphere index could be applied, cannot access it.
-%MongoDB also uses B-Tree structure for other type of index, such as Single Field (e.g. indexing over names), Compound, Text Index. %(Probably this point effect on the structure of geospatial index.)
+MongoDB also provide another 2d index optimized, called Haystack index, to return the results in small areas and is not supported by spherical query operations. To use haystack index in queries, \textit{\$geoSearch} command should be used. Actually, the ways which 2d and 2dsphere index could be applied, cannot access sometimes these small areas. MongoDB also uses B-Tree structure for other type of index, such as Single Field (e.g. indexing over names), Compound, and Text Index. 
+%(Probably this point effect on the structure of geospatial index.)
 
 MongoDB supports the following generall operations to be executed with geospatial indexes through the mentioned operator:
 \begin{itemize}
@@ -699,7 +691,8 @@ Regarding the geospatial queries, the following types are supported,
 \item Radius query: Queries searching for any point within a specified distance around a point.
 \item Polygon query: Queries finding any point within a specified n-sided polygon.
 \end{itemize}
-To do the geospatial queries, numerous geospatial query constructors exist as well as geospatial operators as built-in functions to perform the operations as below,
+To do the geospatial queries, numerous geospatial query constructors exist as well as geospatial operators as built-in functions to perform the operations.
+Here, some of these operators are listed,
 \begin{itemize}
 \item box-intersects: Returns true if the box intersects with the given region.
 \item circle-intersects: Returns true if the circle intersects with the given region.
@@ -711,10 +704,14 @@ To do the geospatial queries, numerous geospatial query constructors exist as we
 \item shortest-distance: Returns the great circle distance between a point and an region. 
 \item destination: Returns the point at the given distance along the given direction from the starting point.
 \end{itemize}
-The region in these operations is a circle, box, polygon, linestring, or complex-polygon is defined by a \textit{region} constructor.
-The geospatial query constructors build the queries on the geospatial data. Depending on the use case, the relevant constructors and functions from the correspondent namespace should be applied. For instance, if we want to query data expressed in both GML and KML, the \textit{geo} namespace functions are the best choice since they support the queries in all supported geospatial formats and for data in geoRSS, the functions in \textit{georss} namespace could be used. This concept is shown in the following example which searchs for the points inside the specified region. 
+The region in these operations is a circle, box, polygon, linestring, or complex-polygon 
+which is defined by a \textit{region} constructor.
+The geospatial query constructors build the queries on the geospatial data. 
+Depending on the use case, the relevant constructors and functions from the correspondent namespace should be applied. For instance, if we want to query data expressed in both GML and KML, the \textit{geo} namespace functions are the best choice since they support the queries in all supported geospatial formats.
+Also for data in geoRSS, the functions in \textit{georss} namespace could be used. 
+This concept is shown in Code~\ref{marklogic-region} which searches for the points inside the specified region. 
 \vspace{10px}
-\begin{fakeJSON}[escapechar=\%]
+\begin{fakeXML}[escapechar=\%,label=marklogic-region,caption=A simple KML example representing a Point]
 ...
 xdmp:document-insert("/points.xml",
 <root xmlns:geo="http://marklogic.com/geospatial">
@@ -733,25 +730,28 @@ cts:search(doc("/points.xml")//item,
  ))
  
  %\colorbox{light-gray}{Result}% : <item><georss:point>15.35 35.34</georss:point></item>
- \end{fakeJSON}
+ \end{fakeXML}
 \vspace{10px}
-Here is another example to return the points in the given path which lie inside the defined region.
+Another example represented in Code~\ref{marklogic-path} shows how MarkLogic returns the 
+points in a given path which lie inside the defined region.
 \vspace{10px}
-\begin{fakeJSON}
+\begin{fakeXML}[escapechar=\%,label=marklogic-path,caption=A simple KML example representing a Point]
 cts:search(doc("/points.xml")//item,
   cts:path-geospatial-query("/root/item/point", 
   			cts:box(10.0, 35.0, 20.0, 40.0)))
-\end{fakeJSON}
+\end{fakeXML}
 \vspace{10px}
-Primitive types are another facet in the geospatial queries which might be needed in query conditions as shown in the previous examples using \textit{box} constructor. These types as instancs of the base type \textit{region}, encompassing \textit{box}, \textit{circle}, \textit{complex-polygon}, \textit{linestring}, \textit{point}, and \textit{polygon}. For instance, the contents of the polygon element in the document "/geo/zip.xml" can be cast to a \textit{cts:polygon} using the \textit{cts:polygon} constructor as in the following:
+
+Primitive types are another fact in the geospatial queries which might be needed in query conditions 
+as shown in the previous Codes~\ref{marklogic-region} and \ref{marklogic-path} using the \textit{box} constructor. These types as instancs of the base type \textit{region}, encompassing \textit{box}, \textit{circle}, \textit{complex-polygon}, \textit{linestring}, \textit{point}, and \textit{polygon}. For instance, the contents of the polygon element in the document "zip.xml" can be cast to a \textit{cts:polygon} using the \textit{cts:polygon} constructor as in the following,
 \vspace{10px}
 \begin{fakeJSON}
-cts:polygon(fn:data(fn:doc("/geo/zip.xml")//polygon[@id eq "712"]))
+cts:polygon(fn:data(fn:doc("zip.xml")//polygon[@id eq "712"]))
 \end{fakeJSON}
 \vspace{10px}
 %Latitudes and longitude pairs shape points. Points shape other geometries, such as circle or polygon. Boxes are formed by 4 points which on the surface of the Earth. The edges of the box are arcs, but when those arcs are projected into a plane, they become two-dimensional latitude and longitude lines, and the space defined by those lines forms a rectangle. A linestring is a sequence of connected joined arcs that do not necessarily form a closed loop. 
 
-Marklogic also provides functions to handle WKT. The function \textit{parse-wkt} reads WKT into the \textit{region} items as the following example returns a polygon.
+Marklogic also provides functions to handle the WKT datatype. The function \textit{parse-wkt} reads WKT into the \textit{region} items as the following example returns a polygon.
 \vspace{10px}
 \begin{fakeJSON}
 cts:parse-wkt("POINT(10 10)")
@@ -761,7 +761,7 @@ This point can be used in queries as any other type. Conversly the function \tex
 
 
 \textbf{The Geospatial Index.}
-Geospatial index in MarkLogic is not based on neither the quad tree nor R-tree. It works similar to a range index with points as data values. In this range index, every value is a pair of latitude (lat) and longitude (long). Like an array of x,y values, sorted mainly based on latitude and then longitude values. The values in array are also connected to the corresponding document.
+Geospatial index in MarkLogic is not based on neither the quad tree nor R-tree. It works similar to a range index with points as data values. In this range index, every value is a pair of latitude (lat) and longitude (long). Like an array of x,y values, sorted mainly based on latitude and then longitude values. The values in this array are also connected to the corresponding document.
 The points would be founded easily in a sorted structure. 
 Boxes could be found first by finding the latitude range, then checking for the longitude range. 
 For circles and polygons as well as more complex types, the geometry's bounding box is used to find the region they belong to. 
@@ -805,8 +805,10 @@ Based on this structure, Marklogic supports the following geospatial indexes,
 To speed up the retrieval of geospatial values geospatial indexes enable geospatial lexicon lookups. Since these functions are implemented using geospatial indexes, the appropriate index must be created in order to use a geospatial lexicon. As an example, a geospatial element index is needed to use the \textit{element-geospatial-boxes}. Here is a sample to show how these functions are used and returns values from the specified element geospatial value lexicon that match the specified wildcard pattern.
 \vspace{10px}
 \begin{fakeJSON}[escapechar=\!]
-cts:element-geospatial-value-match(xs:QName("point"),cts:point(10,20))
- !\colorbox{light-gray}{Result}! : 10,20
+cts:element-geospatial-value-match(xs:QName("point"),
+cts:point(10,20))
+
+!\colorbox{light-gray}{Result}! : 10,20
 \end{fakeJSON}
 \vspace{10px}
 
@@ -882,27 +884,39 @@ cts:element-geospatial-value-match(xs:QName("point"),cts:point(10,20))
 For querying on geospatial data in MarkLogic, after loading the data into the database and making the indexes, primitive types should be constructed to be used in query functions. Then, geospatial queries are constructed using these primitive types. 
 
 \subsubsection{eXist-db}
-%Here, we briefly describe the concepts of geospatial support in eXist-db\footnote{The Spatial Module in eXist-db is still in experimental satus.} to see the properties and implementation model of the functions and the index structure. 
+%Here, we briefly describe the concepts of geospatial support in eXist-db\footnote{The spatial module in eXist-db is still in experimental satus.} to see the properties and implementation model of the functions and the index structure. 
 
-eXist-db version $1.2$\footnote{The Spatial Module in eXist-db is still in experimental satus.} supports geospatial data in GML $2.1.2$ format. The geospatial features are provided using the JTS API in geospatial computations. 
-The general development idea of indexing in eXist-db follows a modular architecture and the geospatial index could be developed based on this model and maintained as a pluggable extension. To create the geospatial index, it must be configured in collection-specific configuration XML files that are located in the system collection: "/db/system/config". 
+The database eXist-db~\cite{existdb} version $1.2$\footnote{The spatial module in eXist-db is still in experimental satus.} supports geospatial data in GML $2.1.2$ format. The geospatial features are provided using the JTS API in geospatial computations. 
+The general development idea of indexing in eXist-db follows a modular architecture.
+The geospatial index is developed based on this model and maintained as a pluggable extension. 
+%To create the geospatial index, it must be configured in collection-specific configuration XML files that are located in the system collection: "/db/system/config". 
 The geospatial index in eXist-db is made by a relational database to index spatial data. The index doesn't store character data from the document. It stores WKB index entries through the JDBC in  the HSQLDB which could be any other relational database such as PostGIS. The index creation relies on the open source libraries of the GeoTools~\cite{geotools} project. Geometries are stored both in the original coordinate system and WGS84 system in index structure to allow the operations on data originated from the different systems. In this way, transformations between coordinate systems are included using GeoTools library.
  
 %In other words, the spatial data is stored in the DB, but geometries, as JTS Geometry instances, are held in memory, waiting for a special mode to be flushed into a relational DB, insertion or removal. The Geometry WKT representation would be serialized and deserialized to and from the database.
 
 \subsubsection{MonetDB}
-MonetDB basically is a relational column-store database which has implemented a seprate modeule to suport the objects and functions in the OGC "Simple Features Specification for SQL"~\cite{ogc_sfs}. MonetDB stores XML in its relational architecture as Boncz et al~\cite{Boncz2006} describes. The geospatial component in MonetDB wraps the open source GEOS libraries~\cite{GEOS}, the \textit{C++} implementation of the JTS API. MonetDB supports the OGC geospatial types in WKT and numerous functions exist to provide SQL-based geospatial querying. As Vermeij et al~\cite{MonetDB} discusses MonetDB benefits from the design principles for spatial query processing in three main areas. First, the column-based storage approach keeps the non-needed geometry out of the way since the traditional tuple-based storage model stores the whole tuple physically together on a disk block. Additionally, some efficient filterings stored in the same column and some approximate geometries, e.g. minimum bounding box, maximum enclosed circle, and maximum enclosed rectangle stored in other related tables would speed up the queries as the index structure does. Second, MonetDB query optimizer effectively improves the geospatial query performance. Third, the spatial data types integration with XML types in MonetDB is considered as an efficient way of querying. 
+MonetDB\footnote{This information which are presented here, are from January 2014 Bugfix.} basically is a relational column-store database which has implemented a seprate modeule to suport the objects and functions in the OGC "Simple Features Specification for SQL"~\cite{ogcsfs}. MonetDB stores XML in its relational architecture as Boncz et al~\cite{Boncz2006} describes. The geospatial component in MonetDB wraps the open source GEOS libraries~\cite{GEOS}
+which is the \textit{C++} implementation of the JTS API. MonetDB supports the OGC geospatial types in WKT. Numerous functions exist in MonetDB to provide SQL-based geospatial querying. 
+
+As Vermeij et al~\cite{MonetDB} discusses, MonetDB benefits from the design principles for spatial query processing in three main areas. First, the column-based storage approach keeps the non-needed geometry out of the way since the traditional tuple-based storage model stores the whole tuple physically together on a disk block. Additionally, some efficient filterings stored in the same column and some approximate geometries, e.g. minimum bounding box, maximum enclosed circle, and maximum enclosed rectangle stored in other related tables would speed up the queries as the index structure does. Second, MonetDB query optimizer effectively improves the geospatial query performance. Third, the spatial data types integration with XML types in MonetDB is considered as an efficient way of querying. 
 %Even though MonetDB still does not provide any indexing structure, ....
 %\begin{itemize}
 %\item The column-store aproach of MonetDB is advantagous for geospatial data, since skips the unnecessary %attributes. This becomes important as only a fraction of data is needed in most of 
 %\end{itemize}
 
-\subsection{Others}
-In addition to the storage and querying, here we briefly discuss some ideas which might me advantagous for more geospatial features and processing in a database as well. 
-\cite{Schwarz2004} introduces a library for geospatial data management to enable handling the different coordinate systems. This library provides geospatial functions which are delegated to JTS library. As mentioned before, JTS library only supports the cartesian coordinate system and the input geometries should be in a common systems to be processed. In order to make it possible a common coordinate system is chosen to convert other systems of the current data to. This coordinate system is chosen considering the the transformation issues to have the minimum differences from the original data and to maximize the transformations percision.
+\subsection{Other Related Topics}
 
-Another topic related to geospatial requirements related to databases is path finding between two points.~\cite{} introduces an alternative way of finding the shortest path regarding existing cost. The K shortest path and many other path finding algorithms are efficient as long as the effecting cost factors do not change dynamically. The provided method first finds the shortest paths without considering the cost factors. At the end, the factors are used to rank the paths. All paths between each two points could be stored in database in pre-processing stage to reduce the furthe combinations. To find the paths, each edge in the network of the connected points should be provided with the start and end points. The process starts from the starting point and finds the whole connected ones and continues till reaches the destination. The paths would be obtained by joining the edges detected in each step.
-%These points would be either the final diestination as the final output or a middle point to proceed the algorithm to find new connected points. This process is continued to find the destination and the path would be joined edges which are detected in easch step  
+In addition to the forementioned topics, some other areas have been discovered as well in this reseach line. 
+we briefly discuss here two ideas which might be advantagous 
+for more geospatial features and processing in a geospatial database.
+The first idea, presented in the first paragraph, is about the unification of the coordinate system when the data
+is coming from different sources.  The second idea, presented in the second paragraph, is pointing to a 
+completely different idea of finding a path between to points in these database.
+
+Schwarz et al\cite{Schwarz2004} introduced a library for geospatial data management to enable handling the different coordinate systems. This library provides geospatial functions which are delegated to JTS library. As mentioned before, JTS library only supports the cartesian coordinate system and the input geometries should be in a common systems to be processed. It can happen that the geometries have different coordinate systems. For example, the geospatial data is provided from different sources. In order to work with JTS library, a common coordinate system is chosen to which other systems of the current data are converted. This coordinate system is chosen considering the the transformation issues to have the minimum differences from the original data and to maximize the transformations percision.
+
+
+Padmaja et al~\cite{short-path} introduces an alternative way of finding the shortest path regarding existing cost. The k-shortest path and many other path finding algorithms are efficient as long as the effecting cost factors do not change dynamically. This provided method first finds the shortest paths without considering the cost factors. At the end, the factors are used to rank the paths. All paths between each two points could be stored in database in pre-processing stage to reduce the furthe combinations. To find the paths, each edge in the network of the connected points should be provided with the start and end points. The process starts from the starting point and finds the whole connected ones and continues till reaches the destination. The paths would be obtained by joining the edges detected in each step.
 
 
 

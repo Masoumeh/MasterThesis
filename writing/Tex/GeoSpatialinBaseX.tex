@@ -245,8 +245,7 @@ To this date, numerous ideas have been introduced for geospatial functionalities
 \label{s.geospatial-index}
 According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on the data manipulation and storage. Like any other type of data, a geospatial data needs to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
 As it is examined in this survey, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the spatial data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. 
-In the discussed spatial indexes, the high percentage of them has the divide and conquer algorithm~\cite{divconquer} as a basis. As a result, the structures are mostly famous trees like Binary-tree, B-tree, and Quad-tree. 
-
+In the discussed spatial indexes, the high percentage of them has the divide and conquer algorithm~\cite{divconquer} as a basis. 
 In general, Chin et al~\cite{survey} categorized all approaches to three different abstract classes:
 \begin{itemize}
 \item Object Mapping: Given a $k$-dimensional polygon with $n$ nodes, these approaches map this shape to a $kn$-dimensional or try to look at the shape of the polygon as a single object in the original $k$-dimensional polygon.   
@@ -254,9 +253,25 @@ In general, Chin et al~\cite{survey} categorized all approaches to three differe
 \item Object Bounding: Similar to the idea of Quad-tree and Marching cube~\cite{marchingcube} (an approach in Computer Graphics), 
 these approaches enclose the polygon as accurate as possible by dividing the space in different ways. 
 \end{itemize}
-To see how different approaches based on the tree structres are included in these classes,  we introduce briefly selective spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree. Then we can see see how various viewpoints are employed to meet particular requirements and design the relative and appropriate index.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{Trees}
+\caption{An overview of most important indexing structures developed over years}
+\label{trees}
+\end{figure}
+
+On the other hand, the index structures are mostly based on the famous trees like Binary-tree, B-tree~\cite{btree}, and Quad-tree. 
+To see how different approaches based on the tree structres are included in these classes,  we introduce briefly spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree. We cover just a selective list since the number of these indexing methods
+is a big number. Figure~\ref{trees} visualize the different indexing structures and their relations. An arrow from the structure $A$
+be $B$ means $B$ is an extension of the structure $A$. The colored ovens also shows the main categories of these
+trees. Three following sections are a brief introduction of the tree important main categories:
+Binary-tree based in Section~\ref{binary-tree-based}, 
+R-tree based in Section~\ref{r-tree-based}, 
+and Quad-tree based in Section~\ref{quad-tree-based}.
 
 \subsubsection{Binary-tree Based}
+\label{binary-tree-based}
 The indexes in this group are basically and conceptually derived from the binary search tree. They adopt and generalize the idea of partitioning the space. Here some of them are explained.
 
 \textbf{The KD-tree}.
@@ -324,41 +339,45 @@ The Sdk-tree is memory-based, not a disk-based, data structure, thus is not suit
 \end{figure}
 
 \subsubsection{B-tree based Indexing Technique}
-\emph{R-tree}
-\label{rtree}
+B-tree is used extensively in databases due to its flexibility and ability to handle a large amount of data.
+However, it is not designed for the multidimensional data which is needed in geospatial data processing.
+Hence, R-tree~\cite{rtree} extends B-tree by adding the support of multidimensional data. 
+Also, R-tree inherit the balance of height in B-tree.
+More clearly, the leaf nodes in R-tree are the actual shapes while
+other nodes are minimum bounding boxes of the actual geospatial data. Here, 
+the actual bounding boxes have the dimension of the data.
 
+According to \cite{survey}, the operations on the R-tree 
+are basically the same as the operations in B-tree. The only difference is that the 
+whole operations are needed to be done on bounding boxes.
+Also, the order, used in the element placement in B-tree,
+is the set inclusion order on bounding boxes and the shapes in leaf nodes. 
 Minimization of both coverage and overlap is crucial to the performance of R-trees.
-\subsubsection{$R^*$-tree}
-The $R^*$-tree is found to be more efficient than some other variants, and the R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. In general, the R*-tree is an improvement over the R-tree at the expense of more expensive insertion.
+Both of them are largely dependent on the splittin algorithm which is used in algorithm.
+
+\textbf{$R^*$-tree~\cite{rstartree}.}
+The $R^*$-tree is found to be more efficient than some other variants,
+and the R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. In general, the R*-tree is an improvement over the R-tree at the expense of more expensive insertion.
 
 This structure tries to reduce overlaps between directory rectangles and the area covered by a rectangle, in order to make better performance, since minimum overlaps leads to less number of branches to be traversed in queries and minimum coverage helps to decide on the paths to traverse on higher levels. 
 R*-Tree does these optimizations with revised node split and also forced insertion which finds a better place for a node that its original place. In R-Tree insertion-build structure is highly suboptimal and insertion and deletion could improves the R-Tree dramatically.
  (Using the idea of reinsertion of the R-tree, Beckmann et al proposed a reinsertion algorithm when a node overflows. The reinsertion sorts the entries in decreasing order of the distance between the centroids of the rectangle and the covering rectangle and reinserts the first p (variable for tuning) entries. In some cases, the entries are reinserted back into the same node and hence a split is eventually necessary. The reinsertion will no doubt increase the storage utilization; but it can be fairly expensive when the tree is large. The R*-tree is found to be more efficient than some other variants, and the R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. In general, the R*-tree is an improvement over the R-tree at the expense of more expensive insertion.)
 
-\emph{The Buddy Tree}
-(In comparison to previously proposed tree structures such as the K-D-B-tree, the buddy-tree guarantees a more efficient dynamic behavior.Moreover, indirect splits which cause low storage utilization and high insertion costs in the K-D-B-tree, are completely avoided. This structure is 
-It avoids the downward splitting of the K-DB-tree, the overlapping problem of the R-tree and the dependency of structures upon the insertion of data. The buddy-tree generalizes the buddy system of the grid-file to organize correlated data efficiently, by bounding the data points tightly using the bounding rectangle concepts of the R-tree and organize the directory as in the R-tree. Like grid-files, the non-zero sized data have to be mapped into higher dimension.
-An important feature of the buddy-tree is that it does not partition empty data space. Therefore queries, such as partial match queries, where the query region intersects with empty data space, can be performed much faster than by conventional structures partitioning the complete data space.
-The following summarizes the design properties of the buddy-tree:
-empty data space is not partitioned
-insertion and deletion of a record is restricted to
-exactly one path
-no overflow pages
-directory grows linear in the number of records
-performance is basicly independent of the sequence of
-insertions
-efficient behavior for insertions and deletions
-very high fan out of the directory nodes)
+%\textbf{The Buddy Tree.}
+%(In comparison to previously proposed tree structures such as the K-D-B-tree, the buddy-tree guarantees a more efficient dynamic behavior.Moreover, indirect splits which cause low storage utilization and high insertion costs in the K-D-B-tree, are completely avoided. This structure is 
+%It avoids the downward splitting of the K-DB-tree, the overlapping problem of the R-tree and the dependency of structures upon the insertion of data. The buddy-tree generalizes the buddy system of the grid-file to organize correlated data efficiently, by bounding the data points tightly using the bounding rectangle concepts of the R-tree and organize the directory as in the R-tree. Like grid-files, the non-zero sized data have to be mapped into higher dimension.
+%An important feature of the buddy-tree is that it does not partition empty data space. Therefore queries, such as partial match queries, where the query region intersects with empty data space, can be performed much faster than by conventional structures partitioning the complete data space.
+%The following summarizes the design properties of the buddy-tree:
+%empty data space is not partitioned insertion and deletion of a record is restricted to
+%exactly one path no overflow pages directory grows linear in the number of records
+%performance is basicly independent of the sequence of
+%insertions efficient behavior for insertions and deletions very high fan out of the directory nodes)
 
-\emph{The Packed R-Tree}
+\textbf{The Packed R-Tree.}
+In order to minimize storage space, coverages and overlaps in R-Tree, constructing a static tree is proposed. To make this tree, first the objects are ordered along a coordinate. The object with the minimum value then is chosen to find the M nearest objects to that one, and assigns them to a node. Here M is the maximum number of objects that are allowed in a page. This step is repeated until the whole objects are assigned to a node. The bounding box of the leaf nodes are higher level objects. These are also ordered and assigned to the nodes. The process repeats until the number of the remained nodes is less than M. If so, they are assigned to the root. The main objective of the algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 
-In order to minimize storage space, coverages and overlaps in R-Tree, constructing a static tree is proposed. To make this tree, first the objects are ordered along a coordinate. The object with the minimum value then is chosen to find the M nearest objects to that one, and assigns them to a node. Here M is the maximum number of objects that are allowed in a page. This step is repeated until the whole objects are assigned to a node. The bounding box of the leaf nodes are higher level objects. These are also ordered and assigned to the nodes. The process repeats until the number of the remained nodes is less than M. If so, they are assigned to the root.
-The main objective of the algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
-
-\emph{R+-Tree}
-
+\textbf{R+-Tree}
 This structure is a compromise between the R-tree and the K-D-B-tree, to solve the overlapping problem of covering rectangles. It has just some difference:
-
 Nodes of an R+-tree are not guaranteed to be at least half filled.
  The entries of any intermediate (internal) node do not overlap.
  An object identifier may be stored in more than one leaf node.
@@ -369,9 +388,9 @@ Also, in insertion cases into the tree a case would happen that the covering rec
 In performance study, in the comparison between R-trees and R+-trees, it is found that the R+-tree requires much more splits, especially for large data objects, but lesser splits for smaller data objects. 
 In general, the query efficiency tests show that R+-trees perform better for smaller objects and slightly worse off for larger objects.
 
-\emph{STR-tree}
+\textbf{STR-tree~\cite{strtree}.}
 
-\emph{Cell-tree}
+\textbf{Cell-tree~\cite{celltree}.}
 The cell tree introduces a structure to overcome the overlapping bounding rectangle problems of R-trees and the "dead space" (empty space) problems of R+-trees. Partitioning is done in a recursive way, but not necessarily with rectangles. Instead, the regions are polyhedral, as bounding polygons. Subspaces do not overlap.  
 \begin{figure}
 \centering
@@ -382,7 +401,7 @@ The cell tree introduces a structure to overcome the overlapping bounding rectan
 
 Like R+-Tree, objects might be represented in more than one leaf node. One problem with such an instruction which duplicates the objects is that each new object may be divided into multiple pieces in order to store them in a tree where internal node bounding polygons do not overlap. Specially in populated DBs. 
 (Each split of a node leads to a decrease in the node data space but to an increase in the number of nodes per object. To overcome the fragmentation and duplication problems, Gunther and Noltemeier proposed to store oversized objects which may greatly increase the number of object identifiers being stored in the leaf nodes in separate "oversize shelves". These oversize shelves are data nodes linked to internal nodes in the cell-tree, in one way, causing the tree to be not height-balanced. The placement of a new object in the subtree or oversize shelf requires some optimization. The oversize page shelf can be overflowed and a split on this shelf is necessary.)
-\emph{Quadtree}
+\emph{Quad-tree.}
 It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
 \newpage
 
@@ -1009,8 +1028,7 @@ To enhance the geospatial query time in BaseX, we discuss an index structure. Th
 \label{figIndexinFile}
 \end{figure}
 
-
-Among the spatial index structures discussed in Section~\ref{geospatialindex}, JTS supports the STRTree and QuadTree. Davis~\cite{jts-presentation} discussed that STRTree in contrast with QuadTree can not be updated after the generation. However, we choose the STRTree since it has better performance. As mentioned before, STRTree has the basic of R-Tree with the improved performance. The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is made once when the spatial index for the database is requested and written into a file on disk. This process is illustrated in Figure~\ref{figIndexinFile}. Each time the index is requested, the file is read 
+Among the spatial index structures discussed in Section~\ref{geospatialindex}, JTS supports the STR-tree and Quad-tree. Davis~\cite{jts-presentation} discussed that STR-tree in contrast with Quad-tree can not be updated after the generation. However, we choose the STR-tree since it has better performance. As mentioned before, STR-tree has the basic of R-Tree with the improved performance. The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is made once when the spatial index for the database is requested and written into a file on disk. This process is illustrated in Figure~\ref{figIndexinFile}. Each time the index is requested, the file is read 
 into main memory and it will be kept there for the future requests.
 Then, the two step filltering is executed. 
 It should be mentioned that only the following queries would benefit from this index. The definitions of these functions are provided in EXPath Geo Module specification.
@@ -1023,9 +1041,9 @@ It should be mentioned that only the following queries would benefit from this i
 \item touches (geometry1, geometry2)
 \end{itemize}
 
-The spatial index structure is involved both in BaseX core and \textit{basex-api} packages. The main structure of the index is added as a package in core, called \textit{index.spatial}. This package contains the index builder classes based on the core index structure of BaseX. The class \textit{SpatialBuilder} which extends \textit{IndexBuilder}, builds the index tree using pre-values instead of the tag names to address the database elements. Then, JTS serializer writes the tree structure into a file called \textit{STRTreeIndex}.
+The spatial index structure is involved both in BaseX core and \textit{basex-api} packages. The main structure of the index is added as a package in core, called \textit{index.spatial}. This package contains the index builder classes based on the core index structure of BaseX. The class \textit{SpatialBuilder} which extends \textit{IndexBuilder}, builds the index tree using pre-values instead of the tag names to address the database elements. Then, JTS serializer writes the tree structure into a file called \textit{STR-treeIndex}.
 
-The other GeoIndex class in \textit{basex-api} package extends \textit{QueryModule} class and implements the method defined by JTS STRTree class for reading the index file from hard disk into memory. Additionally, this class implements the \textit{filter} method to do the first step of two step filtering. The datails of the index implementation is described in the following section.
+The other GeoIndex class in \textit{basex-api} package extends \textit{QueryModule} class and implements the method defined by JTS STR-tree class for reading the index file from hard disk into memory. Additionally, this class implements the \textit{filter} method to do the first step of two step filtering. The datails of the index implementation is described in the following section.
  
 \subsection{Index Functions Implementation}
 \label{indexFunc}
@@ -1193,7 +1211,7 @@ Up to this point we have tried various ways to decrease the query times in Geo M
 
 \subsection{Conclusion}
 \label{BXconc}
-In this Section, we discussed the Geo Module implementation details and assessment in BaseX which provides a set of geometric functions based on the EXPath Geo Module specification. This module employs the JTS library to compute the geometric operations. To enhance the performance, the JTS STRTree index structure is added that accelerates the execution time of queries such as intersects, within, inside, and touches. This is done by applying a filtering in the STRTree structure and consequently reducing the number of processes in the database. Besides the index tree, a GML Reader class is developed to parse the gml elements directly regarding the inefficieny in JTS GMLReader. Although the timing results are convincing, there are room for improvements. For example, the function \textit{split}, \textit{geo}, and \textit{createPolygon} can be modifiend in favour of better performance.
+In this Section, we discussed the Geo Module implementation details and assessment in BaseX which provides a set of geometric functions based on the EXPath Geo Module specification. This module employs the JTS library to compute the geometric operations. To enhance the performance, the JTS STR-tree index structure is added that accelerates the execution time of queries such as intersects, within, inside, and touches. This is done by applying a filtering in the STR-tree structure and consequently reducing the number of processes in the database. Besides the index tree, a GML Reader class is developed to parse the gml elements directly regarding the inefficieny in JTS GMLReader. Although the timing results are convincing, there are room for improvements. For example, the function \textit{split}, \textit{geo}, and \textit{createPolygon} can be modifiend in favour of better performance.
 
 \newpage
 \section{BaseX vs MongoDB}
@@ -1485,7 +1503,7 @@ As mentioned in Section~\ref{indexBX}, BaseX records the index structure in a fi
 %TODO:Complete!not good :|
 Updating a database as a significant interaction supplied by the database system generally comprises three different operation: insert, delete, and modify. In addition to the whole issues related to the database update on disk and memory management, reconstructing the indexes is of great importance. That is, since the index is constructed based on the old database state, the updated database needs a new index. ya masal
 
-Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means the STRTree do not get updated automatically and the geospatial index has to be rebuilt manually. It causes redundant constructions and consequently worse performance. Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
+Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means the STR-tree do not get updated automatically and the geospatial index has to be rebuilt manually. It causes redundant constructions and consequently worse performance. Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
 
 Considering the manual update of the geospatial index in BaseX, reindexing time must be examined to evaluate the updating process. This implies the index creation time plus reopeneing the index file into the main memory should be included in the evaluation. 
 As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operations in MongoDB are apparantly better. As mentioned before, reindexing in BaseX causes a huge growth in time, which individually takes the greatest amount of total time (See Figure~\ref{figBXUpdate}). We skip the result of deletion and insertion since they follow the similar pattern as update.
@@ -1493,7 +1511,7 @@ As shown in Figure~\ref{figBXvsMongoUpdate}, performance of all update operation
 The unsatisfactory performance of the updating and also \textit{near} feature in BaseX lead us to a new approach to use the MongoDB index from BaseX. The strategy is explained in the next section.
 
 %TODO this is some part that we can speak about it in Conclusion
-%Since the current index implementation do not involves updating based on the STRTree definition, hence a new index should be designed and implemented.................
+%Since the current index implementation do not involves updating based on the STR-tree definition, hence a new index should be designed and implemented.................
  
 
 

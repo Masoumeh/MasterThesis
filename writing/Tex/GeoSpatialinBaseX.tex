@@ -142,27 +142,27 @@ Sec.~\ref{s.future}.
 According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{Geospatial Data} is the data representing any thing on the Earth's surface. Regarding the importance of the geospatial data, many standards and systems have been developed  during the years to represent and make use of this data. Different countries and organizations are using different systems and standards to represent this data and consequently there are numerous systems to fulfill a range of target requirements. The World Geodesic System (WGS) is one of the standard geospatial systems that is commonly used all around the world. WGS84 is the latest version of this standard which
 was introduced in $1984$ and is widely used for expressing the locations on Earth in wide range of services, including satellite services, notably Global Positioning System (GPS), and Google Maps which employ this system as a reference.
 
-In this section, we go through the existing concepts and technologies about the geospatial data processing. After some basic definitions in Section \ref{termsanddef}, the process of these data in the native databases are investigated in Section \ref{s.geo-data-in-xml-data}.
+In this section, we go through the existing concepts and technologies about the geospatial data processing. After some basic definitions in Section \ref{termsanddef}, the process of this data in the native databases are investigated in Section \ref{s.geo-data-in-xml-data}.
 Finally, the geospatial indexing and a set of related algorithms are introduced in Section \ref{s.geospatial-index}.
-
 
 \subsection{Terms and Definitions}
 \label{termsanddef}
-As defined before, Geospatial data is the locational information describing \textit{features} and locations and their characteristics that have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. Here, a \textit{feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world, such as geometries, attributes, and relationships. Hence, real-world entities could be expressed as a set of \textit{feature}s.
-Geospatial data also applies to the three-dimensional data, like above and below the Earth's surface~\cite{powell}. Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regards to the specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects, which are defined in a coordinate system. 
+As defined before, Geospatial data is the locational information describing \textit{features} and locations and their characteristics which have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. Here, a \textit{feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world, such as geometries, attributes, and relationships. Hence, real-world entities could be expressed as a set of features.
+Geospatial data also applies to the three-dimensional data, like above and below the Earth's surface (see~\cite{powell}). Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regards to the specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects which are defined in a coordinate system. 
 %Open Geospatial Consortium (OGC)~\cite{ogc} is an international consortium, developing interface standards for geospatial content, services, data exchange, data communication, and data processing. Geospatial data is given usually by its position its coordinate.
-A \emph{coordinate system} as a basic concept, is a method to uniquely determine the position of an object in a space of a given dimension. It uses the definitions, components, and properties to determine the coordinates which specify the linear and angular positions. Coordinate systems are defined by various organization, countries, or governments based on the geodetic datums, units, projections, and some other parameters. For example, WGS coordinate system is defined to visualize the geographic data on a map or on the Earth. 
 
-A country may have more than one coordinate system for its national-wide geographic data. DHDN, ETRS89 UTM zone 32N, and PD/83 Zone 3 are examples of Germany's coordinate systems. These are considered as local ones while there are the world coordinate system for the coordinates in the world space. WGS is an example of the world coordinate system. The coordinates may differ for the same object from a system to another. As an example, the coordinates of Berlin in WGS84 coordinate system with longitude and latitude is $(52.520007, 13.404954)$ while in Germany's ETRS89 UTM zone 32N coordinate system is $(32798809.64, 5828000.49)$. Accordingly, it is necessary to know how the coordinate systems are related in concepts and definitions to make the conversion possible. 
+A \emph{coordinate system} as a basic concept is a method to uniquely determine the position of an object in a space of a given dimension. It uses the definitions, components, and properties to determine the coordinates which specify the linear and angular positions. Coordinate systems are defined by various organization, countries, or governments based on the geodetic data, units, projections, and some other parameters. For example, WGS coordinate system is defined to visualize the geographic data on a map or on the Earth. 
+
+A country may have more than one coordinate system for its national-wide geographic data. As an instance, all three systems \textit{DHDN}\footnote{Deutsches Hauptdreiecksnetz}, \textit{ETRS89 UTM zone 32N}, and \textit{PD/83 Zone 3} are examples of Germany's coordinate systems. These are considered as local ones while there are the world coordinate system for the coordinates in the world space, like WGS system. The coordinates may differ for the same object from a system to another. As an example, the coordinates of Berlin in WGS84 coordinate system with longitude and latitude is $(52.520007, 13.404954)$ while in Germany's \textit{ETRS89 UTM zone 32N} coordinate system is $(32798809.64, 5828000.49)$. Accordingly, it is necessary to know how the coordinate systems are related in concepts and definitions to make the conversion possible. 
 In geographic information systems (GIS), coordinate systems are categorized in two major and common types:
 %http://edndoc.esri.com/arcobjects/9.2/NET/89b720a5-7339-44b0-8b58-0f5bf2843393.htm
 %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323
 %http://www.gps.caltech.edu/gislab/HowTo/ESRI%20-%20Map%20Projections.pdf
 \begin{itemize}
-\item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are WGS84, NAD 1927, and NAD 1983. 
+\item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are WGS84, NAD\footnote{North American Datum} 1927, and NAD 1983. 
 
-\item Projected coordinate system: This coordinate system represents the Earth's round surface on a 2D flat surface, based on a map projection as shown in Figure~\ref{figproject}). A projected coordinate system is always based on a geographic coordinate system. Each projections distorts in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. 
-In some references, this coordinate system is also called raw coordinate system.
+\item Projected coordinate system: This coordinate system represents the Earth's round surface on a 2D flat surface, based on a map projection as shown in Figure~\ref{figproject}. A projected coordinate system is always based on a geographic coordinate system on Earth. Each projections distort in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. 
+In some references, this coordinate system is also called the raw coordinate system.
 %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323 
 %source for image: https://developer.apple.com/library/ios/documentation/userexperience/conceptual/LocationAwarenessPG/LocationAwarenessPG.pdf
 \end{itemize}
@@ -201,7 +201,7 @@ GML versions before the version 3.0 encodes a set of 2D geometries, i.e. Point, 
 </kml>
 \end{fakeXML} 
 \vspace{10px}
-\item Well-known Text (WKT): Text-based markup language to represent the vector geometries which supports a big range of objects like Geometry, Point, LineString, Curve, Polygon, Surface, curvePolygon, and multi-per geometries such as MultiPoint, MultiCurve, MultiSurface, and etc. Below is examples of the WKT representaion for a Point, LineString and Polygon,
+\item Well-known Text (WKT): A text-based markup language to represent the vector geometries which supports a big range of objects like Geometry, Point, LineString, Curve, Polygon, Surface, curvePolygon, and multi-per geometries such as MultiPoint, MultiCurve, MultiSurface. Below is examples of the WKT representaion for a Point, LineString and Polygon,
 \begin{itemize}
 \item Point: POINT (1 2)
 \item LineSting: LINESTRING (3 1, 1 3, 4 4)
@@ -209,14 +209,14 @@ GML versions before the version 3.0 encodes a set of 2D geometries, i.e. Point, 
 			(2 3, 3 3, 3 2, 2 3))
 \end{itemize}
 \item Well-known Binary (WKB): The binary representation of WKT data to be used in a database system.
-\item GeoJSON~\cite{www/geojson}: A geospatial data encoding based on the JavaScript Object Notation (JSON). Supported geometries are Point, LineString, Polygon, and related multi-part geometries. An object is represented by a set of name/value pairs. The whole data are encoded as text and no advanced numeric data types are employed. It is mainly used as a lightweight text for the data interchange. The default coordinate system is WGS84, however other systems could be defined. A sample point in GeoJSON is as belows,
+\item GeoJSON~\cite{www/geojson}: A geospatial data encoding based on the JavaScript Object Notation (JSON). Supported geometries are Point, LineString, Polygon, and related multi-part geometries. An object is represented by a set of name/value pairs. The whole data are encoded as text and no advanced numeric data types are employed. It is mainly used as a lightweight text for the data interchange. The default coordinate system is WGS84, however other systems could be defined. A sample point in GeoJSON is provided in Code,
 \vspace{10px} 
-\begin{fakeJSON}
+\begin{fakeXML}[label=wkb,caption=A simple WKB example representing a Point]
 {
     "type": "Point", 
     "coordinates": [30, 10]
 }
-\end{fakeJSON}
+\end{fakeXML}
 \vspace{10px}
 \end{itemize}
 
@@ -226,7 +226,7 @@ GML versions before the version 3.0 encodes a set of 2D geometries, i.e. Point, 
 As a powerful platform-independent XML grammar introduced by GIS community(OGC), GML plays an important role in the spatial data modeling, integration, sharing, transmission, and exchange, because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. 
 %TODO:In classic relational databases,... In XML native databases, geospatial data are handled ...
 
-In addition to the general functions and features on the structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML elements should be read and treated as geometries. Therefore, the string information is not enough to satisfy the geospatial features. The positions, locations, and relations of between an arbitrary set of geometries raises some requirements regarding to the topics and definitions in related scientific fields like Geometry and Geoscience. For example, "What is the distance between two geometries?" or "Which geometries intersect a particular geometry?". Additionally, there are features related to single geometries, such as the length and area of a geometry, the number of interior ring of a polygon, and the starting point of a line. These features could be provided by a database system as XQuery functions so they can be mixed with standard XQuery, full-text, and other functions.
+In addition to the general functions and features on the structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML elements should be read and treated as geometries. Therefore, the string information is not enough to satisfy the geospatial features. The positions, locations, and relations between an arbitrary set of geometries raises some requirements regarding to the topics and definitions in related scientific fields like Geometry and Geoscience. For example, "What is the distance between two geometries?" or "Which geometries intersect a particular geometry?". Furthermore, there are features related to single geometries, such as the length and area of a geometry, the number of interior ring of a polygon, and the starting point of a line. These features could be provided by a database system as XQuery functions so they can be mixed with standard XQuery, full-text, and other functions.
 To this date, numerous ideas have been introduced for geospatial functionalities as well as indexing. Here we discuss the geospatial index design and then we see the sample implementations in Section~\ref{s.dbs}.
 %In order to investigate the related functionalities we start with the existing approaches in the indexing and the 
 
@@ -243,82 +243,85 @@ To this date, numerous ideas have been introduced for geospatial functionalities
 
 \subsection{Geospatial Indexing}
 \label{s.geospatial-index}
-According to \cite{survey}, indexing has dramatic influences on the data manipulation and storage. Like any other type of data, geospatial data need to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
+According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on the data manipulation and storage. Like any other type of data, a geospatial data needs to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
+As it is examined in this survey, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the spatial data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. 
+In the discussed spatial indexes, the high percentage of them has the divide and conquer algorithm~\cite{divconquer} as a basis. As a result, the structures are mostly famous trees like Binary-tree, B-tree, and Quad-tree. 
 
-As it is examined in \cite{survey}, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the spatial data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. In the following sections, we introduce selective spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree to see how various viewpoints are employed to meet particular requirements and design the relative and appropriate index.
+In general, Chin et al~\cite{survey} categorized all approaches to three different abstract classes:
+\begin{itemize}
+\item Object Mapping: Given a $k$-dimensional polygon with $n$ nodes, these approaches map this shape to a $kn$-dimensional or try to look at the shape of the polygon as a single object in the original $k$-dimensional polygon.   
+\item Object Duplication: These approaches keep different instance of the object in different spaces with the same idea to take advantage of the properties of all these spaces. 
+\item Object Bounding: Similar to the idea of Quad-tree and Marching cube~\cite{marchingcube} (an approach in Computer Graphics), 
+these approaches enclose the polygon as accurate as possible by dividing the space in different ways. 
+\end{itemize}
+To see how different approaches based on the tree structres are included in these classes,  we introduce briefly selective spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree. Then we can see see how various viewpoints are employed to meet particular requirements and design the relative and appropriate index.
 
 \subsubsection{Binary-tree Based}
 The indexes in this group are basically and conceptually derived from the binary search tree. They adopt and generalize the idea of partitioning the space. Here some of them are explained.
-\emph{The kd-Tree}.
-This index, which was first introduced by Bentley \cite{bently1975}, is a generalization of the binary search tree structure for organizing k-dimensional points. As it is explained in \cite{bently1975}, the basic idea is alternatively split the area by x- and y-coordinate, that at each level splits the points half in left, half in right, half below, and half above respectively. For every non-leaf node, there is a k-th dimension discriminator, which defines the left and right subtrees order association with this node. If the discriminator is associated to the i-th dimension, all the i-th attribute of the sub-nodes in left subtrees are smaller than this node, and all the right sub-tree nodes have the greater i-th attribute.
+
+\textbf{The KD-tree}.
+This index, which was first introduced by Bentley \cite{bently1975}, is a generalization of the binary tree structure for organizing $k$-dimensional points. As it is explained in \cite{bently1975}, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that at each level splits the points half in left, half in right, half below, and half above respectively. For every non-leaf node, there is a $k$-th dimension discriminator, which defines the left and right subtrees order association with this node. If the discriminator is associated to the $i$-th dimension, all the $i$-th attribute of the sub-nodes in left subtrees are smaller than this node, and all the right subtree nodes have the greater $i$-th attribute. Figure~\ref{figkdtree} shows an example of a data and the corresponding KD-tree.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{kdtree}
-\caption{kd-tree}
+\includegraphics[width=0.8\textwidth]{kdtree}
+\caption{A representation of KD-tree (source: \cite{bently1975})}
 \label{figkdtree}
 \end{figure}
 
-
-When an item is deleted, a node from the sub-tree must be replaced. Here arises a complication that based on the discriminator in that level, let's call it i, either the node with the smallest i in right sub-tree should be replace or  the node with the biggest i in left sub-tree. A non-homogeneous kd-tree was proposed to make this process cheaper. 
-Kd-Tree has been used a lot in intensive searches, but some variants has been introduced to make a better performance in clustering, searching, storage efficiency and balancing [survay], such as …..
-and below we discuss some of them.
-
-Main memory storage of the index trees are mostly a problem, since it is too big to be placed there  [survay]. Hence, the storage has to be done into disk space. Using binary search tree paging techniques [CeS82 survay] or tree organization of B-trees [BaM72 survay] to store the kd-Tree proposes new indexing structures.
-
-Using properties of both kd-tree and B-tree [reference], the KDB-tree rebuilds the kd-tree to improve some inefficiencies of it.  It means benefits of the balanced kd-trees and the I/O efficiency of B-trees are together. It uses the disk space to bring the kd-tree on disk. 
-
-The method which is used to build  KDB-tree is a space partitioning structure such that the partitions do not overlap each other. The partitions which stand for pages as organizational units, are organized in k-d-tree structure. 
-KDB-tree has two basic structures: region page, consist of (region, pageID) pairs, and point page, consist of  (point, pageID) pairs. The region page contains the description of its subpages and a reference to those pages. The point pages contains actual data and references to them. 
-
-\begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{kdbtree}
-\caption{kdb-tree}
-\label{figkdbtree}
-\end{figure}
-
-The pagination of the B-tree is integrated in the KDB-tree and consequently the tree is height-balanced. Space utilization and efficiency might be low or high, though, since the downward propagation of splitting, caused by region split, may cause low storage utilization. On the other side, there is no guarantee for minimum space utilization. Since partitions do not overlap, it is not always easy to find disjoint partitions to divide a region. So, those partitions must be split at the same value as parent, even though they do not use the minimum amount of space specified for each node. By this problem the range queries' performance is poor. 
-
-Another variation of KDB-Tree which can be distinguished by two features: …
-Since in a the region split in lower levels result in sparse nodes, hB-Tree (the holey brick Btree) as a multi-attribute index structure is proposed. Data spaces could be holey. It allows the data space associated with a node to be non-rectangular and it uses kd-trees for space representation in its internal nodes. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through kd-tree recursive partitioning. It is height balanced since it is based on the K-D-B-Tree. 
+KD-tree has been used a lot in intensive searches, but some variants has been introduced to make a better performance in clustering, searching, storage efficiency and balancing. Here is a short list,
+\begin{itemize}
+\item A non-homogeneous KD-tree~\cite{nonhomkdtree}: When an item is deleted from KD-tree, a node from the subtree must be replaced. Here arises a complication that based on the discriminator in that level, let's call it $i$, either the node with the smallest $i$ in right subtree should be replace or the node with the biggest $i$ in left subtree.  This tree was proposed to make the process of deletion cheaper.
+\item KDB-tree~\cite{kdbtree}: To solve the problem of the main memory storage, this tree takes advantage of B-tree IO-efficiency together with the balanced structure of KD-tree. The KDB-tree is also a space partitioning structure such that the partitions do not overlap each other. 
+The partitions which stand for pages as organizational units, are organized in KD-tree structure. 
+KDB-tree has two basic structures: region page, consist of (region, pageID) pairs, and point page, consist of  (point, pageID) pairs. The region page contains the description of its subpages and a reference to those pages (see Figure~\ref{figkdbtree}). 
+Different pages are kept in different regions instead of the whole storage of the indexing tree, called the paging technique~\cite{bintreepaging}.
+This technique enables the tree to be highly balanced as well as suitable stoarge.
+\item HB-tree~\cite{hbtree1}: Since in a the region split in lower levels result in sparse nodes, HB-Tree (the holey brick B-tree) as a multi-attribute index structure is proposed. Data spaces could be holey. It allows the data space associated with a node to be non-rectangular and it uses kd-trees for space representation in its internal nodes. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through kd-tree recursive partitioning. It is height balanced since it is based on the K-D-B-Tree. 
 Advantages of this structure is removing the sparse nodes of the K-D-B-Tree and reduction of search time and space utilization, since kd-tree is used. 
-Disadvantages of this structure is that the deletion and splitting of nodes are expensive and also multiple references to a data node will lead to more than one traversal of a path.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{hbtree}
-\caption{hb-tree}
-\label{fighbtree}
-\end{figure}
-
-\emph{Matsuyama’s kd-Tree}.
+Disadvantages of this structure is that the deletion and splitting of nodes are expensive and also multiple references to a data node will lead to more than one traversal of a path. Figure
+\item Matsuyama’s KD-Tree~\cite{matsuyama}:
 This structure is introduced for non-point objects and an extensive duplication strategy is used. The directory is a kd-Tree and a data page is associated for each leaf and those objects which overlaps multiple data spaces are identified in data page and also duplicates. Hence, the data page contains identifiers of the objects totally or partially contained in the corresponding data space.
 The point is that this structure is not suitable for large objects since duplication and redundant storage of objects would result in high overhead.
-
-\emph{4D-tree}
-Indexes rectangular objects using kd-tree by mapping the objects into points in a four-dimensional space. Each 2D rectangle with (x1, y1) and (x2, y2) is considered as a 4D (x1, y1, x2, y2). As kd-tree the discriminators are choosen cyclically from this set. For each node, a discriminator, discriminator value and pointers to two children are stored. 
+\item 4D-tree~\cite{4dtree}: Indexes rectangular objects using kd-tree by mapping the objects into points in a four-dimensional space. Each 2D rectangle with (x1, y1) and (x2, y2) is considered as a 4D (x1, y1, x2, y2). As kd-tree the discriminators are choosen cyclically from this set. For each node, a discriminator, discriminator value and pointers to two children are stored. 
 For a region search (qx 1, qx 2, qy 1, qy 2), depending on the discriminator, one of the x1 <= qx2, x2  >=  qx1, y1 <= qy2 or y2 >= qy1 has to be done to determine which subtree (or both) has to be searched.
 The major problem associated with the 4-d-tree is its intersection search, which can be very costly due to the need for traversal of both subtrees when a query region lies in a subspace that cannot not bounded tightly using the discriminator values.
-
-\emph{skd-tree}
-The spatial kd-Tree alters the kd-tree in a way that objects are indexed by their centroid and the minimum bounding box of the object is also stored in the node. This structure is suitable for non-point spatial objects. In a kd-tree the objects which are contained in more than one space, will be referenced more than once. To avoid the duplication virtual subspaces are defined which include the original subspaces. So, each object are placed in the subspace based on its centroid.
+\item SKD-tree: The spatial kd-Tree alters the kd-tree in a way that objects are indexed by their centroid and the minimum bounding box of the object is also stored in the node. This structure is suitable for non-point spatial objects. In a kd-tree the objects which are contained in more than one space, will be referenced more than once. To avoid the duplication virtual subspaces are defined which include the original subspaces. So, each object are placed in the subspace based on its centroid.
 With this division, we just need one more value for each subspace which shows min/max values along the dimension of the discriminator. Therefore, the structure of each node would consist of:
 Two children
 The discriminator and it's value
 The max/ min value of objects left(LOSON)/right(HISON) subspaces along with dimension of the discriminator
 The maximum/minimum value of LOSON/HISON the nearest virtual line which bounds the data whose centroid are inside the LOSON/HISON.
 
-\begin{figure}
-\centering
-\includegraphics[width=0.6\textwidth]{skdtree}
-\caption{skd-tree}
-\label{figskdtree}
-\end{figure}
-
 During traversal a rectangular space is associated with each node and materialized  such that is tested against the query region if it intersects the region. 
 (Since the virtual boundary may sometimes bound the objects tighter than the partitioning line, the intersection search takes advantage of the existing virtual boundary to prune the search space efficiently. To further exploit the virtual boundaries, containment search which retrieves all spatial objects contained in a given query rectangle was proposed. During tree traversal, the algorithm always selects the boundaries that yield smaller search space. The direct support of containment search is useful to operators like within and contain. The search rapidly eliminates all objects that are not totally contained in the query region.)
 The Sdk-tree is memory-based, not a disk-based, data structure, thus is not suitable for very large databases.
+
+\end{itemize}
+
+%Main memory storage of the index trees are mostly a problem, since it is too big to be placed there  [survay]. Hence, the storage has to be done into disk space. Using binary search tree paging techniques [CeS82 survay] or tree organization of B-trees [BaM72 survay] to store the kd-Tree proposes new indexing structures.
+%Using properties of both kd-tree and B-tree [reference], the KDB-tree rebuilds the kd-tree to improve some inefficiencies of it.  It means benefits of the balanced kd-trees and the I/O efficiency of B-trees are together. It uses the disk space to bring the kd-tree on disk. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{kdbtree}
+\caption{A representation of KDB-tree (source: \cite{kdbtree})}
+\label{figkdbtree}
+\end{figure}
+ 
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{hbtree}
+\caption{A representation of HB-tree (source: \cite{hbtree1})}
+\label{fighbtree}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{skdtree}
+\caption{SKD-tree}
+\label{figskdtree}
+\end{figure}
 
 \subsubsection{B-tree based Indexing Technique}
 \emph{R-tree}
@@ -393,9 +396,8 @@ It is organized in a way similar to the region quad-tree. A region is recursivel
 \section{Related Work}
 \label{s.rwork}
 %Investigating the various algorithms and ideas helps to gain an insight into developing a convenient way of indexing in BaseX which suits the systems. However, 
-Investigating the various concepts of the geospatial processing in XML databases, 
-helps to gain an insight into the further solutions and developments. 
-Based on our investigations, the earliest topics of geospatial processing in databases are discussing three main areas: storage, querying, and indexing. There are a large amount of researches and literature in these topics which we summarize the selected ones here. Besides, the geospatial processing issues in three famous databases are reviewed which might be beneficial to design the properly fitting solutions in BaseX. %TODO: three famous databases -> or four when monetdb is written.
+Investigating the various concepts of geospatial processing in XML databases helps to gain an insight into further solutions and developments. 
+Based on our investigations, we will mostly be discussing three main areas: storage, querying, and indexing. There is large amount of researches and literature in these topics from which we summarize selected ones here. Besides, the geospatial processing issues in three famous databases are reviewed which might be beneficial to design the properly fitting solutions in BaseX. %TODO: three famous databases -> or four when monetdb is written.
 
 %This section is organized as follows.
 Since GML data type is our focus, we mainly concentrate on the topics related to this standard. Section~\ref{storage} introduces the approaches regarding the storage of geospatial data in GML. 
@@ -622,7 +624,7 @@ At the end, we will have a hierarchical spatial structure. Here are some propert
 \item It simply groups the points by giving the whole places of a quadrant the same value. Nearby places often share similar prefixes. Conversely, the longer a shared prefix is, the closer the two places are. 
 \item Arbitrary precision and the possibility of gradually removing characters from the end of the code to reduce its size and precision is properties that geohash offers. Therefore, it allows to zoom into the areas to select the level of precision.
 \item It facilitates the unique identification for points and locations.
-\item It could represent databases as data points. All data points belonging to a grid square can be cashed using the related geohash value.
+\item It could represent databases as data points. All data points belonging to a grid square can be cached using the related geohash value.
 \item For finding the nearest neighbor, an index on geohash which sorts them alphanumerically, returns the result directly, as the closest string is the nearest point. However, here we could spot a problem with finding nearest neighbors which will be discussed in the followings.
 \end{itemize}
 
@@ -711,7 +713,7 @@ Depending on the use case, the relevant constructors and functions from the corr
 Also for data in geoRSS, the functions in \textit{georss} namespace could be used. 
 This concept is shown in Code~\ref{marklogic-region} which searches for the points inside the specified region. 
 \vspace{10px}
-\begin{fakeXML}[escapechar=\%,label=marklogic-region,caption=A simple KML example representing a Point]
+\begin{fakeXML}[escapechar=\%,label=marklogic-region,caption=A query example in MarkLogic]
 ...
 xdmp:document-insert("/points.xml",
 <root xmlns:geo="http://marklogic.com/geospatial">
@@ -735,7 +737,7 @@ cts:search(doc("/points.xml")//item,
 Another example represented in Code~\ref{marklogic-path} shows how MarkLogic returns the 
 points in a given path which lie inside the defined region.
 \vspace{10px}
-\begin{fakeXML}[escapechar=\%,label=marklogic-path,caption=A simple KML example representing a Point]
+\begin{fakeXML}[escapechar=\%,label=marklogic-path,caption=Another query example in MarkLogic]
 cts:search(doc("/points.xml")//item,
   cts:path-geospatial-query("/root/item/point", 
   			cts:box(10.0, 35.0, 20.0, 40.0)))
@@ -1053,18 +1055,18 @@ return ( geo-index:filter("DB", $a)[geo:intersects( $a, .)])
 \end{fakeXML}
 \vspace{10px}
 
-Since having two functions with the same name and functionality is redundant, we introduce a new approach in which the \textit{filter} function can be used in XQuery to benefit from the index stucture. In this way, a sample query would be as in Code~\ref{geoandfilter}. To summerize these approaches, the former approach as in Code~\ref{intersectIndx}, does the whole process including the fisrt step of filtering through the \textit{geo-index:intersects} function, while the latter approach as in Code~\ref{geoandfilter}, uses the original \textit{geo:intersects} function together with \textit{geo-index:filter} which does the first step of filtering. 
+Since having two functions with the same name and functionality is redundant, we introduce a new approach in which the \textit{filter} function can be used in XQuery to benefit from the index stucture. In this way, a sample query would be as in Code~\ref{geoandfilter}. To summarize these approaches, the former approach as in Code~\ref{intersectIndx}, does the whole process including the first step of filtering through the \textit{geo-index:intersects} function, while the latter approach as in Code~\ref{geoandfilter}, uses the original \textit{geo:intersects} function together with \textit{geo-index:filter} which does the first step of filtering. 
 
 
-The negetaive point about the latter approach is that the input polygon, like polygon $\$a$ in Code~\ref{geoandfilter}, is read, parsed, and created every time that the spatial function, here \textit{intersects}, is called in the \textit{for} loop, evevn though it is the same fixed object. Since, this causes redundancy and consumes a considerable amount of time, we use a map to hash the fixed input and prevet the further redundant reading. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
+The negative point about the latter approach is that the input polygon, like polygon $\$a$ in Code~\ref{geoandfilter}, is read, parsed, and created every time that the spatial function, here \textit{intersects}, is called in the \textit{for} loop, evevn though it is the same fixed object. Since, this causes redundancy and consumes a considerable amount of time, we use a map to hash the fixed input and prevet the further redundant reading. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
  \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{MapIndexing}
-\caption{Using a Map to cash the input geometry: performance effect}
+\caption{Using a Map to cache the input geometry: performance effect}
 \label{figMap}
 \end{figure}
 
-Figure~\ref{figMap} demonstartes the time consumed by different queries to read the single input geometry with or without cashing. It could be seen that when no map is used, as the number of results goes higher more time is taken, while by cashing the time consumption remains constant, since the input geometry is read once. In other words, the input geometry will be read each time the function \textit{geo:intersects} is called without cashing, as it is one of the input arguments. In the next section, we assess the performance isues related to the geoapaial index.
+Figure~\ref{figMap} demonstrates the time consumed by different queries to read the single input geometry with or without caching. It could be seen that when no map is used, as the number of results goes higher more time is taken, while by caching the time consumption remains constant, since the input geometry is read once. In other words, the input geometry will be read each time the function \textit{geo:intersects} is called without caching, as it is one of the input arguments. In the next section, we assess the performance isues related to the geospaial index.
 
 \subsection{Evaluation and Improvement}
 \label{BXevaluation}
@@ -1256,7 +1258,7 @@ investigated in Section~\ref{update}. Finally, Section~\ref{conc} contains the c
 
 \subsection{Querying the Databases}
 \label{s.query}
-To analyze and compare the databases behaviour, designing the same test queries on the identical dataset is the most straight-forward approach. Based on the MongoDB geospatial features and properties, the Netherland test dataset must be changed. A brief explanation of the changes is provided here to clarify the rules and limitaions. The main change was to either remove multipolygon from the dataset or transforming them to a set of distinct polygons, since multipolygon is not supported in this version of MongoDB. Besides, the coordinate system is converted to WGS84. At the end, there are 12773 polygons and no multipolygon in the data file. Since the geometries are changed in database and the results would be different, we repeate all queries with the new dataset in BaseX.
+To analyze and compare the databases behaviour, designing the same test queries on the identical dataset is the most straight-forward approach. Based on the MongoDB geospatial features and properties, the Netherland test dataset must be changed. A brief explanation of the changes is provided here to clarify the rules and limitaions. The main change was to either remove multipolygon from the dataset or transforming them to a set of distinct polygons, since multipolygon is not supported in this version of MongoDB. Besides, the coordinate system is converted to WGS84. At the end, there are 12773 polygons and no multipolygon in the data file. Since the geometries are changed in database and the results would be different, we repeat all queries with the new dataset in BaseX.
 
 To start with, the GeoJSON file containing the geometries, is imported into MongoDB. This can be done  using Java API or Mongo Shell with appropriate \textit{mongoimport} command. There are limitations to consider in importing the GeoJSON in MongoDB. The main one is the \textit{document} size limitation in a \textit{collection}. Document and collection are two concepts in MongoDB which are correspond with a table and a record in this table respectively. A collection can have one or more documents and a document is a set of key-values. A database contains one or more collections. To successfully import a document into a collection, it should be smaller than 16MB. Since it is common to have large geometries in real-world geographic data files, this limitation can be a problem. Aother limitation is that the $z$ coordinate is not supported in MongoDB. When a coordinate contains $z$ dimension, although those geometries are not processed, no error massage is shown during the import process and query. MultiPoint, MultiLineString, and MultiPolygon, which are not supported in MongoDB, are also skipped in queries without any error massage. 
 
@@ -1543,9 +1545,9 @@ To start with, we suppose that a user has a geospatial dataset in GML and they w
 
 %Although BaseX can handle the non-geospatial queries as well as some geospatial queries like intersects %and within almost efficiently using Index, the near query and the database update decreases the efficiency dramatically. Therefore, besides the geospatial queries there might be some non-geospatial queries as well, e.g. finding the point elements or the number of polygons in a dataset. It means the geospatial queries are not necessarily the only focuse of the queries and the user can mix both types in a piece of code. Hence, these so-called non-geospatial queries should be considered in the set of user requiremets, however analysing them are not our focuse. This point is important when the user wants to choose between BaseX and MongoDB for geospatial queries while the non-geospaial queries will be done by BaseX. In this case the user can benefi from both databases while the most requirements are fulfilled by BaseX. 
 
-%To summerize the results of our investigations, the near query and the geospatial index updating in BaseX are far from the ......???, though geospatial query times which are the focuse of the index structure, like intersects, seem that could be satisfying in some cases/some how.???  
+%To summarize the results of our investigations, the near query and the geospatial index updating in BaseX are far from the ......???, though geospatial query times which are the focuse of the index structure, like intersects, seem that could be satisfying in some cases/some how.???  
 
-Table~\ref{t.comparisonBaseXMongo} summerizes the statement above. \textit{MongoDB through BaseX} in this table means BaseX connects to MongoDB to benefit by the features which are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the forementioned features which are supposed here to be satisfying enough for the user, indicatd with the notation $"\times"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
+Table~\ref{t.comparisonBaseXMongo} summarizes the statement above. \textit{MongoDB through BaseX} in this table means BaseX connects to MongoDB to benefit by the features which are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the forementioned features which are supposed here to be satisfying enough for the user, indicatd with the notation $"\times"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
 %Otherwise, the user might choose to work with another system, like MongoDB.
 % is better in efficiency.
 With $"\times\times"$, we mean that option is very efficient.
@@ -1574,7 +1576,7 @@ However, as we see in Table~\ref{t.comparisonBaseXMongo} doing some queries in B
 %a big limitation for this software regarding the geospatial processing. 
 Thus, it will be more appropriate to provide the user with both possiblities.
 
-Table~\ref{t.possibilities} summerizes the sample scenarios that could happen based on the existing features to process the geospatial data. In addition, this table shows the relevant/appropriate actions the user can apply as an efficient strategy toward her/his goal.
+Table~\ref{t.possibilities} summarizes the sample scenarios that could happen based on the existing features to process the geospatial data. In addition, this table shows the relevant/appropriate actions the user can apply as an efficient strategy toward her/his goal.
 
 
 \begin{table}

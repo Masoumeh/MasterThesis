@@ -355,6 +355,21 @@ is the set inclusion order on bounding boxes and the shapes in leaf nodes.
 Minimization of both coverage and overlap is crucial to the performance of R-trees.
 Both of them are largely dependent on the splittin algorithm which is used in algorithm.
 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{Rtree-1}
+\caption{R-tree structure}
+\label{rtree1}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{Rtree-2}
+\caption{Query on R-tree}
+\label{rtree2}
+\end{figure}
+
 \textbf{$R^*$-tree~\cite{rstartree}.}
 The $R^*$-tree is found to be more efficient than some other variants,
 and the R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. In general, the R*-tree is an improvement over the R-tree at the expense of more expensive insertion.

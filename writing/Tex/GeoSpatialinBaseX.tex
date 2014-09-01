@@ -1217,8 +1217,8 @@ In addition to the \textit{split} function, we omit the $Z$ values in parsing pr
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth,height=0.2\textheight]{BXZvalue}
-\caption{The effect of ignoring the $Z$ values of coorinates in GML parsing on query times}
+\includegraphics[width=0.8\textwidth,height=0.2\textheight]{BXZvalue-sec}
+\caption{The effect of ignoring the $Z$ values of coordinates in GML parsing on query times}
 \label{figBXZvalue}
 \end{figure}
 
@@ -1401,7 +1401,7 @@ Running the same queries as before, like \textit{intersects}, in both databases,
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth,height=0.25\textheight]{BXvsMongo-NoIndex-Intersects-log}
+\includegraphics[width=0.8\textwidth,height=0.25\textheight]{BXvsMongo-NoIndex-Intersects-Sec-log}
 \caption{Query timing of \textit{intersect} operation without geospatial index}
 \label{figBXvsMongoNoIndexIntersects}
 \end{figure}
@@ -1429,7 +1429,7 @@ The same step is also taken in BaseX. Running again the same queries using a geo
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{BXvsMongo-Intersects-Index-log}
+\includegraphics[width=0.8\textwidth]{BXvsMongo-Intersects-Index-Sec-log}
 \caption{Query timing of \textit{intersect} operation with geospatial index}
 \label{figBXvsMongoIndexIntersects}
 \end{figure}
@@ -1503,7 +1503,7 @@ Having the same use cases, we have tested this feature in both databases, with t
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{BXvsMongoNear.png}
+\includegraphics[width=0.8\textwidth]{BXvsMongoNear-newColor.png}
 \caption{Query timing of the \textit{near} feature}
 \label{figBXvsMongoNear}
 \end{figure}
@@ -1532,8 +1532,8 @@ The unsatisfactory performance of the updating and also \textit{near} feature in
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth]{BXvsMongo-Update.png}
-\caption{Performance of the update operation in BaseX and MongoDB}
+\includegraphics[width=0.7\textwidth]{BXvsMongo-Update-sec.png}
+\caption{Performance of the \textit{update} operation in BaseX and MongoDB}
 \label{figBXvsMongoUpdate}
 \end{figure}
 
@@ -1541,7 +1541,7 @@ The unsatisfactory performance of the updating and also \textit{near} feature in
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{BXUpdate.png}
-\caption{Time consumtion percentage of the update operations in BaseX.}
+\caption{Time consumtion percentage of the update operations in BaseX}
 \label{figBXUpdate}
 \end{figure}
 
@@ -1553,7 +1553,7 @@ In regards to the unsatisfactory query times in the \textit{near} feature, we ha
  
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{MongoviaBX-near.png}
+\includegraphics[width=0.9\textwidth]{MongoviaBX-near-sec-log.png}
 \caption{Performance comparision of the \textit{near} feature in BaseX vs. MongoDB through BaseX}
 \label{figMongoviaBX-near}
 \end{figure}
@@ -1563,7 +1563,7 @@ Figure~\ref{figMongoviaBX-near} implies that the performance of the \textit{near
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{MongoviaBX-Update.png}
+\includegraphics[width=0.8\textwidth]{MongoviaBX-Update-sec-log.png}
 \caption{Performance comparision of the update operation in BaseX vs. MongoDB through BaseX}
 \label{figMongoviaBX-update}
 \end{figure}

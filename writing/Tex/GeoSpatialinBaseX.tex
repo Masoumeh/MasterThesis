@@ -276,7 +276,7 @@ This index,first introduced by Bentley \cite{bently1975}, is a generalization of
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{kdtree}
+\includegraphics[width=0.8\textwidth]{kd-Tree}
 \caption{A representation of KD-tree}
 \label{figkdtree}
 \end{figure}
@@ -308,7 +308,8 @@ Since KD-trees are designed as a point access method, its variant structure intr
 For a region search ($qx_1$, $qx_2$, $qy_1$, $qy_2$), depending on the discriminator, the result of one of $x1 <= qx2, x2 >= qx1, y1 <= qy2, y^2 >= qy^1$ operations determines which subtree (or both) has to be searched.
 The major problem of this approach is the high cost of its intersection search when a query region lies in a subspace that cannot not bounded tightly using the discriminator values. In such cases both subtrees have to be traversed and this will be very costly.
 
-\item SKD-tree: The spatial kd-Tree alters the kd-tree in a way that objects are indexed by their centroid and the minimum bounding box of the object is also stored in the node. This structure is suitable for non-point spatial objects. In a kd-tree the objects which are contained in more than one space, will be referenced more than once. To avoid the duplication virtual subspaces are defined which include the original subspaces. So, each object are placed in the subspace based on its centroid.
+\item SKD-tree: 
+To avoid object duplication and object mapping in KD-tree, Spatial KD-tree (SKD-tree)~\cite{skdtree} has benn developed. SKD-tree alters the kd-tree in a way that objects are indexed by their centroid and the minimum bounding box of the object is also stored in the node. This structure is suitable for non-point spatial objects. In a kd-tree the objects which are contained in more than one space, will be referenced more than once. To avoid the duplication virtual subspaces are defined which include the original subspaces. So, each object are placed in the subspace based on its centroid.
 With this division, we just need one more value for each subspace which shows min/max values along the dimension of the discriminator. Therefore, the structure of each node would consist of:
 Two children
 The discriminator and it's value

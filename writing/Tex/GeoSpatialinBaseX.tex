@@ -103,36 +103,34 @@ throughout my whole study at University. At the end, I am deeply appreciative of
 \newpage
 \section{Introduction}
 \setcounter{page}{1}
-The geospatial data is increasingly becoming more important nowadays.
-Different ways of processing this data is studied in ....
-
-The time complexity ...
+The geospatial data is increasingly becoming more important nowadays. example ...????
+Different ways of processing this data is studied over years. However, the huge existing data requires more efficient ways nowadays. The time complexity is specially of great interest. We talk about the motivations to ....
+chera XML khube.......
 
 \subsection{Motivation}
 BaseX~\cite{www/basex} is a high-performance XML~\cite{www/xml}
  database which is developed in Konstanz university.
 It has a powerful text processor as well as the full support 
 for XQuery~\cite{www/xquery,www/xqueryfun} language according to \cite{conf/xsym/GrunGHS09}.
-Our goal is to empower BaseX to process the geospatial data in an efficient way.
-Since BaseX is an XML database, this means to add the support of handling 
-\emph{Geography Markup Language (GML)} data. The Open Geospatial Consortium (OGC)
+Our goal is to empower BaseX to process the geospatial data in an efficient way. This means to add the support of handling \emph{Geography Markup Language (GML)} data. The Open Geospatial Consortium (OGC)
 which is an internationally recognized organization for geospatial standards,
 is defined this new special XML grammar for the geographical data.
-We want to have a complete support of this language in BaseX,
+We want to have a complete support of this language in BaseX
 which means the abilities to read, to write, and to query on this data.
-
+To achieve this goal we need extensive knowledge over existing researches on the geospatial data and specifically indexing techniques. In this work, a short survay is .....
+we also consider the othe xml databases to find the best solutions....
 
 \subsection{Overview}
 This essay will first define the concepts needed later in the discussion, called
-Methodology, in Sec.~\ref{s.method}. In this section, the basic geospatial data
+Methodology, in Section~\ref{s.method}. In this section, the basic geospatial data
 and it's application areas will be introduced. Also, various ways that other works
-are processing this data will be investigated in Sec.~\ref{s.rwork}. BaseX,
-as a native XML database, which is our focus in this essay, is studies and extended
-by a module to handle geospatial data in Sec.~\ref{s.basex}. 
-Sec.~\ref{s.mongo} improves the efficiency of the module
+are processing this data will be investigated in Section~\ref{s.rwork}. BaseX,
+as a native XML database, which is our focus in this essay, is studied and extended
+by a module to handle geospatial data in Section~\ref{s.basex}. 
+Section~\ref{s.mongo} improves the efficiency of the module
 by proposing another novel way considering MongoDB.
 Finally, new ideas for further works are explained in
-Sec.~\ref{s.future}.
+Section~\ref{s.future}.
 
 
 \newpage
@@ -170,7 +168,7 @@ In some references, this coordinate system is also called the raw coordinate sys
 \begin{figure}
 \centering
 \includegraphics[width=0.4\textwidth]{sphere_to_cylinder}
-\caption{Projection of a geographic coordinate system to a 2D flat map (source~\ref{projected})}
+\caption{Projection of a geographic coordinate system to a 2D flat map (source~\cite{projected})}
 \label{figproject}
 \end{figure}
 
@@ -245,7 +243,7 @@ To this date, numerous ideas have been introduced for geospatial functionalities
 \label{s.geospatial-index}
 According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on the data manipulation and storage. Like any other type of data, a geospatial data needs to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
 As it is examined in this survey, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the spatial data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. 
-In the discussed spatial indexes, the high percentage of them has the divide and conquer algorithm~\cite{divconquer} as a basis. 
+The high percentage of them has the divide and conquer algorithm~\cite{divconquer} as a basis. 
 In general, Chin et al~\cite{survey} categorized all approaches to three different abstract classes:
 \begin{itemize}
 \item Object Mapping: Given a $k$-dimensional polygon with $n$ nodes, these approaches map this shape to a $kn$-dimensional or try to look at the shape of the polygon as a single object in the original $k$-dimensional polygon.   
@@ -257,50 +255,59 @@ these approaches enclose the polygon as accurate as possible by dividing the spa
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{Trees}
-\caption{An overview of most important indexing structures developed over years}
+\caption{An overview of some important indexing structures developed over years}
 \label{trees}
 \end{figure}
 
 On the other hand, the index structures are mostly based on the famous trees like Binary-tree, B-tree~\cite{btree}, and Quad-tree. 
-To see how different approaches based on the tree structres are included in these classes,  we introduce briefly spatial indexes based on three data structures Binary-tree, B-tree, and Quad-tree. We cover just a selective list since the number of these indexing methods
-is a big number. Figure~\ref{trees} visualize the different indexing structures and their relations. An arrow from the structure $A$
-be $B$ means $B$ is an extension of the structure $A$. The colored ovens also shows the main categories of these
-trees. Three following sections are a brief introduction of the tree important main categories:
+To see how different approaches based on the tree structres are included in these classes, spatial indexes are introduced briefly  based on three data structures Binary-tree, B-tree, and Quad-tree. We cover just a selective list since the number of these indexing methods
+is a big number. Figure~\ref{trees} visualizes the relation of a part of indexing structures over years. An arrow from the structure $A$ to $B$ means $B$ is an extension of the structure $A$. The colored ovens also shows the main categories of these
+trees. Quad-tree is represented as a subset of the space filling structures. Hashing structures are not in the focuse of this study, however they are used as a basis in the geospatial indexing of some databases. ?????????????Three following sections are a brief introduction of the tree important main categories:
 Binary-tree based in Section~\ref{binary-tree-based}, 
-R-tree based in Section~\ref{r-tree-based}, 
+B-tree based in Section~\ref{b-tree-based}, 
 and Quad-tree based in Section~\ref{quad-tree-based}.
 
 \subsubsection{Binary-tree Based}
 \label{binary-tree-based}
-The indexes in this group are basically and conceptually derived from the binary search tree. They adopt and generalize the idea of partitioning the space. Here some of them are explained.
+The indexes in this group are basically and conceptually derived from the binary search tree. They adopt and generalize the idea of partitioning the space, as many sophisticated indexes. Here, we shortly explain some of them.
 
 \textbf{The KD-tree}.
-This index, which was first introduced by Bentley \cite{bently1975}, is a generalization of the binary tree structure for organizing $k$-dimensional points. As it is explained in \cite{bently1975}, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that at each level splits the points half in left, half in right, half below, and half above respectively. For every non-leaf node, there is a $k$-th dimension discriminator, which defines the left and right subtrees order association with this node. If the discriminator is associated to the $i$-th dimension, all the $i$-th attribute of the sub-nodes in left subtrees are smaller than this node, and all the right subtree nodes have the greater $i$-th attribute. Figure~\ref{figkdtree} shows an example of a data and the corresponding KD-tree.
+This index,first introduced by Bentley \cite{bently1975}, is a generalization of the binary tree structure for organizing $k$-dimensional points. As it is explained in Bentley \cite{bently1975}, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that the points are splitted at each level half in left, half in right, half below, and half above respectively. For every non-leaf node, there is a $k$-th dimension discriminator which defines the left and right subtrees. More clearly, if the discriminator is associated to the $i$-th dimension, all the $i$-th attribute of the sub-nodes in left subtrees are smaller than this node and all the right subtree nodes have the greater $i$-th attribute. Figure~\ref{figkdtree} shows an example of a data and the corresponding KD-tree. As it can be seen, according to the discriminator in first level, $x$, all nodes in the left subtree of $A$ have smaller $x$ value and all nodes in the right subtree have greater $x$ values. In the next level, the discriinator is $y$ value and all left subtree nodes have smaller $y$ value while the right subtree nodes have greater $y$ values.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{kdtree}
-\caption{A representation of KD-tree (source: \cite{bently1975})}
+\caption{A representation of KD-tree}
 \label{figkdtree}
 \end{figure}
 
 KD-tree has been used a lot in intensive searches, but some variants has been introduced to make a better performance in clustering, searching, storage efficiency and balancing. Here is a short list,
 \begin{itemize}
-\item A non-homogeneous KD-tree~\cite{nonhomkdtree}: When an item is deleted from KD-tree, a node from the subtree must be replaced. Here arises a complication that based on the discriminator in that level, let's call it $i$, either the node with the smallest $i$ in right subtree should be replace or the node with the biggest $i$ in left subtree.  This tree was proposed to make the process of deletion cheaper.
-\item KDB-tree~\cite{kdbtree}: To solve the problem of the main memory storage, this tree takes advantage of B-tree IO-efficiency together with the balanced structure of KD-tree. The KDB-tree is also a space partitioning structure such that the partitions do not overlap each other. 
-The partitions which stand for pages as organizational units, are organized in KD-tree structure. 
-KDB-tree has two basic structures: region page, consist of (region, pageID) pairs, and point page, consist of  (point, pageID) pairs. The region page contains the description of its subpages and a reference to those pages (see Figure~\ref{figkdbtree}). 
-Different pages are kept in different regions instead of the whole storage of the indexing tree, called the paging technique~\cite{bintreepaging}.
-This technique enables the tree to be highly balanced as well as suitable stoarge.
-\item HB-tree~\cite{hbtree1}: Since in a the region split in lower levels result in sparse nodes, HB-Tree (the holey brick B-tree) as a multi-attribute index structure is proposed. Data spaces could be holey. It allows the data space associated with a node to be non-rectangular and it uses kd-trees for space representation in its internal nodes. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through kd-tree recursive partitioning. It is height balanced since it is based on the K-D-B-Tree. 
-Advantages of this structure is removing the sparse nodes of the K-D-B-Tree and reduction of search time and space utilization, since kd-tree is used. 
-Disadvantages of this structure is that the deletion and splitting of nodes are expensive and also multiple references to a data node will lead to more than one traversal of a path. Figure
-\item Matsuyama’s KD-Tree~\cite{matsuyama}:
-This structure is introduced for non-point objects and an extensive duplication strategy is used. The directory is a kd-Tree and a data page is associated for each leaf and those objects which overlaps multiple data spaces are identified in data page and also duplicates. Hence, the data page contains identifiers of the objects totally or partially contained in the corresponding data space.
-The point is that this structure is not suitable for large objects since duplication and redundant storage of objects would result in high overhead.
-\item 4D-tree~\cite{4dtree}: Indexes rectangular objects using kd-tree by mapping the objects into points in a four-dimensional space. Each 2D rectangle with (x1, y1) and (x2, y2) is considered as a 4D (x1, y1, x2, y2). As kd-tree the discriminators are choosen cyclically from this set. For each node, a discriminator, discriminator value and pointers to two children are stored. 
-For a region search (qx 1, qx 2, qy 1, qy 2), depending on the discriminator, one of the x1 <= qx2, x2  >=  qx1, y1 <= qy2 or y2 >= qy1 has to be done to determine which subtree (or both) has to be searched.
-The major problem associated with the 4-d-tree is its intersection search, which can be very costly due to the need for traversal of both subtrees when a query region lies in a subspace that cannot not bounded tightly using the discriminator values.
+\item KDB-tree~\cite{kdbtree}: 
+To solve the problem of the main memory storage, this tree takes advantage of B-tree IO-efficiency for optimizing external memory accesses together with the balanced structure of KD-tree. KDB-tree is also a space partitioning structure such that the partitions do not overlap each other. 
+Space partitioning is similar to KD-tree. Unlike KD-tree, each divided space is not just its own node. Instead nodes are stored as pages. These partitions which stand for pages as organizational units, are organized in KD-tree structure. As shown in Figure~\ref{figkdbtree}, C, D, and E subspaces are disjoint and together they shape region A parent node.
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{kdtree}
+\caption{A representation of KDB-tree}
+\label{figkdbtree}
+\end{figure}
+KDB-tree has two basic structures: region page, consist of (region, pageID) pairs, and point page, consist of  (point, pageID) pairs. A region page as internal nodes contains the description of its subpages and a reference to those pages (see Figure~\ref{figkdbtree}) and point pages as leaf nodes only carry the object identifiers.
+Different pages are kept in different regions instead of the whole storage of the indexing tree, called the paging technique~\cite{bintreepaging}. However, this technique enables the tree to be highly balanced, the storage efficiency is poorer. 
+\item A non-homogeneous KD-tree: 
+When an item is deleted from KD-tree, a node from the subtree must be replaced. Here arises a complication that based on the discriminator in that level, let's call it $i$, either the node with the smallest $i$ in right subtree should be replace or the node with the biggest $i$ in left subtree. Non-homogeneous KD-tree~\cite{nonhomkdtree} was proposed to make the process of deletion cheaper. The major difference of this structure is that the partitioning is not always on different dimensions cyclically. Instead, the dimension with more range queries on it are more desirable. As an alternative, splitting  longer dimensions yield more cubical spaces. In general, the dimension should be chosen such that the number of data entries in partionions are approximately equal in order to minimize the splitting process.
+
+\item HB-tree: Since splitting the regions in KDB-tree results in sparse nodes at lower levels, HB-tree (holey brick B-tree)~\cite{hbtree1} as a multi-attribute index structure is proposed. HB-tree solves this prolem by allowing data spaces to be holey and consequently to be non-rectangular. It means data subspaces could be extracted from a region. To represent the holey regions, HB-tree uses KD-tree within internal nodes to organize the information about the lower levels. It might happen that a region is referenced by more than one lesf of KD-tree in internal nodes of HB-tree. In HB-tree leaf nodes are called \textit{data nodes} and internal nodes are \textit{index nodes}. Index nodes  
+%A data space can be non-rectangular and space representation in internal nodes is by KD-trees. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through KD-tree recursive partitioning. 
+As~\cite{hbtree1} states, this structure by removing the sparse nodes of the KDB-tree, gives beter search and insert performance and decent space utilization. Nevertheless, expensive deletion and splitting are and multiple references to a data node that may lead to more than one traversal of a path are trade-off.
+
+\item Matsuyama’s KD-tree:
+Since KD-trees are designed as a point access method, its variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via ading an extensive duplication strategy. In KD-tree, a data page is associated to each leaf nodes and reference to the objects totlly or partially contained in it. Those objects which overlaps multiple data spaces are duplicated in all corresponding data pages. The point is that due to duplicated storage this structure is not appropriate for large objects
+
+\item 4D-tree~\cite{4dtree}: In order to index two-dimensional objects, ~\cite{4dtree} maps objects into four-dimensional points in KD-tree. It means a rectangle ($x‍‍_1$, $y_1$), ($x_2$, $y_2$) is considered as a point ($x‍‍_1$, $y_1$, $x_2$, $y_2$). The discriminator is chosen repeatedly from the set ($x‍‍_1$, $y_1$, $x_2$, $y_2$). For each node, a discriminator, discriminator value and pointers to two children are stored. 
+For a region search ($qx_1$, $qx_2$, $qy_1$, $qy_2$), depending on the discriminator, the result of one of $x1 <= qx2, x2 >= qx1, y1 <= qy2, y^2 >= qy^1$ operations determines which subtree (or both) has to be searched.
+The major problem of this approach is the high cost of its intersection search when a query region lies in a subspace that cannot not bounded tightly using the discriminator values. In such cases both subtrees have to be traversed and this will be very costly.
+
 \item SKD-tree: The spatial kd-Tree alters the kd-tree in a way that objects are indexed by their centroid and the minimum bounding box of the object is also stored in the node. This structure is suitable for non-point spatial objects. In a kd-tree the objects which are contained in more than one space, will be referenced more than once. To avoid the duplication virtual subspaces are defined which include the original subspaces. So, each object are placed in the subspace based on its centroid.
 With this division, we just need one more value for each subspace which shows min/max values along the dimension of the discriminator. Therefore, the structure of each node would consist of:
 Two children
@@ -339,44 +346,120 @@ The Sdk-tree is memory-based, not a disk-based, data structure, thus is not suit
 \end{figure}
 
 \subsubsection{B-tree based Indexing Technique}
-B-tree is used extensively in databases due to its flexibility and ability to handle a large amount of data.
-However, it is not designed for the multidimensional data which is needed in geospatial data processing.
-Hence, R-tree~\cite{rtree} extends B-tree by adding the support of multidimensional data. 
-Also, R-tree inherit the balance of height in B-tree.
-More clearly, the leaf nodes in R-tree are the actual shapes while
-other nodes are minimum bounding boxes of the actual geospatial data. Here, 
-the actual bounding boxes have the dimension of the data.
+\label{b-tree-based}
+B-tree is used extensively in databases due to its flexibility and ability to handle a large amount of data. However, it is not designed for the data in multi-dimensional spaces and like some other classical one-dimensional index structures are not suitable for spatial searches. Frequent queries in geospatial applications, such as finding the all places within $20 km$ of a point, makes it important to find the objects according to their spatial location in a space. 
 
-According to \cite{survey}, the operations on the R-tree 
+\textbf{R-tree}
+R-tree~\cite{rtree} as one of the introduced spatial indexing structures, extends B-tree by adding the support of multi-dimensional data that also inherits height balance from B-tree. The structure is designed based on the idea of grouping the neighbouring objects and represent them with their minimum bounding rectangle (MBR). This idea leads to to minimize the visiting area in spatial search queries. The shapes and objects are described in leaf nodes by rectangles each containing a single object and each non-leaf node in higher levels is the smalles bounding rectangle spatially containing its children either the rectangles or objects. Since this structure is designed for disk storage, leaf nodes point to the objects in pages. The root node with at least two children, is the biggest minimum bounding rectangle which spatially contains the whole objects. Figure~\ref{rtree} represent how an R-tree is built for a spatial data set. Figure~\ref{rtreebox} illustrates the minimum bounding rectangles calculated for different levels
+% from those which contain the single objects to those containing the whole area. 
+and the corresponding R-tree is shown in Figure~\ref{rtreestruct}.
+%More clearly, the leaf nodes in R-tree are the actual shapes while
+%other nodes are minimum bounding boxes of the actual geospatial data. Here, 
+%the actual bounding boxes have the dimension of the data.
+
+
+
+\begin{figure}
+\centering
+\subfigure[Minimum bounding rectangles of an object set to build R-tree]{
+\includegraphics[width=0.47\textwidth]{Rtree-box}
+%\caption{R-tree structure}
+\label{rtreebox}
+}
+\centering
+\subfigure[R-tree structure]{
+\includegraphics[width=0.47\textwidth]{Rtree}
+%\caption{R-tree}
+\label{rtreestruct}
+}
+\caption{A sample  of R-tree creation for a set of data objects in 2D}
+\label{rtree}
+\end{figure}
+
+According to Chin et al~\cite{survey}, the operations on the R-tree 
 are basically the same as the operations in B-tree. The only difference is that the 
-whole operations are needed to be done on bounding boxes.
-Also, the order, used in the element placement in B-tree,
-is the set inclusion order on bounding boxes and the shapes in leaf nodes. 
-Minimization of both coverage and overlap is crucial to the performance of R-trees.
-Both of them are largely dependent on the splittin algorithm which is used in algorithm.
+whole operations have to be done on bounding rectangles.
+Also, the order used in the element placement in B-tree
+is the set inclusion order on bounding rectangles and shapes in leaf nodes. 
 
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{Rtree-1}
-\caption{R-tree structure}
-\label{rtree1}
-\end{figure}
+The challenging point about R-tree is partitioning the area with MBRs to build the tree. Since the rectangles are the areas to be investigated in spatial calculations, minimization of coverage and overlap is crucial to the performance of R-trees. Therefore, splitting should result in minimum total area of each two nodes and minimum overlapping of each two nodes. Achieving these goals or at leaste quilibrium between them are largely dependent on the splitting algorithm chosen for defining the bounding rectangles. Figure~\ref{rtreesplit} illustrates this point by two different splits. Total coverage area of the "Bad aplit" case in this sample is mach larger than the "Good split" and this will lead to unnecessary empty spaces investigation.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{Rtree-2}
-\caption{Query on R-tree}
-\label{rtree2}
+\includegraphics[width=0.7\textwidth,height=0.19\textheight]{R-treeMBR}
+\caption{Two different split strategies in R-tree}
+\label{rtreesplit}
 \end{figure}
 
-\textbf{$R^*$-tree~\cite{rstartree}.}
-The $R^*$-tree is found to be more efficient than some other variants,
-and the R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. In general, the R*-tree is an improvement over the R-tree at the expense of more expensive insertion.
+As mentioned before, the idea of bounding rectangles helps to decide which parts of the tree have to be visited in search queryies, such as intersection, overlapping, and containment. In fact, a filtering is applied to select those rectangles which overlap the query area and then the requested spatial operation is run on them. This process continues until it reaches those rectangles containig single objects. At the end selected objects are checked against the query operation. Figure~\ref{rtreequery} illustrates how an intersection query is done on the R-tree and how the rectangles are chosen to be included in calculations. In this example, \textit{$R_2$}, \textit{$R_5$}, \textit{$R_6$}, \textit{$R_{12}$}, and \textit{$R_{14}$} are selected to be checked and the aother areas remain untouced. At the end \textit{$R_{12}$} and \textit{$R_{14}$} are selected as rectangles containing the final results.
 
-This structure tries to reduce overlaps between directory rectangles and the area covered by a rectangle, in order to make better performance, since minimum overlaps leads to less number of branches to be traversed in queries and minimum coverage helps to decide on the paths to traverse on higher levels. 
-R*-Tree does these optimizations with revised node split and also forced insertion which finds a better place for a node that its original place. In R-Tree insertion-build structure is highly suboptimal and insertion and deletion could improves the R-Tree dramatically.
- (Using the idea of reinsertion of the R-tree, Beckmann et al proposed a reinsertion algorithm when a node overflows. The reinsertion sorts the entries in decreasing order of the distance between the centroids of the rectangle and the covering rectangle and reinserts the first p (variable for tuning) entries. In some cases, the entries are reinserted back into the same node and hence a split is eventually necessary. The reinsertion will no doubt increase the storage utilization; but it can be fairly expensive when the tree is large. The R*-tree is found to be more efficient than some other variants, and the R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. In general, the R*-tree is an improvement over the R-tree at the expense of more expensive insertion.)
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{Rtree-query}
+\caption{Querying R-tree}
+\label{rtreequery}
+\end{figure}
+
+R-tree benefits from the highly balanced structure and usually optimized implementation for secondary storage. Furthur, in low-dimensional spaces it gives a good perofrmance. Generally, R-tree is appropriate and common spatial index for both point and extended spatial data, however, there are disadvantages which motivates to revise the structure with more efficient variations. As Manolopoulos et al~\cite{Manolopoulos:2005} explains, there are two main reasons. First, point location queries may lead to visit and investigate multiple paths in tree which detregates performance, specially when MBRs overlappings are considerable. Second, investigating empty spaces in large rectangles which have significant overlaps and have to be investigated in range queries, deteriorates the performance. Here, we briefly explain the some variations of R-tree to see how they alter the structure to prevent the disadvantages, since there are some possible optimizations.
+
+
+\textbf{$R^+$-tree}
+To avoid the above-mentioned problems of R-tree, $R^+$-tree~/cite{Sellis:rplustree} is introduce as a compromise between R-tree and K-D-B-tree. In simple words, $R^+$-tree avoids overlapping of internal nodes (rectangles) at the same level in tree. To obtain this, objects will be inserted in more than one leaf if necessary. These are differences between R-tree and $R^+$-tree. Figure~\ref{r+tree} shows an example of an $R^+$-tree together with its corresponding planer representation.
+
+%It has just some difference:
+%Nodes of an R+-tree are not guaranteed to be at least half filled.
+% The entries of any intermediate (internal) node do not overlap.
+% An object identifier may be stored in more than one leaf node.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{r+tree}
+\caption{An {$R^+$-tree} example}
+\label{r+tree}
+\end{figure}
+
+With the changes made in structure, {$R^+$-tree} is at some advantages. Point query performance benefits from abscence of overlappings and instead of several paths, a single path is traversed and consequently fewer nodes are visited in queries. On the other hand, there are some disadvantages. 
+%The duplication of the objects avoids overlapping and consequently leads to less path traversals in point queries. 
+%On the other hand there is some disadvantages: 
+{$R^+$-tree} might be bigger than R-Tree as a result of duplicated rectangle. Additionally, construction and maintenance are more complex.  
+According to Günther~\cite{efficientstruct} there is another problem in {$R^+$-tree} algorithm which could happen in some insertions. The problematic case happens when the covering rectangles do not do not allow each other from expanding to include the inserted object. It means there are some spaces, called \textit{dead spaces}, in the current structure that cannot be covered. If a new object places in those regions, it cannot be fully covered. To cover the uncovered areas, one or more rectangles have to be split and this leads in split of some children as well. This case may degrade the storage efficiency. However, Chin et al~\cite{survey} states that in general {$R^+$-tree} perform better for smaller objects and slightly worse off for larger objects.
+%In performance study, in the comparison between R-trees and R+-trees, it is found that the R+-tree requires much more splits, especially for large data objects, but lesser splits for smaller data objects. 
+
+\textbf{The Cell Tree}
+To avoid the overlapping problem of R-tree and \textit{dead spaces} in $R^+$-tree, the cell tree~\cite{celltree} was introduced. The partitions in the cell tree may be convex polyhedral as bounding polygons, instead of rectangles, such that the partitions do not overlap (see Figure~\ref{figcelltree}). Since some spatial object are shaped irregularly, to better approximate them a convex polyhedral is composed of a set of polyhedral. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{CellTree}
+\caption{An Example of a cell tree}
+\label{figcelltree}
+\end{figure}
+
+Similar to $R^+$-tree, objects may be stored in more than one leaf if necessary. This could lead to division of new objects in order to place them in bounding polygons that do not overlap. This will be more serious in populated DBs. The solutions proposed to evercome this problem by Chin et al~\cite{survey}, improves storage efficieny, but does not give significant query performance. 
+
+\textbf{$R^*$-tree}
+In order to improve achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization with trying following criteria, as Manolopoulos et al~\cite{Manolopoulos:2005} explains,
+\begin{itemize}
+\item Minimizing the covered area by MBRs to minimize the dead spaces which leads to fewer paths to be traversed in queries. 
+\item Minimizing the MBRs overlap to reduce the paths followed by queries.
+\item minimizing the MBR margins to shape squarish/quadratic rectangles which improve the performance of queries with large quadratic shapes.
+\item Maximizing of storage utilization. 
+\end{itemize}
+
+To find the best combination of the criteria, it is necessary to implement an approch, since the criteria can conflict sometimes. The optimizations is obtained with revised node split and also forced reinsertion which finds a better place for a node than its original place. This revised structure result in the following performance improvements,
+\begin{itemize}
+\item More rectangular pages produced by the revised split algorithm are better for many applications.
+\item Performance optimization is gained through the reinsertion method, however increases the complication.
+\end{itemize}
+As Beckmann et al~\cite{rstartree} states, the efficiency of $R^*$-tree is generally better than R-tree and other variants and with the expensive insertion, $R^*$-tree is an improved approach. The major reason for effectiveness and attractiveness of $R^*$-tree compared to R-tree, is its slightly higher implementation cost, while revised insertion and split algorithm give better performance.
+% $R^*$-tree is found to be more efficient than some other variants,
+%and R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. 
+%In general, $R^*$-tree is an improvement over the R-tree at the expense of more expensive insertion.
+
+%This structure tries to reduce overlaps between directory rectangles and the area covered by a rectangle, in order to make better performance, since minimum overlaps leads to less number of branches to be traversed in queries and minimum coverage helps to decide on the paths to traverse on higher levels. 
+%R*-Tree does these optimizations with revised node split and also forced insertion which finds a better place for a node that its original place. In R-Tree insertion-build structure is highly suboptimal and insertion and deletion could improves the R-Tree dramatically.
+%(Using the idea of reinsertion of the R-tree, Beckmann et al proposed a reinsertion algorithm when a node overflows. The reinsertion sorts the entries in decreasing order of the distance between the centroids of the rectangle and the covering rectangle and reinserts the first p (variable for tuning) entries. In some cases, the entries are reinserted back into the same node and hence a split is eventually necessary. The reinsertion will no doubt increase the storage utilization; but it can be fairly expensive when the tree is large. 
+%The R*-tree is found to be more efficient than some other variants, and the R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. In general, the R*-tree is an improvement over the R-tree at the expense of more expensive insertion.)
 
 %\textbf{The Buddy Tree.}
 %(In comparison to previously proposed tree structures such as the K-D-B-tree, the buddy-tree guarantees a more efficient dynamic behavior.Moreover, indirect splits which cause low storage utilization and high insertion costs in the K-D-B-tree, are completely avoided. This structure is 
@@ -388,36 +471,27 @@ R*-Tree does these optimizations with revised node split and also forced inserti
 %performance is basicly independent of the sequence of
 %insertions efficient behavior for insertions and deletions very high fan out of the directory nodes)
 
-\textbf{The Packed R-Tree.}
-In order to minimize storage space, coverages and overlaps in R-Tree, constructing a static tree is proposed. To make this tree, first the objects are ordered along a coordinate. The object with the minimum value then is chosen to find the M nearest objects to that one, and assigns them to a node. Here M is the maximum number of objects that are allowed in a page. This step is repeated until the whole objects are assigned to a node. The bounding box of the leaf nodes are higher level objects. These are also ordered and assigned to the nodes. The process repeats until the number of the remained nodes is less than M. If so, they are assigned to the root. The main objective of the algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
+\textbf{The Packed R-Tree}
+In order to minimize storage space, coverages and overlaps in R-Tree, statically constructed R-tree is proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, called Packed R-tree. To build this tree, first the objects are ordered along one coordinate, e.g.$X$. The object with the minimum value of the coordinate, then is chosen to find the \textit{M nearest objects} to that one and assign them to it. Here, $M$ is the maximum number of objects that are allowed in a page. This step is repeated until the whole objects are assigned to a node. The bounding box of the leaf nodes are higher level objects which are ordered and assigned to the nodes as well. The process repeats until the remaining nodes can be placed in a page and at the end those nodes are assigned to the root. 
+To achieve the best minimization of covering rectangles, 
+%The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 
-\textbf{R+-Tree}
-This structure is a compromise between the R-tree and the K-D-B-tree, to solve the overlapping problem of covering rectangles. It has just some difference:
-Nodes of an R+-tree are not guaranteed to be at least half filled.
- The entries of any intermediate (internal) node do not overlap.
- An object identifier may be stored in more than one leaf node.
 
-The duplication of the objects in the tree avoids overlapping and consequently leads to less path traversals in point queries. 
-On the other hand there is some disadvantages: it might be bigger that R-Tree as a result of duplications, and the construction and maintenance are more complex that R-Tree or other variants. 
-Also, in insertion cases into the tree a case would happen that the covering rectangles of some entries can prevent each other from expanding to include the new object. In other words, some space ("dead space") within the current node cannot be covered by any of the covering rectangles of the entries in the node. If the new object occupies such a region, it cannot be fully covered by the entries. When a new object cannot be fully covered, one or more of the covering rectangles are split. This means that the split may cause the children of the entries to be split as well, which may further degrade the storage efficiency.
-In performance study, in the comparison between R-trees and R+-trees, it is found that the R+-tree requires much more splits, especially for large data objects, but lesser splits for smaller data objects. 
-In general, the query efficiency tests show that R+-trees perform better for smaller objects and slightly worse off for larger objects.
+\textbf{STR-tree}
+Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. Dynamically building an R-tree may not give always the best stucture, in addition to high load time and sunptimal space utilization. Therefore, static creation in cases which data do not change frequently is at an advantage. STR approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt(r/n)$ vertical slices such that he number of rectangles in each tile is $\sqrt(r/n)$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted bt $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
+As stated in \cite{strtree} this structure, as well as the other packing structures such as \textit{Nearest-X} and \textit{Hilbert Sort}, improves the space utilization and query performance. 
 
-\textbf{STR-tree~\cite{strtree}.}
+\textbf{X-tree}
+X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to support high-dimensional data processing and focuses on prevention of MBRs overlaps. In this structure, if the split leads to large overlap, ...
+\subsubsection{Space Filling Index structures}
+\label{quad-tree-based}
+Among this category of structures, here we explain briefly Quad-tree~\cite{quadtree} as the one describing hierarchial spatial data structure whichis based on theprinciple of recursive decomposition, like some of the forementioned structures. The goal of this design was to design a structure in main memory and only for two-dimensional data. The common structure, called \textit{region Quad-tree} is based on the subdivision into four equal-size quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitraty shape. The leaf nodes represent the corresponding data contained in a region. 
+Other variants of Quad-tree have been introduced to avoid the existing problems and aim at different goals, such as Quad-CIF-tree, PR Quad-tree, MX Quad-tree, and MX-CIF Quad-tree. However, they all satisfy common properties. 
+However Quad-tree benefits the simple implementation and good performance for two-dimensional data, if the tree is balanced, in high- dimensional spaces is not useful. Also, the performance is not alway good since it is not usually balanced and main memory maintenance of the structure is tricky duo to poor IO performance. 
+%It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
 
-\textbf{Cell-tree~\cite{celltree}.}
-The cell tree introduces a structure to overcome the overlapping bounding rectangle problems of R-trees and the "dead space" (empty space) problems of R+-trees. Partitioning is done in a recursive way, but not necessarily with rectangles. Instead, the regions are polyhedral, as bounding polygons. Subspaces do not overlap.  
-\begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{celltree}
-\caption{cell-tree}
-\label{figcelltree}
-\end{figure}
+%\textbf{Cell Methods based on Dynamic Hashing}
 
-Like R+-Tree, objects might be represented in more than one leaf node. One problem with such an instruction which duplicates the objects is that each new object may be divided into multiple pieces in order to store them in a tree where internal node bounding polygons do not overlap. Specially in populated DBs. 
-(Each split of a node leads to a decrease in the node data space but to an increase in the number of nodes per object. To overcome the fragmentation and duplication problems, Gunther and Noltemeier proposed to store oversized objects which may greatly increase the number of object identifiers being stored in the leaf nodes in separate "oversize shelves". These oversize shelves are data nodes linked to internal nodes in the cell-tree, in one way, causing the tree to be not height-balanced. The placement of a new object in the subtree or oversize shelf requires some optimization. The oversize page shelf can be overflowed and a split on this shelf is necessary.)
-\emph{Quad-tree.}
-It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
 \newpage
 
 

@@ -241,13 +241,13 @@ To this date, numerous ideas have been introduced for geospatial functionalities
 
 \subsection{Geospatial Indexing}
 \label{s.geospatial-index}
-According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on the data manipulation and storage. Like any other type of data, a geospatial data needs to be indexed. Conventional index types are not suitable to support the spatial data, since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
+According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on the data manipulation and storage. Conventional index types are not suitable to support the spatial data since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
 As it is examined in this survey, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the spatial data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. 
 The high percentage of them has the divide and conquer algorithm~\cite{divconquer} as a basis. 
 In general, Chin et al~\cite{survey} categorized all approaches to three different abstract classes:
 \begin{itemize}
 \item Object Mapping: Given a $k$-dimensional polygon with $n$ nodes, these approaches map this shape to a $kn$-dimensional or try to look at the shape of the polygon as a single object in the original $k$-dimensional polygon.   
-\item Object Duplication: These approaches keep different instance of the object in different spaces with the same idea to take advantage of the properties of all these spaces. 
+\item Object Duplication: These approaches keep different instance of the object in different spaces with the similar representations to take advantage of the properties of all these spaces. 
 \item Object Bounding: Similar to the idea of Quad-tree and Marching cube~\cite{marchingcube} (an approach in Computer Graphics), 
 these approaches enclose the polygon as accurate as possible by dividing the space in different ways. 
 \end{itemize}
@@ -260,56 +260,75 @@ these approaches enclose the polygon as accurate as possible by dividing the spa
 \end{figure}
 
 On the other hand, the index structures are mostly based on the famous trees like Binary-tree, B-tree~\cite{btree}, and Quad-tree. 
-To see how different approaches based on the tree structres are included in these classes, spatial indexes are introduced briefly  based on three data structures Binary-tree, B-tree, and Quad-tree. We cover just a selective list since the number of these indexing methods
-is a big number. Figure~\ref{trees} visualizes the relation of a part of indexing structures over years. An arrow from the structure $A$ to $B$ means $B$ is an extension of the structure $A$. The colored ovens also shows the main categories of these
-trees. Quad-tree is represented as a subset of the space filling structures. Hashing structures are not in the focuse of this study, however they are used as a basis in the geospatial indexing of some databases. ?????????????Three following sections are a brief introduction of the tree important main categories:
+To see how different approaches based on the tree structres are included in these classes, 
+spatial indexes are introduced briefly based on these three famous data structures. We cover just a selective list since the number of these indexing methods
+is large. Figure~\ref{trees} visualizes the relation of indexing structures which were developed over years. An arrow from the structure $A$ to $B$ means $B$ is an extension of the structure $A$. The colored ovens also shows the main categories of these
+trees. In the upcoming sections, these structures are briefly explained into three main categories:
 Binary-tree based in Section~\ref{binary-tree-based}, 
 B-tree based in Section~\ref{b-tree-based}, 
 and Quad-tree based in Section~\ref{quad-tree-based}.
 
 \subsubsection{Binary-tree Based}
 \label{binary-tree-based}
-The indexes in this group are basically and conceptually derived from the binary search tree. They adopt and generalize the idea of partitioning the space, as many sophisticated indexes. Here, we shortly explain some of them.
+The indexes in this group are conceptually derived from the binary search tree. 
+They adopt and generalize the idea of partitioning the space like sophisticated indexes. 
+The KD-tree was very first indexing structure of this kind that was introduced by Bentley \cite{bently1975}. 
+It is a generalization of the binary tree structure for organizing $k$-dimensional points. As it is explained in Bentley \cite{bently1975}, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that the points are splitted at each level half in left, half in right, half below, and half above respectively. For every non-leaf node, there is a $k$-th dimension discriminator which defines the left and right subtrees. More clearly, if the discriminator is associated to the $i$-th dimension, all the $i$-th attribute of the sub-nodes in left subtrees are smaller than this node and all the right subtree nodes have the greater $i$-th attribute. 
 
-\textbf{The KD-tree}.
-This index,first introduced by Bentley \cite{bently1975}, is a generalization of the binary tree structure for organizing $k$-dimensional points. As it is explained in Bentley \cite{bently1975}, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that the points are splitted at each level half in left, half in right, half below, and half above respectively. For every non-leaf node, there is a $k$-th dimension discriminator which defines the left and right subtrees. More clearly, if the discriminator is associated to the $i$-th dimension, all the $i$-th attribute of the sub-nodes in left subtrees are smaller than this node and all the right subtree nodes have the greater $i$-th attribute. Figure~\ref{figkdtree} shows an example of a data and the corresponding KD-tree. As it can be seen, according to the discriminator in first level, $x$, all nodes in the left subtree of $A$ have smaller $x$ value and all nodes in the right subtree have greater $x$ values. In the next level, the discriinator is $y$ value and all left subtree nodes have smaller $y$ value while the right subtree nodes have greater $y$ values.
+Figure~\ref{figkdtree} shows an example of a data and the corresponding KD-tree. As it can be seen, according to the discriminator in first level, $x$, all nodes in the left subtree of $A$ have smaller $x$ value and all nodes in the right subtree have greater $x$ values. In the next level, the discriinator is $y$ value and all left subtree nodes have smaller $y$ value while the right subtree nodes have greater $y$ values, i.e. the points in half below and half above the discriminatior.
+KD-tree has been used a lot in intensive searches but some variants has been introduced to make a better performance in clustering, searching, storage efficiency,  
+and balancing. We discuss some of these invariants in the followings.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{kd-Tree}
+\includegraphics[width=0.8\textwidth]{kdtree}
 \caption{A representation of KD-tree}
 \label{figkdtree}
 \end{figure}
 
-KD-tree has been used a lot in intensive searches, but some variants has been introduced to make a better performance in clustering, searching, storage efficiency and balancing. Here is a short list,
-\begin{itemize}
-\item KDB-tree~\cite{kdbtree}: 
-To solve the problem of the main memory storage, this tree takes advantage of B-tree IO-efficiency for optimizing external memory accesses together with the balanced structure of KD-tree. KDB-tree is also a space partitioning structure such that the partitions do not overlap each other. 
-Space partitioning is similar to KD-tree. Unlike KD-tree, each divided space is not just its own node. Instead nodes are stored as pages. These partitions which stand for pages as organizational units, are organized in KD-tree structure. As shown in Figure~\ref{figkdbtree}, C, D, and E subspaces are disjoint and together they shape region A parent node.
+A complication arises when an item is deleted from KD-tree when a node from the subtree must be replaced. This complication comes from the discriminator in that level. After the deletion, either the node with the smallest value in the right subtree should be replace or the node with the biggest value in the left subtree. Non-homogeneous KD-tree~\cite{nonhomkdtree} was proposed to make the process of deletion cheaper. The major difference of this structure is that the partitioning is not always on different dimensions cyclically. 
+Instead, the dimension including more range queries are more desirable. 
+As the name suggests, the partitioning in this tree can happen in an arbitrary hyperplane, a line in 2D,  in two different balanced subplances.
+
+Another issue is the storage efficiency of the indexing.
+Since the size of indexing can grow fast to fill a huge chunk of the main memory, 
+KDB-tree~\cite{kdbtree} is proposed as an extension to solve this problem. 
+It takes advantage of the paging technique~\cite{bintreepaging} together with the balanced structure of KD-tree. 
+KDB-tree uses a space partitioning method such that the partitions do not overlap each other.
+Although this space partitioning is similar to KD-tree, more than one nodes can be stored together as pages. 
+Then, these pages are stored as nodes of KD-tree.
+KDB-tree has two basic structures: region page containing $(r, c)$ and point page containing $(p, l)$. A region page as an internal node contains a description of the bounding region $r$ enclosing its children and the reference $c$ to the children. 
+%\todo the figure is not correct.
+As shown in Figure~\ref{figkdbtree}, $C$, $D$, and $E$ subspaces are disjoint and together they shape region $A$ parent node.
+A point page as a leaf node carries the object identifiers: the point $p$ and the location $l$.
+Therefore, different pages are kept in different regions instead of the whole storage of the indexing tree. 
+It should be mentioned that there is a trade off between being height-balanced and the storage efficiency.
+Then it can happens that the storage efficiency become poorer in some cases. 
+
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{kdtree}
+\includegraphics[width=0.8\textwidth]{kdbtree}
 \caption{A representation of KDB-tree}
 \label{figkdbtree}
 \end{figure}
-KDB-tree has two basic structures: region page, consist of (region, pageID) pairs, and point page, consist of  (point, pageID) pairs. A region page as internal nodes contains the description of its subpages and a reference to those pages (see Figure~\ref{figkdbtree}) and point pages as leaf nodes only carry the object identifiers.
-Different pages are kept in different regions instead of the whole storage of the indexing tree, called the paging technique~\cite{bintreepaging}. However, this technique enables the tree to be highly balanced, the storage efficiency is poorer. 
-\item A non-homogeneous KD-tree: 
-When an item is deleted from KD-tree, a node from the subtree must be replaced. Here arises a complication that based on the discriminator in that level, let's call it $i$, either the node with the smallest $i$ in right subtree should be replace or the node with the biggest $i$ in left subtree. Non-homogeneous KD-tree~\cite{nonhomkdtree} was proposed to make the process of deletion cheaper. The major difference of this structure is that the partitioning is not always on different dimensions cyclically. Instead, the dimension with more range queries on it are more desirable. As an alternative, splitting  longer dimensions yield more cubical spaces. In general, the dimension should be chosen such that the number of data entries in partionions are approximately equal in order to minimize the splitting process.
 
-\item HB-tree: Since splitting the regions in KDB-tree results in sparse nodes at lower levels, HB-tree (holey brick B-tree)~\cite{hbtree1} as a multi-attribute index structure is proposed. HB-tree solves this prolem by allowing data spaces to be holey and consequently to be non-rectangular. It means data subspaces could be extracted from a region. To represent the holey regions, HB-tree uses KD-tree within internal nodes to organize the information about the lower levels. It might happen that a region is referenced by more than one lesf of KD-tree in internal nodes of HB-tree. In HB-tree leaf nodes are called \textit{data nodes} and internal nodes are \textit{index nodes}. Index nodes  
+Since splitting the regions in KDB-tree results in sparse nodes at lower levels, HB-tree (holey brick B-tree)~\cite{hbtree1} as a multi-attribute index structure is proposed. HB-tree solves this prolem by allowing data spaces to be holey and consequently to be non-rectangular. 
+It means the subspaces without data could be extracted from a region. To represent the holey regions, HB-tree uses KD-tree within internal nodes to organize the information about the lower levels. It might happen that a region is referenced by more than one leaf of KD-tree in internal nodes of HB-tree. In HB-tree leaf nodes are called \textit{data nodes} and internal nodes are \textit{index nodes}. 
+%Index nodes  
 %A data space can be non-rectangular and space representation in internal nodes is by KD-trees. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through KD-tree recursive partitioning. 
 As~\cite{hbtree1} states, this structure by removing the sparse nodes of the KDB-tree, gives beter search and insert performance and decent space utilization. Nevertheless, expensive deletion and splitting are and multiple references to a data node that may lead to more than one traversal of a path are trade-off.
 
-\item Matsuyama’s KD-tree:
-Since KD-trees are designed as a point access method, its variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via ading an extensive duplication strategy. In KD-tree, a data page is associated to each leaf nodes and reference to the objects totlly or partially contained in it. Those objects which overlaps multiple data spaces are duplicated in all corresponding data pages. The point is that due to duplicated storage this structure is not appropriate for large objects
+Since KD-trees are designed as a point access method, its variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In KD-tree, a data page is associated to each leaf nodes and reference to the objects totally or partially contained in it. Those objects which overlaps multiple data spaces are duplicated in all corresponding data pages. Then, the point is due to duplicated storage which means this structure is not appropriate for data with large objects.
 
-\item 4D-tree~\cite{4dtree}: In order to index two-dimensional objects, ~\cite{4dtree} maps objects into four-dimensional points in KD-tree. It means a rectangle ($x‍‍_1$, $y_1$), ($x_2$, $y_2$) is considered as a point ($x‍‍_1$, $y_1$, $x_2$, $y_2$). The discriminator is chosen repeatedly from the set ($x‍‍_1$, $y_1$, $x_2$, $y_2$). For each node, a discriminator, discriminator value and pointers to two children are stored. 
-For a region search ($qx_1$, $qx_2$, $qy_1$, $qy_2$), depending on the discriminator, the result of one of $x1 <= qx2, x2 >= qx1, y1 <= qy2, y^2 >= qy^1$ operations determines which subtree (or both) has to be searched.
+Another interesting extension of KD-tree is 4D-tree~\cite{4dtree}.
+In order to index two-dimensional objects, 4D-tree maps objects into four-dimensional points in KD-tree. It means a rectangle $(x‍‍_1, y_1)$, $(x_2, y_2)$ is considered as a point $(x‍‍_1, y_1, x_2, y_2)$. The discriminator is chosen repeatedly from the set $(x‍‍_1, y_1, x_2, y_2)$. 
+For each node, a discriminator, a discriminator value and pointers to two children are stored. 
+For a region search $(qx_1, qx_2, qy_1, qy_2)$, depending on the discriminator, the result of one of the operators,
+$$x_1 \leq qx_2, \quad x_2 \geq qx_1, \quad y_1 \leq qy_2, \quad y^2 \geq qy^1,$$ 
+determines which subtree (or both) has to be searched.
 The major problem of this approach is the high cost of its intersection search when a query region lies in a subspace that cannot not bounded tightly using the discriminator values. In such cases both subtrees have to be traversed and this will be very costly.
 
-\item SKD-tree: 
-To avoid object duplication and object mapping in KD-tree, Spatial KD-tree (SKD-tree)~\cite{skdtree} has benn developed. SKD-tree alters the kd-tree in a way that objects are indexed by their centroid and the minimum bounding box of the object is also stored in the node. This structure is suitable for non-point spatial objects. In a kd-tree the objects which are contained in more than one space, will be referenced more than once. To avoid the duplication virtual subspaces are defined which include the original subspaces. So, each object are placed in the subspace based on its centroid.
+SKD-tree: The spatial kd-Tree alters the kd-tree in a way that objects are indexed by their centroid and the minimum bounding box of the object is also stored in the node. This structure is suitable for non-point spatial objects. In a kd-tree the objects which are contained in more than one space, will be referenced more than once. To avoid the duplication virtual subspaces are defined which include the original subspaces. So, each object are placed in the subspace based on its centroid.
 With this division, we just need one more value for each subspace which shows min/max values along the dimension of the discriminator. Therefore, the structure of each node would consist of:
 Two children
 The discriminator and it's value
@@ -319,8 +338,6 @@ The maximum/minimum value of LOSON/HISON the nearest virtual line which bounds t
 During traversal a rectangular space is associated with each node and materialized  such that is tested against the query region if it intersects the region. 
 (Since the virtual boundary may sometimes bound the objects tighter than the partitioning line, the intersection search takes advantage of the existing virtual boundary to prune the search space efficiently. To further exploit the virtual boundaries, containment search which retrieves all spatial objects contained in a given query rectangle was proposed. During tree traversal, the algorithm always selects the boundaries that yield smaller search space. The direct support of containment search is useful to operators like within and contain. The search rapidly eliminates all objects that are not totally contained in the query region.)
 The Sdk-tree is memory-based, not a disk-based, data structure, thus is not suitable for very large databases.
-
-\end{itemize}
 
 %Main memory storage of the index trees are mostly a problem, since it is too big to be placed there  [survay]. Hence, the storage has to be done into disk space. Using binary search tree paging techniques [CeS82 survay] or tree organization of B-trees [BaM72 survay] to store the kd-Tree proposes new indexing structures.
 %Using properties of both kd-tree and B-tree [reference], the KDB-tree rebuilds the kd-tree to improve some inefficiencies of it.  It means benefits of the balanced kd-trees and the I/O efficiency of B-trees are together. It uses the disk space to bring the kd-tree on disk. 

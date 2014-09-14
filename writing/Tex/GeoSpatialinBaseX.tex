@@ -476,19 +476,22 @@ According to Günther~\cite{efficientstruct}, there is another problem in {$R^+$
 %In performance study, in the comparison between R-trees and R+-trees, it is found that the R+-tree requires much more splits, especially for large data objects, but lesser splits for smaller data objects. 
 
 \textbf{The Cell Tree}
-To avoid the overlapping problem of R-tree and \textit{dead spaces} in $R^+$-tree, the cell tree~\cite{celltree} was introduced. The partitions in the cell tree may be convex polyhedral as bounding polygons, instead of rectangles, such that the partitions do not overlap (see Figure~\ref{figcelltree}). Since some spatial object are shaped irregularly, to better approximate them a convex polyhedral is composed of a set of polyhedral. 
-
+To avoid the overlapping problem of R-tree and \textit{dead spaces} in $R^+$-tree, the cell tree~\cite{celltree} was introduced. The partitions in the cell tree may be convex polyhedra as bounding polygons, instead of rectangles, such that the partitions do not overlap. 
+Since some spatial object are shaped irregularly, this method gives a better apporximation of them.
+For example, the internal nodes in Figure~\ref{figcelltree} are polyons. 
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{CellTree}
 \caption{An Example of a cell tree (source~\cite{survey})}
 \label{figcelltree}
-\end{figure}
+\end{figure} 
 
-Similar to $R^+$-tree, objects may be stored in more than one leaf if necessary. This could lead to division of new objects in order to place them in bounding polygons that do not overlap. This will be more serious in populated DBs. The solutions proposed to evercome this problem by Chin et al~\cite{survey}, improves storage efficieny, but does not give significant query performance. 
+Similar to $R^+$-tree, objects may be stored in more than one leaf if necessary. This could lead to division of new objects in order to place them in bounding polygons that do not overlap. 
+As an instance, the object $b$ in Figure~\ref{figcelltree} is contained in two different leaf nodes as $b1$ and $b2$.
+This will be more serious in populated databases. The solution, which is proposed to evercome this problem by Chin et al~\cite{survey}, improves storage efficieny but does not give significant query performance. 
 
 \textbf{$R^*$-tree}
-In order to improve achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization with trying following criteria, as Manolopoulos et al~\cite{Manolopoulos:2005} explains,
+In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization with trying following criteria, as Manolopoulos et al~\cite{Manolopoulos:2005} explains,
 \begin{itemize}
 \item Minimizing the covered area by MBRs to minimize the dead spaces which leads to fewer paths to be traversed in queries. 
 \item Minimizing the MBRs overlap to reduce the paths followed by queries.
@@ -522,8 +525,8 @@ As Beckmann et al~\cite{rstartree} states, the efficiency of $R^*$-tree is gener
 %insertions efficient behavior for insertions and deletions very high fan out of the directory nodes)
 
 \textbf{The Packed R-Tree}
-In order to minimize storage space, coverages and overlaps in R-Tree, statically constructed R-tree is proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, called Packed R-tree. To build this tree, first the objects are ordered along one coordinate, e.g.$X$. The object with the minimum value of the coordinate, then is chosen to find the \textit{M nearest objects} to that one and assign them to it. Here, $M$ is the maximum number of objects that are allowed in a page. This step is repeated until the whole objects are assigned to a node. The bounding box of the leaf nodes are higher level objects which are ordered and assigned to the nodes as well. The process repeats until the remaining nodes can be placed in a page and at the end those nodes are assigned to the root. 
-To achieve the best minimization of covering rectangles, 
+In order to minimize storage space, coverages, and overlaps in R-tree, the statically constructed R-tree is proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, called Packed R-tree. To build this tree, first the objects are ordered along one coordinate, e.g. $x$. Then, the object with the minimum value of this coordinate is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also uses as the higher nodes. This step is repeated until the whole objects are assigned to a node. Also, shaping the tree is continued up to the root.
+%To achieve the best minimization of covering rectangles, 
 %The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 
 

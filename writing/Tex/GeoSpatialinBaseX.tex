@@ -387,12 +387,13 @@ As SKD-tree is memory-based, not disk-based, it is not suitable for very large d
 
 \subsubsection{B-tree based Indexing Technique}
 \label{b-tree-based}
-B-tree is used extensively in databases due to its flexibility and ability to handle a large amount of data. However, it is not designed for the data in multi-dimensional spaces and like some other classical one-dimensional index structures are not suitable for spatial searches. Frequent queries in geospatial applications, such as finding the all places within $20 km$ of a point, makes it important to find the objects according to their spatial location in a space. 
+B-tree is used extensively in databases due to its flexibility and ability to handle a large amount of data. However, it is not designed for the data in multi-dimensional spaces. Then it is not suitable for spatial searches like other classical one-dimensional index structures. Frequent queries in geospatial applications, such as finding the all places within $20 km$ of a point, make it important to find the objects according to their spatial location in a space. 
 
-\textbf{R-tree}
-R-tree~\cite{rtree} as one of the introduced spatial indexing structures, extends B-tree by adding the support of multi-dimensional data that also inherits height balance from B-tree. The structure is designed based on the idea of grouping the neighbouring objects and represent them with their minimum bounding rectangle (MBR). This idea leads to to minimize the visiting area in spatial search queries. The shapes and objects are described in leaf nodes by rectangles each containing a single object and each non-leaf node in higher levels is the smalles bounding rectangle spatially containing its children either the rectangles or objects. Since this structure is designed for disk storage, leaf nodes point to the objects in pages. The root node with at least two children, is the biggest minimum bounding rectangle which spatially contains the whole objects. Figure~\ref{rtree} represent how an R-tree is built for a spatial data set. Figure~\ref{rtreebox} illustrates the minimum bounding rectangles calculated for different levels
+R-tree~\cite{rtree} as one of the spatial indexing structures, extends B-tree by adding the support of multi-dimensional data. It also inherits the height balance from B-tree. This structure is designed based on the idea of grouping the neighbouring objects and representing them with their minimum bounding rectangle (MBR). This idea minimizes the visiting area in spatial search queries. Shapes and objects are described in leaf nodes by rectangles containing a single object. Each non-leaf node in higher levels is the smalles bounding rectangle spatially containing its children, either the rectangles or objects. The root node with at least two children, is the biggest minimum bounding rectangle which spatially contains the whole objects. Figure~\ref{rtree} represent how an R-tree is built for a spatial data set. Figure~\ref{rtreebox} illustrates the minimum bounding rectangles calculated for different levels
 % from those which contain the single objects to those containing the whole area. 
 and the corresponding R-tree is shown in Figure~\ref{rtreestruct}.
+It should be mentioned that this structure is designed for disk storage.
+Figure~\ref{rtreestruct} also shows that leaf nodes point to the data tuples on disk.
 %More clearly, the leaf nodes in R-tree are the actual shapes while
 %other nodes are minimum bounding boxes of the actual geospatial data. Here, 
 %the actual bounding boxes have the dimension of the data.
@@ -422,7 +423,9 @@ whole operations have to be done on bounding rectangles.
 Also, the order used in the element placement in B-tree
 is the set inclusion order on bounding rectangles and shapes in leaf nodes. 
 
-The challenging point about R-tree is partitioning the area with MBRs to build the tree. Since the rectangles are the areas to be investigated in spatial calculations, minimization of coverage and overlap is crucial to the performance of R-trees. Therefore, splitting should result in minimum total area of each two nodes and minimum overlapping of each two nodes. Achieving these goals or at leaste quilibrium between them are largely dependent on the splitting algorithm chosen for defining the bounding rectangles. Figure~\ref{rtreesplit} illustrates this point by two different splits. Total coverage area of the "Bad aplit" case in this sample is mach larger than the "Good split" and this will lead to unnecessary empty spaces investigation.
+Partitioning the area with MBRs is the challenging point about R-tree. 
+Since the rectangles are areas to be investigated in spatial calculations, minimizing both their coverage area and overlappings is crucial to the performance of R-tree. Therefore, splittings should result in the minimum total area of rectangles and minimum overlapping of each two rectangles. 
+Achieving these goals are largely dependent on the splitting algorithm chosen for defining the bounding rectangles. Figure~\ref{rtreesplit} illustrates this point by two different splits. Total coverage area of the "Bad aplit" case in this sample is larger than the "Good split" and this will lead to unnecessary investigation of empty spaces.
 
 \begin{figure}
 \centering
@@ -431,7 +434,14 @@ The challenging point about R-tree is partitioning the area with MBRs to build t
 \label{rtreesplit}
 \end{figure}
 
-As mentioned before, the idea of bounding rectangles helps to decide which parts of the tree have to be visited in search queryies, such as intersection, overlapping, and containment. In fact, a filtering is applied to select those rectangles which overlap the query area and then the requested spatial operation is run on them. This process continues until it reaches those rectangles containig single objects. At the end selected objects are checked against the query operation. Figure~\ref{rtreequery} illustrates how an intersection query is done on the R-tree and how the rectangles are chosen to be included in calculations. In this example, \textit{$R_2$}, \textit{$R_5$}, \textit{$R_6$}, \textit{$R_{12}$}, and \textit{$R_{14}$} are selected to be checked and the aother areas remain untouced. At the end \textit{$R_{12}$} and \textit{$R_{14}$} are selected as rectangles containing the final results.
+As mentioned before, the idea of bounding rectangles helps to decide which parts of the tree have to be visited in search queries, such as intersection, overlapping, and containment. In fact, the following steps are taken to run a query,
+\begin{enumerate}
+\item Filtering: This step selects those rectangles which overlap the query area.
+\item Spatial Operation: The requested spatial operation is applied on the selected rectangles from the previous step. 
+\item This process continues until it reaches those rectangles containig single objects. 
+\item At the end selected objects are checked against the query operation. 
+\end{enumerate}
+Figure~\ref{rtreequery} illustrates how an intersection query is done on the R-tree and how the rectangles are chosen to be included in calculations. In this example, the rectangles $R_2$, $R_5$, $R_6$, $R_{12}$, and $R_{14}$ are selected to be checked while the other areas remain untouced. At the end $R_{12}$ and $R_{14}$ are selected as rectangles containing the final results.
 
 \begin{figure}
 \centering
@@ -440,7 +450,7 @@ As mentioned before, the idea of bounding rectangles helps to decide which parts
 \label{rtreequery}
 \end{figure}
 
-R-tree benefits from the highly balanced structure and usually optimized implementation for secondary storage. Furthur, in low-dimensional spaces it gives a good perofrmance. Generally, R-tree is appropriate and common spatial index for both point and extended spatial data, however, there are disadvantages which motivates to revise the structure with more efficient variations. As Manolopoulos et al~\cite{Manolopoulos:2005} explains, there are two main reasons. First, point location queries may lead to visit and investigate multiple paths in tree which detregates performance, specially when MBRs overlappings are considerable. Second, investigating empty spaces in large rectangles which have significant overlaps and have to be investigated in range queries, deteriorates the performance. Here, we briefly explain the some variations of R-tree to see how they alter the structure to prevent the disadvantages, since there are some possible optimizations.
+R-tree benefits from the highly balanced structure and usually optimized implementation for secondary storage. Furthur, it gives a good perofrmance in low-dimensional spaces. Generally, R-tree is appropriate and common spatial index for both point and extended spatial data. However, there are disadvantages which motivate to revise the structure with more efficient variations. As Manolopoulos et al~\cite{Manolopoulos:2005} explains, there are two main reasons. First, point location queries may lead to visit and investigate multiple paths in tree which detregates performance, specially when MBRs overlappings are considerable. Second, investigating empty spaces in large rectangles which have significant overlaps and have to be investigated in range queries, deteriorates the performance. Here, we briefly explain the some variations of R-tree to see how they alter the structure to prevent the disadvantages, since there are some possible optimizations.
 
 
 \textbf{$R^+$-tree}

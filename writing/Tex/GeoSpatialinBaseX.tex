@@ -8,6 +8,7 @@
     \begin{center}\large#1\end{center}
     \vskip0.5em}%
 }
+\usepackage[graphicx]{realboxes}
 \usepackage{color}
 \definecolor{light-gray}{gray}{0.80}
 \usepackage{url}
@@ -241,7 +242,7 @@ To this date, numerous ideas have been introduced for geospatial functionalities
 
 \subsection{Geospatial Indexing}
 \label{s.geospatial-index}
-According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on the data manipulation and storage. Conventional index types are not suitable to support the spatial data since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
+According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on the data manipulation and storage. Conventional index types are not sui to support the spatial data since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
 As it is examined in this survey, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the spatial data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. 
 The high percentage of them has the divide and conquer algorithm~\cite{divconquer} as a basis. 
 In general, Chin et al~\cite{survey} categorized all approaches to three different abstract classes:
@@ -537,6 +538,35 @@ However Quad-tree benefits the simple implementation and good performance for tw
 %It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
 
 %\textbf{Cell Methods based on Dynamic Hashing}
+
+
+\newpage
+\Rotatebox{-90}{
+\begin{tabular}{|  c | c | c | c |}
+\hline
+The tree & Based on & Advantage & Disadvantage \\\hline
+KD-tree & Binary-tree & Early indexing for $k$-dimensional data & Storage inefficiency \\\hline
+Non-homogenous KD-tree & KD-tree & Optimized Deletion & - \\\hline
+KDB-tree & KD-tree & Paging Technique & Trade off between height-balanced   \\
+               &             &  Storage Efficiency & and storage efficiency   \\
+               &             & Balanced KD-tree   &                                       \\hline
+HB-tree & KD-tree & Handling sparsity & expensive deletion \\  
+             &              & Beter search and insert performance &multiple reference to same data \\
+             &               & Decent space utilization & \\\hline
+Matsuyama's KD-tree & KD-tree & Non-point data indexing & Duplicate Storage \\\hline
+4D-tree & KD-tree & Non-point object indexing & high cost of its intersection search \\
+             &              &    Avoiding object duplication &            \\\hline
+SKD-tree & KD-tree & Non-point object indexing & Memory-based \\\hline
+R-tree & B-tree & & \\\hline
+$R^+$-tree & R-tree &&\\\hline
+Cell-tree & R-tree & & \\\hline
+$R^*$-tree & R-tree & & \\\hline
+Packed R-Tree & R-tree & & \\\hline
+STR-tree & R-tree & & \\\hline
+X-tree & R-tree & & \\\hline
+Quad-tree & & &\\\hline
+\end{tabular}
+}
 
 \newpage
 

@@ -8,7 +8,7 @@
     \begin{center}\large#1\end{center}
     \vskip0.5em}%
 }
-\usepackage[graphicx]{realboxes}
+%\usepackage[graphicx]{realboxes}
 \usepackage{color}
 \definecolor{light-gray}{gray}{0.80}
 \usepackage{url}
@@ -450,11 +450,11 @@ Figure~\ref{rtreequery} illustrates how an intersection query is done on the R-t
 \label{rtreequery}
 \end{figure}
 
-R-tree benefits from the highly balanced structure and usually optimized implementation for secondary storage. Furthur, it gives a good perofrmance in low-dimensional spaces. Generally, R-tree is appropriate and common spatial index for both point and extended spatial data. However, there are disadvantages which motivate to revise the structure with more efficient variations. As Manolopoulos et al~\cite{Manolopoulos:2005} explains, there are two main reasons. First, point location queries may lead to visit and investigate multiple paths in tree which detregates performance, specially when MBRs overlappings are considerable. Second, investigating empty spaces in large rectangles which have significant overlaps and have to be investigated in range queries, deteriorates the performance. Here, we briefly explain the some variations of R-tree to see how they alter the structure to prevent the disadvantages, since there are some possible optimizations.
+R-tree benefits from the highly balanced structure and usually optimized implementation for secondary storage. Furthurmore, it gives a good perofrmance in low-dimensional spaces. Generally, R-tree is appropriate and common spatial index for both point and extended spatial data. However, there are two main disadvantages according to Manolopoulos et al~\cite{Manolopoulos:2005}, which motivate to revise the structure towards more efficient variations. First, point-location queries may lead to visit multiple paths in tree which detregates performance, specially when MBRs overlappings are considerable. Second, investigating empty spaces of large rectangles which have significant overlaps, deteriorates the performance. Here, we briefly explain some variations of R-tree to see how they alter the structure to prevent disadvantages.
 
 
-\textbf{$R^+$-tree}
-To avoid the above-mentioned problems of R-tree, $R^+$-tree~/cite{Sellis:rplustree} is introduce as a compromise between R-tree and K-D-B-tree. In simple words, $R^+$-tree avoids overlapping of internal nodes (rectangles) at the same level in tree. To obtain this, objects will be inserted in more than one leaf if necessary. These are differences between R-tree and $R^+$-tree. Figure~\ref{r+tree} shows an example of an $R^+$-tree together with its corresponding planer representation.
+\textbf{$R^+$-tree.}
+To avoid the above-mentioned disadvantages of R-tree, $R^+$-tree~/cite{Sellis:rplustree} is introduce as a compromise between R-tree and KDB-tree. In simple words, $R^+$-tree avoids overlapping of internal nodes (rectangles) at the same level in tree. To obtain this, objects will be inserted in more than one leaf if necessary. Figure~\ref{r+tree} shows an example of an $R^+$-tree together with its corresponding planer representation. As it can be seen, the node $e$ which is partially cantained in both rectangles $C$ and $B$, is referenced twice in the leaf nodes.
 
 %It has just some difference:
 %Nodes of an R+-tree are not guaranteed to be at least half filled.
@@ -472,7 +472,7 @@ With the changes made in structure, {$R^+$-tree} is at some advantages. Point qu
 %The duplication of the objects avoids overlapping and consequently leads to less path traversals in point queries. 
 %On the other hand there is some disadvantages: 
 {$R^+$-tree} might be bigger than R-Tree as a result of duplicated rectangle. Additionally, construction and maintenance are more complex. In addition, more complex deletion algorithm is another drawback of the approach of avioding overlaps.  
-According to Günther~\cite{efficientstruct} there is another problem in {$R^+$-tree} algorithm which could happen in some insertions. The problematic case happens when the covering rectangles do not do not allow each other from expanding to include the inserted object. It means there are some spaces, called \textit{dead spaces}, in the current structure that cannot be covered. If a new object places in those regions, it cannot be fully covered. To cover the uncovered areas, one or more rectangles have to be split and this leads in split of some children as well. This case may degrade the storage efficiency. However, Chin et al~\cite{survey} states that in general {$R^+$-tree} perform better for smaller objects and slightly worse off for larger objects.
+According to Günther~\cite{efficientstruct}, there is another problem in {$R^+$-tree} algorithm which could happen in some insertions. It happens when the covering rectangles do not allow each other to expand in order to include the inserted object. As a result, the so-called \textit{dead spaces} are produced in the current structure that cannot be covered. It means if a new object places in those regions, it cannot be fully covered. To cover the uncovered areas, one or more rectangles have to be split and this leads in split of some children as well. This case degrades the storage efficiency. However, Chin et al~\cite{survey} states that {$R^+$-tree} perform generally better for smaller objects and slightly worse for larger objects.
 %In performance study, in the comparison between R-trees and R+-trees, it is found that the R+-tree requires much more splits, especially for large data objects, but lesser splits for smaller data objects. 
 
 \textbf{The Cell Tree}
@@ -552,7 +552,7 @@ However Quad-tree benefits the simple implementation and good performance for tw
 
 
 \newpage
-\Rotatebox{-90}{
+%\Rotatebox{-90}{
 \begin{tabular}{|  c | c | c | c |}
 \hline
 The tree & Based on & Advantage & Disadvantage \\\hline
@@ -577,7 +577,7 @@ STR-tree & R-tree & & \\\hline
 X-tree & R-tree & & \\\hline
 Quad-tree & & &\\\hline
 \end{tabular}
-}
+%}
 
 \newpage
 

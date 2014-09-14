@@ -351,32 +351,33 @@ To represent the holey regions, HB-tree uses KD-tree within internal nodes to or
 %A data space can be non-rectangular and space representation in internal nodes is by KD-trees. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through KD-tree recursive partitioning.
 As~\cite{hbtree1} states, removing the sparse nodes of the KDB-tree, gives better search and insert performance and decent space utilization in HB-tree. Nevertheless, expensive deletion and splitting are and multiple references to a data node that may lead to more than one traversal of a path are trade-off.
 
-\textbf{Matsuyama KD-tree.} Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In order to achieve theis, a data page is associated to each leaf node such that contains pointer to the objects. Those objects that overlap several unpartiotioned spaces will be referenced in all corresponding pages. Those objects which overlaps multiple data spaces are duplicated in all corresponding data pages. As mentioned in~\cite{survey}, due to duplication this structure is not appropriate for data with large objects since redundancy will cause high overhead.
+\textbf{Matsuyama KD-tree.} Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In order to achieve this, a data page is associated to each leaf node containing pointer to the objects. Those objects that overlap several unpartiotioned spaces will be referenced in all corresponding pages. As mentioned in~\cite{survey}, this structure is not appropriate for data with large objects due to duplication.
 
-\textbf{4D-tree.} Another extension of KD-tree to make it useful for two-dimensional objects is 4D-tree~\cite{4dtree}. 4D-tree maps objects into four-dimensional points in KD-tree. It means a rectangle $(x‍‍_1, y_1)$, $(x_2, y_2)$ is considered as the point $(x‍‍_1, y_1, x_2, y_2)$. Similar to KD-tree, discriminator in each level is chosen repeatedly from the set $(x‍‍_1, y_1, x_2, y_2)$. For each node, a discriminator, a discriminator value and pointers to two children are stored. 
-For a region search $(qx_1, qx_2, qy_1, qy_2)$, depending on the discriminator, the result of one of the operators,
+\textbf{4D-tree.} Another extension of KD-tree to make it useful for two-dimensional rectangular objects, is 4D-tree~\cite{4dtree}. 4D-tree maps objects into four-dimensional points which are indexed in KD-tree. It means a rectangle $(x‍‍_1, y_1)$, $(x_2, y_2)$ is considered as the point $(x‍‍_1, y_1, x_2, y_2)$. Similar to KD-tree, discriminator in each level is chosen repeatedly from the set $(x‍‍_1, y_1, x_2, y_2)$. For each node, a discriminator, a discriminator value, and pointers to two children are stored. 
+For a region search $(qx_1, qx_2, qy_1, qy_2)$, depending on the discriminator, the result of one of the following operators,
 $$x_1 \leq qx_2, \quad x_2 \geq qx_1, \quad y_1 \leq qy_2, \quad y_2 \geq qy_1,$$ 
 determines which subtree (or both) has to be searched.
-The major problem of this approach is the high cost of its intersection search when a query region lies in a subspace that cannot not bounded tightly using the discriminator values. In such cases both subtrees have to be traversed and this will be very costly.
+The major problem of this approach is the high cost of its intersection search when the query needs propagating in both subtrees. 
 
 
-\textbf{SKD-tree.} The Spatial KD-Tree (SKD-tree)~\cite{skdtree} alters KD-tree in a way such that object duplication and object mapping is avoided. Similar to 4D-tree, it is proposed to handle non-point (non-zero sized) spatial objects. In KD-tree, extended data object may extend in more than one subspace. To avoid those objects to be divided and referenced multiple times, SKD-tree defines a subspace for each original space. These virtual spaces determine the bounding area of all objects with the centroid inside the left and right subspace respectively. The objects will be placed in subspaces based on their centroid. Therefore, for each node contains the following parts~\cite{skdtreebook},
+\textbf{SKD-tree.} The Spatial KD-Tree (SKD-tree)~\cite{skdtree} alters KD-tree such that the object duplication and object mapping is avoided. Similar to 4D-tree, it is proposed to handle non-point spatial objects. These objects may extend in more than one subspace in KD-tree. To prevent those objects to be divided and referenced multiple times, SKD-tree defines a virtual subspace for each subspace produced in KD-tree. Each virtual subspace determines the bounding area of all objects with the centroid inside the original subspaces. It means even though an object is not totally contained in the original subspace, it can be contained in the corresponding virtual subspace. More clearly, the objects will be placed in subspaces based on their centroid. Therefore, each node has the following parts necessarily~\cite{skdtreebook},
 \begin{itemize}
 \item Pointers to two children
 \item The level discriminator
 \item The level discriminator value
-\item The maximum and minimum values of the left and right subtree objects respectively, in the dimension that discriminator belongs to
+\item The maximum and minimum values of the left and right subtree objects respectively in the dimension that discriminator belongs to.
 \end{itemize}    
-As Chin et al~\cite{survey} states, the SKD-tree directory is stored in secondayr memory. Figure~\ref{figskdtree} illustrates the way that minimum and maximum boundries of each space is determined to shape a virtual subspace. In this example, for the root node which divides the space by $x_6$ value, $x_7$ value, bounding $r_3$ object, and $x_5$ value, bounding $r_8$ rectangle, are the maximum and minimum $x$ values for the left and right subspace respectively.
+As Chin et al~\cite{survey} states, the SKD-tree directory is stored in secondary memory. Figure~\ref{figskdtree} illustrates the way that minimum and maximum boundries of each space is determined to shape a virtual subspace. In this example, the discrimator for the root node is $x$ with the value of $x_6$.
+The maximum boundary of the rectangle $r_3$ is $x_7$ which defines the maximum boundary of the left virtual subspace. Correspondingly, the minimum boundary of the right subspace is $x_5$ which the right boundary of the rectangle $r_8$.
+
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth,height=0.6\textheight]{skdtree}
 \caption{An example of the SKD-tree structure (source~\cite{survey})}
 \label{figskdtree}
-\end{figure}
-During traversal a rectangular space is associated with each node and materialized  such that is tested against the query region if it intersects the region. 
-Using the virtual boundaries SKD-tree is at the advantage when virtual boundary may sometimes bound the objects tighter than the partitioning line. In such cases the intersection search cuts the search space efficiently. ?? The containment search is directly supported in this structure and is useful to operators like within and contain, since all objects not contained totally in the query region is ignored.
-Since Sdk-tree is memory-based, not a disk-based, data structure, it is not suitable for very large databases.
+\end{figure} 
+SKD-tree is at the advantage when the virtual subspace may bound the objects tighter than the partitioning line. In such cases, the intersection search cuts the search space efficiently. The containment search is directly supported in this structure and is useful to operators, like \textit{within} and \textit{contain}, since all objects, which are not contained totally in the query region, are ignored.
+As SKD-tree is memory-based, not disk-based, it is not suitable for very large databases.
 
 %Main memory storage of the index trees are mostly a problem, since it is too big to be placed there  [survay]. Hence, the storage has to be done into disk space. Using binary search tree paging techniques [CeS82 survay] or tree organization of B-trees [BaM72 survay] to store the kd-Tree proposes new indexing structures.
 %Using properties of both kd-tree and B-tree [reference], the KDB-tree rebuilds the kd-tree to improve some inefficiencies of it.  It means benefits of the balanced kd-trees and the I/O efficiency of B-trees are together. It uses the disk space to bring the kd-tree on disk. 

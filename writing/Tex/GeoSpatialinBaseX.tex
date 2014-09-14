@@ -266,16 +266,17 @@ is large. Figure~\ref{trees} visualizes the relation of indexing structures whic
 trees. In the upcoming sections, these structures are briefly explained into three main categories:
 Binary-tree based in Section~\ref{binary-tree-based}, 
 B-tree based in Section~\ref{b-tree-based}, 
-and Quad-tree based in Section~\ref{quad-tree-based}.
+and space filling index structures in Section~\ref{quad-tree-based}.
 
 \subsubsection{Binary-tree Based}
 \label{binary-tree-based}
 The indexes in this group are conceptually derived from the binary search tree. 
 They adopt and generalize the idea of partitioning the space like sophisticated indexes. 
 The KD-tree was very first indexing structure of this kind that was introduced by Bentley \cite{bently1975}. 
-It is a generalization of the binary tree structure for organizing $k$-dimensional points. As it is explained in Bentley \cite{bently1975}, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that the points are splitted at each level half in left, half in right, half below, and half above respectively. For every non-leaf node, there is a $k$-th dimension discriminator which defines the left and right subtrees. More clearly, if the discriminator is associated to the $i$-th dimension, all the $i$-th attribute of the sub-nodes in left subtrees are smaller than this node and all the right subtree nodes have the greater $i$-th attribute. 
+It is a generalization of the binary tree structure for organizing $k$-dimensional points. As it is explained in Bentley \cite{bently1975}, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that the points are splitted at each level half in left, half in right, half below, and half above respectively. Generally, for every non-leaf node, there is a $k$-th dimension discriminator which defines the left and right subtrees. More clearly, if the discriminator is associated to the $i$-th dimension, all the $i$-th attribute of the sub-nodes in left subtrees are smaller than this node and all the right subtree nodes have the greater $i$-th attribute. 
 
-Figure~\ref{figkdtree} shows an example of a data and the corresponding KD-tree. As it can be seen, according to the discriminator in first level, $x$, all nodes in the left subtree of $A$ have smaller $x$ value and all nodes in the right subtree have greater $x$ values. In the next level, the discriinator is $y$ value and all left subtree nodes have smaller $y$ value while the right subtree nodes have greater $y$ values, i.e. the points in half below and half above the discriminatior.
+Figure~\ref{figkdtree} shows a representation of a data and the corresponding KD-tree. As it can be seen, according to the discriminator $x$ in the first level, the nodes $B, C, D$ in the left subtree of $A$ have smaller $x$ value and the nodes $E, F$ in the right subtree have greater $x$ value. In the next level that the discriminator is $y$, the same happens consequently now for $y$ values. For example, the node $C$ which is in the half below $B$, has the smaller $y$ value.
+
 KD-tree has been used a lot in intensive searches but some variants has been introduced to make a better performance in clustering, searching, storage efficiency,  
 and balancing. We discuss some of these invariants in the followings.
 
@@ -286,22 +287,22 @@ and balancing. We discuss some of these invariants in the followings.
 \label{figkdtree}
 \end{figure}
 
-A complication arises when an item is deleted from KD-tree when a node from the subtree must be replaced. This complication comes from the discriminator in that level. After the deletion, either the node with the smallest value in the right subtree should be replace or the node with the biggest value in the left subtree. Non-homogeneous KD-tree~\cite{nonhomkdtree} was proposed to make the process of deletion cheaper. The major difference of this structure is that the partitioning is not always on different dimensions cyclically. 
-Instead, the dimension including more range queries are more desirable. 
-As the name suggests, the partitioning in this tree can happen in an arbitrary hyperplane, a line in 2D,  in two different balanced subplances.
 
-Another issue is the storage efficiency of the indexing.
+\textbf{Non-homogenous KD-tree.}
+A complication arises when an item is deleted from KD-tree and a node from the subtree must be replaced. This complication comes from the discriminator in that level. After the deletion, either the node with the smallest value in the right subtree should be replaced or the node with the biggest value in the left subtree. Non-homogeneous KD-tree~\cite{nonhomkdtree} was proposed to make the process of deletion cheaper. The major difference of this structure is that the partitioning is not always on different dimensions cyclically. Instead, the dimension including more range queries is selected to be the discriminator in each level. For example, the discriminator in the second level can be $x$ again instead of $y$ in two-dimensional KD-tree. 
+The partitioning in this tree can happen in an arbitrary hyperplane like a line in 2D in contrast to KD-tree that a data point is always chosen for partitioning. In this partitioning, almost balanced subplances are desired.
+ 
+\textbf{KDB-tree.} Another issue is the storage efficiency of indexing.
 Since the size of indexing can grow fast to fill a huge chunk of the main memory, 
 KDB-tree~\cite{kdbtree} is proposed as an extension to solve this problem. 
 It takes advantage of the paging technique~\cite{bintreepaging} together with the balanced structure of KD-tree. 
 KDB-tree uses a space partitioning method such that the partitions do not overlap each other.
 Although this space partitioning is similar to KD-tree, more than one nodes can be stored together as pages. 
 Then, these pages are stored as nodes of KD-tree.
-KDB-tree has two basic structures: region page containing $(r, c)$ and point page containing $(p, l)$. A region page as an internal node contains a description of the bounding region $r$ enclosing its children and the reference $c$ to the children. 
+KDB-tree has two basic structures: region and point pages. A region page as an internal node contains a description of the bounding region enclosing its children and the reference to the children. 
 %\todo the figure is not correct.
-As shown in Figure~\ref{figkdbtree}, $D$, $E$, $F$, and $G$ subspaces are disjoint and together they shape region $A$ parent node.
-A point page as a leaf node carries the object identifiers: the point $p$ and the location $l$.
-Therefore, different pages are kept in different regions instead of the whole storage of the indexing tree. 
+A point page as a leaf node carries the object identifiers. Therefore, different pages are kept in different parts of memory instead of a huge chunk. 
+As shown in Figure~\ref{figkdbtree}, $D$, $E$, $F$, and $G$ subspaces are disjoint and shape together the region $A$ as the parent node. Here, the black small points in the leaf nodes are representing the objects. Also, the hatched areas in each node is the regions which are not included the page of that node. 
 It should be mentioned that there is a trade-off between being height-balanced and the storage efficiency.
 Then, the storage efficiency can be poorer in some cases. 
 
@@ -312,26 +313,30 @@ Then, the storage efficiency can be poorer in some cases.
 \label{figkdbtree}
 \end{figure}
 
-Since splitting the regions in KDB-tree results in sparse nodes at lower levels, HB-tree (holey brick B-tree)~\cite{hbtree1} as a multi-attribute index structure is proposed to solve this prolem. HB-tree allows data spaces to be divided along more than one dimension. It permits rectagular holes inside a data space  by partitioning along pieces of several dimensions. This gives more flexibility in patitioning and serves as a solution for the cases where partitioning a region along one entire dimension forces splitting of the children subregion. Also, this structure helps to distribute the objects in subspaces more evenly when it is ot possible by cutting across one dimension. This point is illustrated in Figure~\ref{hbtree}.
+\textbf{HB-tree.} 
+Splitting the region nodes is inevitable for keeping the balance of KDB-tree during the modification processes. This splitting is done by intersecting the data space with a plane. This intersection does not cross the actual borders of the previously found subregions. Then, new subspaces would be produced. This means splitting can propagate to the children resulting in more and more sparse nodes in lower levels. HB-tree (holey brick B-tree)~\cite{hbtree1} as a multi-attribute index structure is proposed to solve this prolem. HB-tree allows data spaces to be divided along more than one dimension. 
+%It permits rectagular holes inside a data space by partitioning along pieces of several dimensions. 
+This gives more flexibility in patitioning and serves as a solution for the cases where partitioning a region along one entire dimension forces splitting of the children subregion. This structure also helps to distribute the objects in subspaces more evenly when it is not possible by cutting across one dimension. As Figure~\ref{hbtree} illustrates, partitioning along one dimension in~\ref{hbsplita} results in uneven division of data while two-dimesional split in~\ref{hbsplitb} divides the objects more evenly.
 
 \begin{figure}
 \centering
 \subfigure[Single-dimensional split of data points]{
-\includegraphics[width=0.22\textwidth,height=0.13\textheight]{hbtree1}
+\includegraphics[width=0.22\textwidth,height=0.12\textheight]{hbtree1}h
 %\caption{R-tree structure}
 \label{hbsplita}
 }
 \centering
 \subfigure[Two-dimensional split of data points]{
-\includegraphics[width=0.22\textwidth,height=0.13\textheight]{hbtree2}
+\includegraphics[width=0.22\textwidth,height=0.12\textheight]{hbtree2}
 %\caption{R-tree}
 \label{hbsplitb}
 }
-\caption{Partitioning of data space in HB-tree}
+\caption{Partitioning of data space in HB-tree (based on~\cite{tree-basedindexes})}
 \label{hbtree}
 \end{figure}
 
-To represent the holey regions, HB-tree uses KD-tree within internal nodes to organize the information about the lower levels. It means that more complex data structure is required to represent a node. In addition, it might happen that a region is referenced by more than one leaf of KD-tree in internal nodes of HB-tree (see Figure~\ref{fighbtree}). This implies that this structure is not exactly a tree. 
+To represent the holey regions, HB-tree uses KD-tree within internal nodes to organize the information about the lower levels. It means that more complex data structure is required to represent a node. In addition, it might happen that a region is referenced by more than one leaf of KD-tree in internal nodes of HB-tree, such as node $G$ in Figure~\ref{fighbtree}. Splitting along $y$ in third level results in dividing into two subtrees, one having $1/3$ and the other $2/3$ of the nodes. To achieve this, the subtree with node $x_2$ shows the splitt along $x$ in the next level and therefore duplicates $G$ in both right and left subtrees. The subtrees with root noeds $x_1$, $x_2$, $y_3$, and $y_5$ are extracted to shows $F$ and $C$ regions.
+%, since part of it is below and the other part is above $y_5$. Obviously, $F$ is in the left subtree as the lower region. Then, in the next level, partitioning along $x$ dimnesion puts $G$ in left and $F$ in right. This means, to represent the "hole"
 
 \begin{figure}
 \centering
@@ -343,19 +348,18 @@ To represent the holey regions, HB-tree uses KD-tree within internal nodes to or
 %In HB-tree leaf nodes are called \textit{data nodes} and internal nodes are \textit{index nodes}. 
 %Index nodes  
 %A data space can be non-rectangular and space representation in internal nodes is by KD-trees. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through KD-tree recursive partitioning.
-As~\cite{hbtree1} states, this structure by removing the sparse nodes of the KDB-tree, gives beter search and insert performance and decent space utilization. Nevertheless, expensive deletion and splitting are and multiple references to a data node that may lead to more than one traversal of a path are trade-off.
+As~\cite{hbtree1} states, removing the sparse nodes of the KDB-tree, gives better search and insert performance and decent space utilization in HB-tree. Nevertheless, expensive deletion and splitting are and multiple references to a data node that may lead to more than one traversal of a path are trade-off.
 
-Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In KD-tree, a data page is associated to each leaf nodes and reference to the objects totally or partially contained in it. Those objects which overlaps multiple data spaces are duplicated in all corresponding data pages. Then, the point is due to duplicated storage which means this structure is not appropriate for data with large objects.
+\textbf{Matsuyama KD-tree.} Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In order to achieve theis, a data page is associated to each leaf node such that contains pointer to the objects. Those objects that overlap several unpartiotioned spaces will be referenced in all corresponding pages. Those objects which overlaps multiple data spaces are duplicated in all corresponding data pages. As mentioned in~\cite{survey}, due to duplication this structure is not appropriate for data with large objects since redundancy will cause high overhead.
 
-Another extension of KD-tree to make it useful to index two-dimensional objects is 4D-tree~\cite{4dtree}.
-4D-tree maps objects into four-dimensional points in KD-tree. It means a rectangle $(x‍‍_1, y_1)$, $(x_2, y_2)$ is considered as a point $(x‍‍_1, y_1, x_2, y_2)$. The discriminator is chosen repeatedly from the set $(x‍‍_1, y_1, x_2, y_2)$. 
-For each node, a discriminator, a discriminator value and pointers to two children are stored. 
+\textbf{4D-tree.} Another extension of KD-tree to make it useful for two-dimensional objects is 4D-tree~\cite{4dtree}. 4D-tree maps objects into four-dimensional points in KD-tree. It means a rectangle $(x‍‍_1, y_1)$, $(x_2, y_2)$ is considered as the point $(x‍‍_1, y_1, x_2, y_2)$. Similar to KD-tree, discriminator in each level is chosen repeatedly from the set $(x‍‍_1, y_1, x_2, y_2)$. For each node, a discriminator, a discriminator value and pointers to two children are stored. 
 For a region search $(qx_1, qx_2, qy_1, qy_2)$, depending on the discriminator, the result of one of the operators,
 $$x_1 \leq qx_2, \quad x_2 \geq qx_1, \quad y_1 \leq qy_2, \quad y_2 \geq qy_1,$$ 
 determines which subtree (or both) has to be searched.
 The major problem of this approach is the high cost of its intersection search when a query region lies in a subspace that cannot not bounded tightly using the discriminator values. In such cases both subtrees have to be traversed and this will be very costly.
 
-The Spatial KD-Tree (SKD-tree)~\cite{skdtree} alters KD-tree in a way such that object duplication and object mapping is avoided. Similar to 4D-tree, it proposed to handle non-point (non-zero sized) spatial objects. In KD-tree, extended data object may extend in more than one subspace. To avoid those objects to be divided and referenced multiple times, SKD-tree defines a subspace for each original space. These virtual spaces determine the bounding area of all objects with the centroid inside the left and right subspace respectively. The objects will be placed in subspaces based on their centroid. Therefore, for each node contains the following parts~\cite{skdtreebook},
+
+\textbf{SKD-tree.} The Spatial KD-Tree (SKD-tree)~\cite{skdtree} alters KD-tree in a way such that object duplication and object mapping is avoided. Similar to 4D-tree, it is proposed to handle non-point (non-zero sized) spatial objects. In KD-tree, extended data object may extend in more than one subspace. To avoid those objects to be divided and referenced multiple times, SKD-tree defines a subspace for each original space. These virtual spaces determine the bounding area of all objects with the centroid inside the left and right subspace respectively. The objects will be placed in subspaces based on their centroid. Therefore, for each node contains the following parts~\cite{skdtreebook},
 \begin{itemize}
 \item Pointers to two children
 \item The level discriminator

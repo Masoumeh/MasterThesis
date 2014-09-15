@@ -545,11 +545,13 @@ Packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtr
 Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. Dynamically building an R-tree may not give always the best stucture, in addition to high load time and suboptimal space utilization. Therefore, static creation in cases which data do not change frequently is at an advantage as we discussed. The STR approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt(r/n)$ vertical slices such that he number of rectangles in each tile is $\sqrt(r/n)$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
 As stated in \cite{strtree}, this structure improves the space utilization and query performance as well as the other packing structures. 
 
-\subsubsection{Space Filling Index structures}
+\subsubsection{Quad-tree}
 \label{quad-tree-based}
-Among this category of structures, here we explain briefly Quad-tree~\cite{quadtree} as the one describing hierarchial spatial data structure whichis based on theprinciple of recursive decomposition, like some of the forementioned structures. The goal of this design was to design a structure in main memory and only for two-dimensional data. The common structure, called \textit{region Quad-tree} is based on the subdivision into four equal-size quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitraty shape. The leaf nodes represent the corresponding data contained in a region. 
-Other variants of Quad-tree have been introduced to avoid the existing problems and aim at different goals, such as Quad-CIF-tree, PR Quad-tree, MX Quad-tree, and MX-CIF Quad-tree. However, they all satisfy common properties. 
-However Quad-tree benefits the simple implementation and good performance for two-dimensional data, if the tree is balanced, in high- dimensional spaces is not useful. Also, the performance is not alway good since it is not usually balanced and main memory maintenance of the structure is tricky duo to poor IO performance. 
+Another general category of indexing structures is the space filling structures which is studied in Jagadish~\cite{spacefilling}.
+Among this category, we explain here Quad-tree~\cite{quadtree} briefly as the hierarchial spatial data structure. Quad-tree is based on the principle of recursive decomposition. The goal of this tree is to design a structure in main memory and often for the two-dimensional data. 
+Quad-tree is a class of tree structures in which the common structure, called \textit{region Quad-tree}, is based on the subdivision into four equal-size quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitraty shape. The leaf nodes represent the corresponding data contained in a region. 
+Other variants of Quad-tree have been introduced to optimize the convenient structure such as Quad-CIF-tree, PR Quad-tree, MX Quad-tree, and MX-CIF Quad-tree. However, most of them satisfy the common properties and benefits the simple implementation and good performance for two-dimensional data.
+It should be mentioned that the performance is not always good since it might be not balanced and main memory maintenance of the structure is tricky due to the poor IO performance. 
 %It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
 
 %\textbf{Cell Methods based on Dynamic Hashing}
@@ -564,7 +566,7 @@ KD-tree & Binary-tree & Early indexing for $k$-dimensional data & Storage ineffi
 Non-homogenous KD-tree & KD-tree & Optimized Deletion & - \\\hline
 KDB-tree & KD-tree & Paging Technique & Trade off between height-balanced   \\
                &             &  Storage Efficiency & and storage efficiency   \\
-               &             & Balanced KD-tree   &                                       \\hline
+               &             & Balanced KD-tree   &                                       \\\hline
 HB-tree & KD-tree & Handling sparsity & expensive deletion \\  
              &              & Beter search and insert performance &multiple reference to same data \\
              &               & Decent space utilization & \\\hline

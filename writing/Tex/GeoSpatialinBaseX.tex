@@ -491,20 +491,20 @@ As an instance, the object $b$ in Figure~\ref{figcelltree} is contained in two d
 This will be more serious in populated databases. The solution, which is proposed to evercome this problem by Chin et al~\cite{survey}, improves storage efficieny but does not give significant query performance. 
 
 \textbf{$R^*$-tree}
-In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization with trying following criteria, as Manolopoulos et al~\cite{Manolopoulos:2005} explains,
+In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization by trying following criteria, as Manolopoulos et al~\cite{Manolopoulos:2005} explains,
 \begin{itemize}
-\item Minimizing the covered area by MBRs to minimize the dead spaces which leads to fewer paths to be traversed in queries. 
-\item Minimizing the MBRs overlap to reduce the paths followed by queries.
-\item minimizing the MBR margins to shape squarish/quadratic rectangles which improve the performance of queries with large quadratic shapes.
+\item Minimizing the covered area by MBRs to minimize the dead spaces which leads to fewer paths needed to be traversed in queries. 
+\item Minimizing the MBRs overlappings to reduce the paths which must be followed by queries.
+\item Minimizing the MBR margins to shape squarish rectangles which improve the performance of queries with large quadratic shapes.
 \item Maximizing of storage utilization. 
 \end{itemize}
-In fact, unlike R-tree which determines the MBRs according to their area, $R^*$-tree determines them based on theier area, margins of space, and overlap with other MBRs. Additionally, \textit{Forced Reinsertion} is a key concept in this algorithm which delets and reinserts elements of a full node to prevent splits.
-To find the best combination of the criteria, it is necessary to implement an approch, since the criteria can conflict sometimes. The optimizations is obtained with revised node split and also forced reinsertion which finds a better place for a node than its original place. This revised structure result in the following performance improvements,
+In fact, unlike R-tree which determines the MBRs according to their area, $R^*$-tree determines them based on their area, margins of space, and the overlap with other MBRs. Additionally, \textit{Forced Reinsertion} is a key concept in this algorithm which deletes and reinserts elements of a full node to prevent splits.
+To find the best combination of the criteria, it is necessary to implement an optimized approch. This is important since the criteria can conflict sometimes. The optimization is obtained with revised node split and also forced reinsertion which finds a better place for a node than its original place. This revised structure results in the following performance improvements,
 \begin{itemize}
 \item More rectangular pages produced by the revised split algorithm are better for many applications.
 \item Performance optimization is gained through the reinsertion method, however increases the complication.
 \end{itemize}
-As Beckmann et al~\cite{rstartree} states, the efficiency of $R^*$-tree is generally better than R-tree and other variants and with the expensive insertion, $R^*$-tree is an improved approach. The major reason for effectiveness and attractiveness of $R^*$-tree compared to R-tree, is its slightly higher implementation cost, while revised insertion and split algorithm give better performance.
+As Beckmann et al~\cite{rstartree} states, the efficiency of $R^*$-tree is generally better than R-tree and some other variants, although it has slightly higher implementation cost than R-tree.
 % $R^*$-tree is found to be more efficient than some other variants,
 %and R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. 
 %In general, $R^*$-tree is an improvement over the R-tree at the expense of more expensive insertion.
@@ -524,25 +524,26 @@ As Beckmann et al~\cite{rstartree} states, the efficiency of $R^*$-tree is gener
 %performance is basicly independent of the sequence of
 %insertions efficient behavior for insertions and deletions very high fan out of the directory nodes)
 
-\textbf{The Packed R-Tree}
-In order to minimize storage space, coverages, and overlaps in R-tree, the statically constructed R-tree is proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, called Packed R-tree. To build this tree, first the objects are ordered along one coordinate, e.g. $x$. Then, the object with the minimum value of this coordinate is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also uses as the higher nodes. This step is repeated until the whole objects are assigned to a node. Also, shaping the tree is continued up to the root.
-%To achieve the best minimization of covering rectangles, 
-%The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
-
-
-\textbf{STR-tree}
-Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. Dynamically building an R-tree may not give always the best stucture, in addition to high load time and sunptimal space utilization. Therefore, static creation in cases which data do not change frequently is at an advantage. STR approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt(r/n)$ vertical slices such that he number of rectangles in each tile is $\sqrt(r/n)$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted bt $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
-As stated in \cite{strtree} this structure, as well as the other packing structures such as \textit{Nearest-X} and \textit{Hilbert Sort}, improves the space utilization and query performance. 
-
-\textbf{X-tree}
-X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to support high-dimensional data processing. X-tree focuses on prevention of MBRs overlaps in order to minimize the amount of paths that have to be traversed. Unlike $R^+$-tree, this approach does not split a data region. Instead, follows more complex algorithm by analyzing the size of overlap occured for each split. Then, decides on choosing the minimum overlap or creating a new kind of node, called \textit{supernode}. \textit{Supernode} refers to internal nodes which containing more data values and pointers than maxmimum capacity of normal nodes (see Figure~\ref{figxtree}). This will help to decrease the tree levels and consequently improve search queries efficiency.
+\textbf{X-tree.}
+X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to support the high-dimensional data processing. X-tree focuses on the prevention of MBRs overlappings in order to minimize the amount of paths that have to be traversed. Unlike $R^+$-tree, this approach does not split a data region. Instead, follows more complex algorithm by analyzing the size of overlap occured for each split. Then, decides on choosing the minimum overlapping or creating a new kind of node, called \textit{supernode}. \textit{Supernode} refers to internal nodes containing more data values and pointers than maxmimum capacity of normal nodes. Figure~\ref{figxtree} shows the supernodes in gray which are extended to contain six node links instead of three in normal nodes. This will help to decrease the tree levels and consequently improve search queries efficiency.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{xtree}
-\caption{Structure of the X-tree}
+\caption{Structure of the X-tree (source:~\cite{xtree})}
 \label{figxtree}
 \end{figure}
+
+
+\textbf{R-tree with packing algorithms.}
+Suppose all the required data is available or at least does not change frequently when the tree is going to be built.
+In these cases, a postprocessing step, called the packing algorithm, minimizes the storage space, coverages, and overlaps in R-tree.
+Packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-tree which has this preprocessing step. To build this tree, the objects are ordered along one coordinate first, e.g. $x$. Then, the object with the minimum value of this coordinate is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also uses as the higher nodes. This step is repeated until the whole objects are assigned to a node. Also, shaping the tree is continued up to the root.
+%To achieve the best minimization of covering rectangles, 
+%The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
+
+Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. Dynamically building an R-tree may not give always the best stucture, in addition to high load time and suboptimal space utilization. Therefore, static creation in cases which data do not change frequently is at an advantage as we discussed. The STR approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt(r/n)$ vertical slices such that he number of rectangles in each tile is $\sqrt(r/n)$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
+As stated in \cite{strtree}, this structure improves the space utilization and query performance as well as the other packing structures. 
 
 \subsubsection{Space Filling Index structures}
 \label{quad-tree-based}

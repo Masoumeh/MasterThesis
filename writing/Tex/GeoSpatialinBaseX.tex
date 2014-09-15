@@ -10,6 +10,7 @@
 }
 %\usepackage[graphicx]{realboxes}
 \usepackage{color}
+\usepackage{rotating}
 \definecolor{light-gray}{gray}{0.80}
 \usepackage{url}
 \usepackage{listings}
@@ -556,9 +557,11 @@ It should be mentioned that the performance is not always good since it might be
 
 %\textbf{Cell Methods based on Dynamic Hashing}
 
-
+\subsection{Summary}
+Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirement. Based on the application, each structure has pros and cons. The catogories that we presented and Among the for   
 \newpage
-%\Rotatebox{-90}{
+%\Rotatebox{-90}
+\begin{turn}{270}
 \begin{tabular}{|  c | c | c | c |}
 \hline
 The tree & Based on & Advantage & Disadvantage \\\hline
@@ -574,14 +577,14 @@ Matsuyama's KD-tree & KD-tree & Non-point data indexing & Duplicate Storage \\\h
 4D-tree & KD-tree & Non-point object indexing & high cost of its intersection search \\
              &              &    Avoiding object duplication &            \\\hline
 SKD-tree & KD-tree & Non-point object indexing & Memory-based \\\hline
-R-tree & B-tree & & \\\hline
-$R^+$-tree & R-tree &&\\\hline
-Cell-tree & R-tree & & \\\hline
-$R^*$-tree & R-tree & & \\\hline
-Packed R-Tree & R-tree & & \\\hline
-STR-tree & R-tree & & \\\hline
-X-tree & R-tree & & \\\hline
-Quad-tree & & &\\\hline
+R-tree & B-tree & Highly balanced point and non-point objects indexing & Large covered area and overlappings by MBRs, Multiple path traversal in point queries\\\hline
+$R^+$-tree & R-tree & No overlappings of MBRs, No multiple path traversal & Rectangle duplication, Bigger and complicated structure, Complex deletion process, Dead spaces\\\hline
+Cell-tree & R-tree & No overlappings and dead spaces & Object duplication\\\hline
+$R^*$-tree & R-tree & Minimizing the coverage area, overlappings, and margin of MBRs, Minimizing the storage utilization & Silghtly more cost\\\hline
+Packed R-Tree & R-tree & Storage and performance efficiency & Poor performance in frequent modification of data\\\hline
+STR-tree & R-tree & Storage and performance efficiency & Poor performance in frequent modification of data\\\hline
+X-tree & R-tree & No overlappings of MBRs & Good performance\\\hline
+Quad-tree & Space filing structures & & Poor performance in high-dimensional data\\\hline
 \end{tabular}
 %}
 

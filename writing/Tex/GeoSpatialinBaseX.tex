@@ -8,7 +8,7 @@
     \begin{center}\large#1\end{center}
     \vskip0.5em}%
 }
-%\usepackage[graphicx]{realboxes}
+\usepackage[graphicx]{realboxes}
 \usepackage{color}
 \usepackage{rotating}
 \definecolor{light-gray}{gray}{0.80}
@@ -543,28 +543,36 @@ Packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtr
 %To achieve the best minimization of covering rectangles, 
 %The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 
-Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. Dynamically building an R-tree may not give always the best stucture, in addition to high load time and suboptimal space utilization. Therefore, static creation in cases which data do not change frequently is at an advantage as we discussed. The STR approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt(r/n)$ vertical slices such that he number of rectangles in each tile is $\sqrt(r/n)$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
+Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. Dynamically building an R-tree may not give always the best stucture, in addition to high load time and suboptimal space utilization. Therefore, static creation in cases which data do not change frequently is at an advantage as we discussed. The so-called STR-tree approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt{r/n}$ vertical slices such that he number of rectangles in each tile is $\sqrt{r/n}$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
 As stated in \cite{strtree}, this structure improves the space utilization and query performance as well as the other packing structures. 
 
 \subsubsection{Quad-tree}
 \label{quad-tree-based}
 Another general category of indexing structures is the space filling structures which is studied in Jagadish~\cite{spacefilling}.
 Among this category, we explain here Quad-tree~\cite{quadtree} briefly as the hierarchial spatial data structure. Quad-tree is based on the principle of recursive decomposition. The goal of this tree is to design a structure in main memory and often for the two-dimensional data. 
-Quad-tree is a class of tree structures in which the common structure, called \textit{region Quad-tree}, is based on the subdivision into four equal-size quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitraty shape. The leaf nodes represent the corresponding data contained in a region. 
-Other variants of Quad-tree have been introduced to optimize the convenient structure such as Quad-CIF-tree, PR Quad-tree, MX Quad-tree, and MX-CIF Quad-tree. However, most of them satisfy the common properties and benefits the simple implementation and good performance for two-dimensional data.
-It should be mentioned that the performance is not always good since it might be not balanced and main memory maintenance of the structure is tricky due to the poor IO performance. 
+Quad-tree is a class of tree structures in which the common structure, called \textit{region Quad-tree}, is based on the subdivision into four equal-size quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitraty shape. The leaf nodes represent the corresponding data contained in a region. The space is divided more and more in the regions that the data is more dense. As a result, this structure is very efficient for the sparse data.
+Several variants of Quad-tree have been introduced to optimize the convenient structure such as Quad-CIF-tree~\cite{quadcif}, MX Quad-tree~\cite{quadmx}, and a combination of both MX-CIF Quad-tree. However, most of them satisfy the common properties and benefits the simple implementation and good performance for two-dimensional data.
+It should be mentioned that the performance is not always good since it might be not balanced and main memory maintenance of the structure is tricky due to the poor IO performance.  Also, as we discussed, this data structure is basically designed for the two dimensional data. Then, another similar idea should be taken for higher dimensions.
 %It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
 
 %\textbf{Cell Methods based on Dynamic Hashing}
 
 \subsection{Summary}
-Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirement. Based on the application, each structure has pros and cons. The catogories that we presented and Among the for   
+Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has pros and cons. We explained the important indexing trees which were introduced mostly in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes}. Also, we looked at the actual paper of each tree to gather the advantages and disadvantages. For sure, we did not want to have an extensive research on these indexing trees since it is not our focuse. But we want to have at least an introduction about the huge area of spatial indexing. 
+A table is illustrated in the following page which summerizes the indexing trees, which we discussed here, together with the advantages and disdvantages. 
+Among the presented trees, STR-tree is the one which we selected for our further implementation. There were several reasons:
+\begin{itemize}
+\item Many spatial databases are using this tree as the indexing basis. 
+\item Since our focus was on almost fixed given data, the indexing tree with the packing algorithms would be best choice. 
+\end{itemize}
+
+
 \newpage
 %\Rotatebox{-90}
 \begin{turn}{270}
 \begin{tabular}{|  c | c | c | c |}
 \hline
-The tree & Based on & Advantage & Disadvantage \\\hline
+\textbf{The indexing tree} & \textbf{Based on} & \textbf{Advantage} & \textbf{Disadvantage} \\\hline
 KD-tree & Binary-tree & Early indexing for $k$-dimensional data & Storage inefficiency \\\hline
 Non-homogenous KD-tree & KD-tree & Optimized Deletion & - \\\hline
 KDB-tree & KD-tree & Paging Technique & Trade off between height-balanced   \\
@@ -577,22 +585,29 @@ Matsuyama's KD-tree & KD-tree & Non-point data indexing & Duplicate Storage \\\h
 4D-tree & KD-tree & Non-point object indexing & high cost of its intersection search \\
              &              &    Avoiding object duplication &            \\\hline
 SKD-tree & KD-tree & Non-point object indexing & Memory-based \\\hline
-R-tree & B-tree & Highly balanced point and non-point objects indexing & Large covered area and overlappings by MBRs, Multiple path traversal in point queries\\\hline
-$R^+$-tree & R-tree & No overlappings of MBRs, No multiple path traversal & Rectangle duplication, Bigger and complicated structure, Complex deletion process, Dead spaces\\\hline
+R-tree & B-tree & Highly balanced point  & Large covered area  \\
+           &           &                                      & and overlappings by MBRs \\\hline
+           &          &  and non-point objects indexing    &  Multiple path traversal \\ 
+           &           &                                                      & in point queries \\\hline
+$R^+$-tree & R-tree & No overlappings of MBRs  & Rectangle duplication\\
+                     &           & No multiple path traversal  &  Bigger and complicated structure\\
+                     &           &                                            & Complex deletion process, Dead spaces\\\hline
 Cell-tree & R-tree & No overlappings and dead spaces & Object duplication\\\hline
-$R^*$-tree & R-tree & Minimizing the coverage area, overlappings, and margin of MBRs, Minimizing the storage utilization & Silghtly more cost\\\hline
-Packed R-Tree & R-tree & Storage and performance efficiency & Poor performance in frequent modification of data\\\hline
-STR-tree & R-tree & Storage and performance efficiency & Poor performance in frequent modification of data\\\hline
+$R^*$-tree & R-tree & Minimizing the coverage area, overlappings  & Silghtly more cost than R-tree\\
+                    &           &  and margin of MBRs                                     & \\
+                    &           & Minimizing the storage utilization                  &\\\hline
+Packed-tree & R-tree & Only one time-consuming preprocessing step & Poor performance \\
+               &           & Storage and performance efficiency                & in frequent modification of data\\\hline
+STR-tree & R-tree & Only one time-consuming preprocessing step & Poor performance \\
+               &           & Packed in more dimensions                            & in frequent modification of data\\\hline
 X-tree & R-tree & No overlappings of MBRs & Good performance\\\hline
-Quad-tree & Space filing structures & & Poor performance in high-dimensional data\\\hline
+Quad-tree & Space filing structures & Efficient for sparse data & Poor performance \\
+                 &                                     &                                     & in high-dimensional data\\\hline
 \end{tabular}
+\end{turn}
 %}
 
 \newpage
-
-
-
-
 
 
 
@@ -1213,7 +1228,7 @@ To enhance the geospatial query time in BaseX, we discuss an index structure. Th
 \label{figIndexinFile}
 \end{figure}
 
-Among the spatial index structures discussed in Section~\ref{geospatialindex}, JTS supports the STR-tree and Quad-tree. Davis~\cite{jts-presentation} discussed that STR-tree in contrast with Quad-tree can not be updated after the generation. However, we choose the STR-tree since it has better performance. As mentioned before, STR-tree has the basic of R-Tree with the improved performance. The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is made once when the spatial index for the database is requested and written into a file on disk. This process is illustrated in Figure~\ref{figIndexinFile}. Each time the index is requested, the file is read 
+Among the spatial index structures discussed in Section~\ref{s.geospatial-index}, JTS supports the STR-tree and Quad-tree. Davis~\cite{jts-presentation} discussed that STR-tree in contrast with Quad-tree can not be updated after the generation. However, we choose the STR-tree since it has better performance. As mentioned before, STR-tree has the basic of R-Tree with the improved performance. The index tree structure, holding the bounding boxes in inner nodes and geometries in leaves, is made once when the spatial index for the database is requested and written into a file on disk. This process is illustrated in Figure~\ref{figIndexinFile}. Each time the index is requested, the file is read 
 into main memory and it will be kept there for the future requests.
 Then, the two step filltering is executed. 
 It should be mentioned that only the following queries would benefit from this index. The definitions of these functions are provided in EXPath Geo Module specification.

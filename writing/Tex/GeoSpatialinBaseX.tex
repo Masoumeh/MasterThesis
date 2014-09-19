@@ -8,7 +8,7 @@
     \begin{center}\large#1\end{center}
     \vskip0.5em}%
 }
-\usepackage[graphicx]{realboxes}
+%\usepackage[graphicx]{realboxes}
 \usepackage{color}
 \usepackage{rotating}
 \definecolor{light-gray}{gray}{0.80}
@@ -558,9 +558,9 @@ It should be mentioned that the performance is not always good since it might be
 %\textbf{Cell Methods based on Dynamic Hashing}
 
 \subsection{Summary}
-Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has pros and cons. We explained the important indexing trees which were introduced mostly in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes}. Also, we looked at the actual paper of each tree to gather the advantages and disadvantages. For sure, we did not want to have an extensive research on these indexing trees since it is not our focuse. But we want to have at least an introduction about the huge area of spatial indexing. 
-A table is illustrated in the following page which summerizes the indexing trees, which we discussed here, together with the advantages and disdvantages. 
-Among the presented trees, STR-tree is the one which we selected for our further implementation. There were several reasons:
+Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. We explained some important indexing trees which were introduced mostly in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes}. Also, we looked at the actual paper of each tree to gather the advantages and disadvantages. For sure, we did not want to have an extensive research on these indexing trees since it is not our focuse. But we want to have at least an introduction about the huge area of spatial indexing. 
+Table~\ref{t.trees} summerizes the discussed indexing trees together with the advantages and disdvantages. 
+Among the presented trees, STR-tree is the one which we have selected for our further implementation. There were several reasons:
 \begin{itemize}
 \item Many spatial databases are using this tree as the indexing basis. 
 \item Since our focus was on almost fixed given data, the indexing tree with the packing algorithms would be best choice. 
@@ -603,6 +603,7 @@ STR-tree & R-tree & Only one time-consuming preprocessing step & Poor performanc
 X-tree & R-tree & No overlappings of MBRs & Good performance\\\hline
 Quad-tree & Space filing structures & Efficient for sparse data & Poor performance \\
                  &                                     &                                     & in high-dimensional data\\\hline
+\label{t.trees}
 \end{tabular}
 \end{turn}
 %}

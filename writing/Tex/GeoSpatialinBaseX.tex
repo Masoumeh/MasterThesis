@@ -16,6 +16,7 @@
 \usepackage{listings}
 \usepackage[tight,footnotesize]{subfigure}  
 \usepackage[top=2cm, bottom=2cm, left=4cm, right=2cm]{geometry}
+\usepackage{amsmath}
 %\begin{titlepage}
 %\begin{center}
 \title{Processing Geospatial Data in BaseX}
@@ -139,29 +140,37 @@ Section~\ref{s.future}.
 \section{Geospatial Data Processing}
 \label{s.method}
 %TODO:in tarifa bere bakhshe badi, inja chanta jomle koli begam
-According to \emph{Collins} dictionary, \emph{Geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{Geospatial Data} is the data representing any thing on the Earth's surface. Regarding the importance of the geospatial data, many standards and systems have been developed  during the years to represent and make use of this data. Different countries and organizations are using different systems and standards to represent this data and consequently there are numerous systems to fulfill a range of target requirements. The World Geodesic System (WGS) is one of the standard geospatial systems that is commonly used all around the world. WGS84 is the latest version of this standard which
+According to \emph{Collins} dictionary, the word \emph{geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{geospatial data} is the data representing any thing on the Earth's surface. Regarding the importance of the geospatial data, many standards and systems have been developed  during the years to manipukate, represent and make use of them. Different countries and organizations are using different systems and standards to represent geospatial data and consequently there are numerous systems to fulfill a range of requirements. The World Geodesic System (WGS) is one of the standard geospatial systems that is commonly used all around the world. WGS84 is the latest version of this standard which
 was introduced in $1984$ and is widely used for expressing the locations on Earth in wide range of services, including satellite services, notably Global Positioning System (GPS), and Google Maps which employ this system as a reference.
 
-In this section, we go through the existing concepts and technologies about the geospatial data processing. After some basic definitions in Section \ref{termsanddef}, the process of this data in the native databases are investigated in Section \ref{s.geo-data-in-xml-data}.
-Finally, the geospatial indexing and a set of related algorithms are introduced in Section \ref{s.geospatial-index}.
+In this section, we mainly explain some existing geospatial indexing structure as the most critical part of geospatial data processing in database systems. After some basic definitions in Section \ref{termsanddef}, general process of this data in the native databases is shortly discussed in Section \ref{s.geo-data-in-xml-data}.
+Finally, a set of geospatial indexing algorithms are introduced in Section \ref{s.geospatial-index}.
 
 \subsection{Terms and Definitions}
 \label{termsanddef}
-As defined before, Geospatial data is the locational information describing \textit{features} and locations and their characteristics which have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. Here, a \textit{feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of the phenomenon in the real world, such as geometries, attributes, and relationships. Hence, real-world entities could be expressed as a set of features.
-Geospatial data also applies to the three-dimensional data, like above and below the Earth's surface (see~\cite{powell}). Quiet often, this information is described in the multi-layer hierarchy. Geospatial objects and entities are formulated through encodings and formats developed in regards to the specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects which are defined in a coordinate system. 
+As defined before, Geospatial data is the locational information describing \textit{features} and locations as well as their characteristics which have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. Here, a \textit{feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of real world phenomenons, such as geometries, attributes, and relationships. Hence, real world entities could be expressed as a set of features.
+Geospatial data also applies to the three-dimensional data, like above and below the Earth's surface~\cite{powell}. Quiet often, this information is described in a multi-layer hierarchy. Geospatial objects and entities are formulated through different encodings and formats which are developed in regards to the specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects  defined in a specific \textit{coordinate system}. 
 %Open Geospatial Consortium (OGC)~\cite{ogc} is an international consortium, developing interface standards for geospatial content, services, data exchange, data communication, and data processing. Geospatial data is given usually by its position its coordinate.
 
-A \emph{coordinate system} as a basic concept is a method to uniquely determine the position of an object in a space of a given dimension. It uses the definitions, components, and properties to determine the coordinates which specify the linear and angular positions. Coordinate systems are defined by various organization, countries, or governments based on the geodetic data, units, projections, and some other parameters. For example, WGS coordinate system is defined to visualize the geographic data on a map or on the Earth. 
+A \emph{coordinate system} as a basic concept is a method to uniquely determine the position of an object in a space of a given dimension. Using particular definitions, components, and properties, a coordinate system determines the coordinates which specify the linear and angular position of entities. Coordinate systems are defined by various organization, countries, or governments based on some parameters which we discuss them in the followings.
+%For example, WGS coordinate system is defined to handle the geographic data on a map or on the Earth. 
 
-A country may have more than one coordinate system for its national-wide geographic data. As an instance, all three systems \textit{DHDN}\footnote{Deutsches Hauptdreiecksnetz}, \textit{ETRS89 UTM zone 32N}, and \textit{PD/83 Zone 3} are examples of Germany's coordinate systems. These are considered as local ones while there are the world coordinate system for the coordinates in the world space, like WGS system. The coordinates may differ for the same object from a system to another. As an example, the coordinates of Berlin in WGS84 coordinate system with longitude and latitude is $(52.520007, 13.404954)$ while in Germany's \textit{ETRS89 UTM zone 32N} coordinate system is $(32798809.64, 5828000.49)$. Accordingly, it is necessary to know how the coordinate systems are related in concepts and definitions to make the conversion possible. 
+A country may have more than one coordinate system for its national-wide geographic data. As an instance, all three systems \textit{DHDN}\footnote{Deutsches Hauptdreiecksnetz}, \textit{ETRS89 UTM zone 32N}, and \textit{PD/83 Zone 3} are examples of Germany's coordinate systems. These systems are considered as local or regional ones while there are the global coordinate systems to give features of the world unique coordinates and specifications, like WGS system. The coordinates of one feature or object may differ from one system to another. As an example, the coordinates of Berlin in WGS84 coordinate system with longitude and latitude is $(52.520007, 13.404954)$ while in Germany's \textit{ETRS89 UTM zone 32N} coordinate system is $(32798809.64, 5828000.49)$. Accordingly, it is necessary to know how the coordinate systems are related in concepts and definitions to make the conversion from one system to another possible. The conversion is required when we need o move data between coordinate systems.
+
+  
 In geographic information systems (GIS), coordinate systems are categorized in two major and common types:
 %http://edndoc.esri.com/arcobjects/9.2/NET/89b720a5-7339-44b0-8b58-0f5bf2843393.htm
 %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323
 %http://www.gps.caltech.edu/gislab/HowTo/ESRI%20-%20Map%20Projections.pdf
 \begin{itemize}
-\item Global or spherical coordinate system: Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Examples of geographic coordinates systems are WGS84, NAD\footnote{North American Datum} 1927, and NAD 1983. 
+\item Global or spherical coordinate system: 
 
-\item Projected coordinate system: This coordinate system represents the Earth's round surface on a 2D flat surface, based on a map projection as shown in Figure~\ref{figproject}. A projected coordinate system is always based on a geographic coordinate system on Earth. Each projections distort in some way the data on the Earth. It is important to know about the distortion of the particular projection when selecting it for the data projection. 
+Also referred as \textit{geographic coordinate system}, represents the data on the Earth in a 3D spherical surface by longitudes and latitudes. Points are referenced by their longitude and latitude values which are are angles measured often in degrees (or in grads) from the earth's center to a point on the earth's surface. Sometimes it is useful to associate Longitude and latitude values with $x$ and $y$ axis respectively. WGS84, NAD\footnote{North American Datum} 1927, and NAD 1983 are examples of geographic coordinate systems. 
+
+\item Projected coordinate system: 
+
+This coordinate system represents the Earth's round surface on a 2D flat surface, based on a map projection as shown in Figure~\ref{figproject}. In fact, a projected coordinate system is always based on a geographic coordinate system on Earth and the word "projected" referes to projection of the data on the spherical Earth to a flat space, called \textit{map projection}. Points in such system are located by $x$ and $y$ values on a grid. 
+%Each projection distorts the data in some way on the Earth. It is important to know about the distortion of a particular projection, i.e. between two specific coordinate system, when selecting it for the data projection. 
 In some references, this coordinate system is also called the raw coordinate system.
 %http://guides.scholarsportal.info/content.php?pid=242877&sid=2563323 
 %source for image: https://developer.apple.com/library/ios/documentation/userexperience/conceptual/LocationAwarenessPG/LocationAwarenessPG.pdf
@@ -174,17 +183,20 @@ In some references, this coordinate system is also called the raw coordinate sys
 \label{figproject}
 \end{figure}
 
-In order to express the data by coordinate systems, various encodings have been developed by Open Geospatial Consortium (OGC)~\cite{ogc}, while following different goals. OGC as an international consortium is the main reference to develop interface standards for geospatial content, services, data exchange, data communication, and data processing. Here we introduce only a short list of common data representation standards which are related to our study in the followings,
+To define a coordinate system, some parameters should be considered, such as the measurement framework (geographic  or planimetric), the unit of measurement (e.g. meter for projected coordinate systems and decimal degrees for geosraphical coordinate systems), and the projection definition for projected coordinate system.
+%geographic (measuring spherical coordinates from the Earth's center) or planimetric (projecting the Earth's coordinates onto a two-dimensional planar surface)
+
+In order to express the geospatial data by coordinate systems, various encodings have been developed by Open Geospatial Consortium (OGC)~\cite{ogc}, while following different goals. OGC as an international consortium is the main reference to develop interface standards for geospatial content, services, data exchange, data communication, and data processing. Here we introduce only a short list of common data representation standards which are related to our study in the followings,
 %Additionally, there are terms for representing a geospatial data which a list of them is as follows,
 \begin{itemize}
 
 %\item Geometry: A geometry is a datatype to represent a location or a region. 
 %TODO \item: encodings, baghiye subitem bashan (http://www.digitalpreservation.gov/formats/fdd/gis_fdd.shtml)
 
-\item Geography Markup Language (GML): The XML based standard encoding defined by OGC, serves as a modeling language to express geographical features in both spatial and non-spatial characteristic. It is used as an interchange format in internet data storage, exchange, transport and transaction. The key to the effectiveness of GML is its capability in integrating all forms of geographic information. %TODO:ref az wikipedia!.
+\item Geography Markup Language (GML): The XML based standard encoding defined by OGC that serves as a modeling language to express geographical features in both spatial and non-spatial characteristic. It is used as an interchange format in internet data storage, exchange, transport and transaction. The key to the effectiveness of GML is its capability in integrating all forms of geographic information. %TODO:ref az wikipedia!.
 GML versions before the version 3.0 encodes a set of 2D geometries, i.e. Point, LineString, and Polygon. GML 3.0 introduces Curve and Surface as new geometries, plus the support of geometries in 3D.
 
-\item Keyhole Markup Language (KML)~\cite{kml}: An XML-based grammar to encode and represent the geographic data in an 3D earth viewer such as Google Earth, also on a 2D map like Google Maps. KML has adopted as an international standard by OGC. The 3D geographic coordinates for each place are represented with longitude, latitude, and if available altitude. Coordinates are provided using the plain unprojected WGS84 longitude and latitude. The altitude could be omitted and assumed as $0$. KML mainly focuses on visualizations and expresses what and how to show. Code~\ref{kml} shows a sample data in KML. 
+\item Keyhole Markup Language (KML)~\cite{kml}: An XML-based grammar to encode and represent the geographic data in an 3D earth viewer such as Google Earth, also on a 2D map like Google Maps. KML has adopted as an international standard by OGC. The 3D geographic coordinates for each place are represented with longitude, latitude, and if available altitude. Coordinates are provided using the plain unprojected WGS84 longitude and latitude. The altitude could be omitted and assumed as $0$. KML mainly focuses on visualizations and expresses what and how to show the data. Code~\ref{kml} shows a sample data in KML. 
 \vspace{10px}
 \begin{fakeXML}[label=kml,caption=A simple KML example representing a Point]
 <?xml version="1.0" encoding="UTF-8"?>
@@ -201,7 +213,7 @@ GML versions before the version 3.0 encodes a set of 2D geometries, i.e. Point, 
 </kml>
 \end{fakeXML} 
 \vspace{10px}
-\item Well-known Text (WKT): A text-based markup language to represent the vector geometries which supports a big range of objects like Geometry, Point, LineString, Curve, Polygon, Surface, curvePolygon, and multi-per geometries such as MultiPoint, MultiCurve, MultiSurface. Below is examples of the WKT representaion for a Point, LineString and Polygon,
+\item Well-known Text (WKT): A text-based markup language to represent the vector geometries which supports a big range of objects like Geometry, Point, LineString, Curve, Polygon, Surface, curvePolygon, and multi-part geometries such as MultiPoint, MultiCurve, MultiSurface. Below is examples of Point, LineString, and Polygon represented in WKT, 
 \begin{itemize}
 \item Point: POINT (1 2)
 \item LineSting: LINESTRING (3 1, 1 3, 4 4)
@@ -209,25 +221,24 @@ GML versions before the version 3.0 encodes a set of 2D geometries, i.e. Point, 
 			(2 3, 3 3, 3 2, 2 3))
 \end{itemize}
 \item Well-known Binary (WKB): The binary representation of WKT data to be used in a database system.
-\item GeoJSON~\cite{www/geojson}: A geospatial data encoding based on the JavaScript Object Notation (JSON). Supported geometries are Point, LineString, Polygon, and related multi-part geometries. An object is represented by a set of name/value pairs. The whole data are encoded as text and no advanced numeric data types are employed. It is mainly used as a lightweight text for the data interchange. The default coordinate system is WGS84, however other systems could be defined. A sample point in GeoJSON is provided in Code,
+\item GeoJSON~\cite{www/geojson}: A geospatial data encoding based on the JavaScript Object Notation (JSON). An object is represented by a set of name/value pairs. The whole data are encoded as text and no advanced numeric data types are employed. It is mainly used as a lightweight text for data interchange. The default coordinate system in this standard is WGS84, however other systems could be defined. A sample point in GeoJSON is provided in Code~\ref{geojsonexa},
 \vspace{10px} 
-\begin{fakeXML}[label=wkb,caption=A simple WKB example representing a Point]
+\begin{fakeXML}[label=geojsonexa,caption=A simple GeoJSON example representing a Point]
 {
     "type": "Point", 
     "coordinates": [30, 10]
 }
 \end{fakeXML}
-\vspace{10px}
 \end{itemize}
-
+\vspace{10px}
 
 \subsection{Geospatial Data in Native XML Databases}
 \label{s.geo-data-in-xml-data}
-As a powerful platform-independent XML grammar introduced by GIS community(OGC), GML plays an important role in the spatial data modeling, integration, sharing, transmission, and exchange, because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. 
+As a powerful platform-independent XML grammar introduced by GIS community(OGC), GML plays an important role in the spatial data modeling, integration, sharing, transmission, and exchange because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering XML-based structure of GML, it could be embedded and queried anywhere in the document, mixed with any other type of XML, images, etc. 
 %TODO:In classic relational databases,... In XML native databases, geospatial data are handled ...
 
-In addition to the general functions and features on the structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML elements should be read and treated as geometries. Therefore, the string information is not enough to satisfy the geospatial features. The positions, locations, and relations between an arbitrary set of geometries raises some requirements regarding to the topics and definitions in related scientific fields like Geometry and Geoscience. For example, "What is the distance between two geometries?" or "Which geometries intersect a particular geometry?". Furthermore, there are features related to single geometries, such as the length and area of a geometry, the number of interior ring of a polygon, and the starting point of a line. These features could be provided by a database system as XQuery functions so they can be mixed with standard XQuery, full-text, and other functions.
-To this date, numerous ideas have been introduced for geospatial functionalities as well as indexing. Here we discuss the geospatial index design and then we see the sample implementations in Section~\ref{s.dbs}.
+In addition to the general functions and features on the structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML elements should be read and treated as geometries. Therefore, the string information is not enough to satisfy the geospatial features. The positions, locations, and relations between an arbitrary set of geometries raises some requirements regarding to the topics and definitions in related scientific fields like Geometry and Geoscience. For example, "What is the distance between two geometries?" or "Which geometries intersect a particular geometry?". Furthermore, there are features related to single geometries, such as the length and area of a geometry, the number of interior rings of a polygon, and the starting point of a line. These features can be provided as XQuery functions by a database system or XQuery processor and be mixed with standard XQuery, full-text, and other functions.
+To this date, numerous ideas have been introduced for geospatial functionalities as well as indexing. Here we discuss some geospatial index structures and then we see the sample implementations in Section~\ref{s.dbs}.
 %In order to investigate the related functionalities we start with the existing approaches in the indexing and the 
 
 %Indeed in a database system the features related to a set of geometries are of more importance ...................
@@ -243,14 +254,14 @@ To this date, numerous ideas have been introduced for geospatial functionalities
 
 \subsection{Geospatial Indexing}
 \label{s.geospatial-index}
-According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on the data manipulation and storage. Conventional index types are not sui to support the spatial data since the spatial data is very large and complex in structure and relations. Also, the operators used for data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not suitable is that indexing strategies would consider the spatial objects in one dimension and do not preserve the spatial proximity.
-As it is examined in this survey, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the spatial data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. 
-The high percentage of them has the divide and conquer algorithm~\cite{divconquer} as a basis. 
-In general, Chin et al~\cite{survey} categorized all approaches to three different abstract classes:
+According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on data manipulation and storage. Conventional index types are not suitable for supporting the geospatial data since it is very large and complex in structure and relations. Besides, the operators used for geospatial data retrieval are complicated and spatial orderings would be hard to define. Another point which makes the traditional indices not appropriate is that indexing strategies will consider the spatial objects in one dimension and do not preserve the spatial proximity.
+As Chin et al~\cite{survey} has examined, a large number of spatial indexes has been introduced to fulfill the geospatial specialty and improve the data retrieval. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. 
+The high percentage of these structures has the divide and conquer algorithm~\cite{divconquer} as the basis. 
+In general, Chin et al~\cite{survey} has categorized all approaches to three different abstract classes:
 \begin{itemize}
-\item Object Mapping: Given a $k$-dimensional polygon with $n$ nodes, these approaches map this shape to a $kn$-dimensional or try to look at the shape of the polygon as a single object in the original $k$-dimensional polygon.   
-\item Object Duplication: These approaches keep different instance of the object in different spaces with the similar representations to take advantage of the properties of all these spaces. 
-\item Object Bounding: Similar to the idea of Quad-tree and Marching cube~\cite{marchingcube} (an approach in Computer Graphics), 
+\item Object Mapping: Given a $k$-dimensional polygon with $n$ nodes, these approaches map this shape to a $kn$-dimensional or try to look at the shape of a polygon as a single object in the original $k$-dimensional polygon.   
+\item Object Duplication: These approaches keep different instance of an object in different spaces with the similar representations to take advantage of the properties of all these spaces. 
+\item Object Bounding: Similar to the idea of Quad-tree~\cite{quadtree} and Marching cube~\cite{marchingcube} (an approach in Computer Graphics), 
 these approaches enclose the polygon as accurate as possible by dividing the space in different ways. 
 \end{itemize}
 
@@ -261,25 +272,25 @@ these approaches enclose the polygon as accurate as possible by dividing the spa
 \label{trees}
 \end{figure}
 
-On the other hand, the index structures are mostly based on the famous trees like Binary-tree, B-tree~\cite{btree}, and Quad-tree. 
-To see how different approaches based on the tree structres are included in these classes, 
-spatial indexes are introduced briefly based on these three famous data structures. We cover just a selective list since the number of these indexing methods
-is large. Figure~\ref{trees} visualizes the relation of indexing structures which were developed over years. An arrow from the structure $A$ to $B$ means $B$ is an extension of the structure $A$. The colored ovens also shows the main categories of these
+On the other hand, the index structures are mostly based on the famous trees like Binary-tree~\cite{binarytree}, B-tree~\cite{btree}, and Quad-tree. 
+%To see how different approaches are developed based on these tree structres, 
+%spatial indexes are introduced briefly based on these three famous data structures. 
+To see how different approaches are developed based on these tree structres, here we cover just a selective list of these indexing structures since the whole number of them
+is big. Figure~\ref{trees} visualizes the relation of some indexing structures which were developed over years. An arrow from the structure $A$ to $B$ means $B$ is an extension of $A$. The colored ovens also shows the main categories of these
 trees. In the upcoming sections, these structures are briefly explained into three main categories:
 Binary-tree based in Section~\ref{binary-tree-based}, 
 B-tree based in Section~\ref{b-tree-based}, 
-and space filling index structures in Section~\ref{quad-tree-based}.
+and Quad-tree based on the space filling index structures in Section~\ref{quad-tree-based}.
 
 \subsubsection{Binary-tree Based}
 \label{binary-tree-based}
-The indexes in this group are conceptually derived from the binary search tree. 
-They adopt and generalize the idea of partitioning the space like sophisticated indexes. 
-The KD-tree was very first indexing structure of this kind that was introduced by Bentley \cite{bently1975}. 
-It is a generalization of the binary tree structure for organizing $k$-dimensional points. As it is explained in Bentley \cite{bently1975}, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that the points are splitted at each level half in left, half in right, half below, and half above respectively. Generally, for every non-leaf node, there is a $k$-th dimension discriminator which defines the left and right subtrees. More clearly, if the discriminator is associated to the $i$-th dimension, all the $i$-th attribute of the sub-nodes in left subtrees are smaller than this node and all the right subtree nodes have the greater $i$-th attribute. 
+The indexes in this group are conceptually derived from the binary search tree by adopting and generalizing the idea of partitioning the space. 
+The KD-tree was very first indexing structure of this kind introduced by Bentley~\cite{bently1975}. 
+It is a generalization of the binary tree structure for organizing $k$-dimensional points. As Bentley~\cite{bently1975} explains, the basic idea for a 2D example is to alternatively split the area by $x$- and $y$-coordinate such that at each level the points are splitted half in left, half in right and half below, half above respectively. Generally, for every non-leaf nodes in the same level, there is a $k$-th dimension discriminator which defines the dimnesion along which the areas must be split to form the left and right subtrees. The split have to result in two subspaces such that the points in left or below subspace have smaller value of the split dimension than the parent node and greater value in right or above subspaces. More clearly, if the discriminator for a node is associated to the $i$-th dimension, after splitting a space along the $i$-dimension all $i$-th attribute of the left subtrees nodes have smaller value than the $i$-th attribute of this node and all the right subtree nodes have the greater $i$-th attribute. 
 
-Figure~\ref{figkdtree} shows a representation of a data and the corresponding KD-tree. As it can be seen, according to the discriminator $x$ in the first level, the nodes $B, C, D$ in the left subtree of $A$ have smaller $x$ value and the nodes $E, F$ in the right subtree have greater $x$ value. In the next level that the discriminator is $y$, the same happens consequently now for $y$ values. For example, the node $C$ which is in the half below $B$, has the smaller $y$ value.
+Figure~\ref{figkdtree} shows the representation of a sample data and the corresponding KD-tree. As it can be seen, according to the discriminator $x$ in the first level, the nodes $B, C, D$ in the left subtree of $A$ have smaller $x$ value and the nodes $E, F$ in the right subtree have greater $x$ value. In the next level that the discriminator is $y$, the same consequently happens for $y$ values. For example, the node $C$ which is in the subspace half below $B$, has smaller $y$ value.
 
-KD-tree has been used a lot in intensive searches but some variants has been introduced to make a better performance in clustering, searching, storage efficiency,  
+The KD-tree has been used a lot in intensive searches but some variants has been introduced to make a better performance in clustering, searching, storage efficiency,  
 and balancing. We discuss some of these invariants in the followings.
 
 \begin{figure}
@@ -291,39 +302,45 @@ and balancing. We discuss some of these invariants in the followings.
 
 
 \textbf{Non-homogenous KD-tree.}
-A complication arises when an item is deleted from KD-tree and a node from the subtree must be replaced. This complication comes from the discriminator in that level. After the deletion, either the node with the smallest value in the right subtree should be replaced or the node with the biggest value in the left subtree. Non-homogeneous KD-tree~\cite{nonhomkdtree} was proposed to make the process of deletion cheaper. The major difference of this structure is that the partitioning is not always on different dimensions cyclically. Instead, the dimension including more range queries is selected to be the discriminator in each level. For example, the discriminator in the second level can be $x$ again instead of $y$ in two-dimensional KD-tree. 
+A complication arises when an item is deleted from KD-tree and a node from the subtrees must be replaced. This complication comes from the discriminator in that level. After the deletion, either the node with the smallest value in the right subtree should be replaced or the node with the biggest value in the left subtree. 
+
+Non-homogeneous KD-tree~\cite{nonhomkdtree} was proposed to make the process of deletion cheaper. The major alteration to build this structure is that the partitioning is not always on different dimensions cyclically. Instead, the dimension including more range queries is selected to be the discriminator in each level. For example, if the discriminator at the first level is $x$, at the second level it can be $x$ again instead of $y$ in a two-dimensional KD-tree. 
 The partitioning in this tree can happen in an arbitrary hyperplane like a line in 2D in contrast to KD-tree that a data point is always chosen for partitioning. In this partitioning, almost balanced subplances are desired.
  
-\textbf{KDB-tree.} Another issue is the storage efficiency of indexing.
-Since the size of indexing can grow fast to fill a huge chunk of the main memory, 
-KDB-tree~\cite{kdbtree} is proposed as an extension to solve this problem. 
-It takes advantage of the paging technique~\cite{bintreepaging} together with the balanced structure of KD-tree. 
-KDB-tree uses a space partitioning method such that the partitions do not overlap each other.
-Although this space partitioning is similar to KD-tree, more than one nodes can be stored together as pages. 
-Then, these pages are stored as nodes of KD-tree.
-KDB-tree has two basic structures: region and point pages. A region page as an internal node contains a description of the bounding region enclosing its children and the reference to the children. 
+\textbf{KDB-tree.} Another issue in the KD-tree is storage efficiency of indexing.
+Since the size of indexing can grow fast enough to fill a huge chunk of main memory, most of the index have to be stored necessarily on disk while being used.
+To make efficient use of the secondary memory, KDB-tree~\cite{kdbtree} is proposed to provide the search efficiency of a balanced KD-tree together with the optimized storage access taken from the B-tree. It partitions the areas similar to KD-tree and stores each node as a page similar to the B-tree. Pages exist in two types, 
+%as takes advantage of the paging technique~\cite{bintreepaging} together with the balanced structure of KD-tree. 
+%The KDB-tree uses a space partitioning method such that the partitions do not overlap each other. ????
+%Although this space partitioning is similar to the KD-tree, more than one nodes can be stored together as pages. ????
+%Then, these pages are stored as nodes of KD-tree.
+%The KDB-tree has two basic structures:
+region and point pages. A region page as an internal node contains a description of the bounding region enclosing its children and the reference to the children. 
 %\todo the figure is not correct.
 A point page as a leaf node carries the object identifiers. Therefore, different pages are kept in different parts of memory instead of a huge chunk. 
-As shown in Figure~\ref{figkdbtree}, $D$, $E$, $F$, and $G$ subspaces are disjoint and shape together the region $A$ as the parent node. Here, the black small points in the leaf nodes are representing the objects. Also, the hatched areas in each node is the regions which are not included the page of that node. 
-It should be mentioned that there is a trade-off between being height-balanced and the storage efficiency.
-Then, the storage efficiency can be poorer in some cases. 
+
+As a property of the KDB-tree structure, the regions in every region page are disjoint and their union is the parent region. Moreover, the union of regions in a child region page is the parent region. Similarly, all points in a point page as a child of a region are necessarily in the region.
+As shown in Figure~\ref{figkdbtree}, $D$, $E$, $F$, and $G$ subspaces are disjoint and shape together the region $A$ as the parent node. Here, the black small points in the leaf nodes are representing the points belonging to a page. Also, the hatched areas in each node is the regions which are not included the page of that node. 
+As Robinson~\cite{kdbtree} states, KDB-tree give more efficient search structure for large multi-dimensional dynamic structures with optimized storage utilization. It should be mentioned that there is a trade-off between being height-balanced and the storage efficiency. Then, the storage efficiency can be even poorer in some cases. ?????
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{kdbtree}
-\caption{A representation of KDB-tree}
+\caption{A representation of KDB-tree(created based on~\cite{kdbtree})}
 \label{figkdbtree}
 \end{figure}
 
 \textbf{HB-tree.} 
-Splitting the region nodes is inevitable for keeping the balance of KDB-tree during the modification processes. This splitting is done by intersecting the data space with a plane. This intersection does not cross the actual borders of the previously found subregions. Then, new subspaces would be produced. This means splitting can propagate to the children resulting in more and more sparse nodes in lower levels. HB-tree (holey brick B-tree)~\cite{hbtree1} as a multi-attribute index structure is proposed to solve this prolem. HB-tree allows data spaces to be divided along more than one dimension. 
+Splitting the region nodes is inevitable for keeping the balance of KDB-tree during the modification processes. This splitting is done by intersecting the data space with a plane. This intersection does not always cross the actual borders of the current subregions. Then, new subspaces would be produced. This means splitting can propagate to the children, resulting in more and more sparse nodes in lower levels. HB-tree (holey brick B-tree)~\cite{hbtree1} as a multi-attribute index structure is proposed to solve this prolem. HB-tree allows data spaces to be divided along more than one dimension that can shape rectangular regions inside that space, called holes.
 %It permits rectagular holes inside a data space by partitioning along pieces of several dimensions. 
-This gives more flexibility in patitioning and serves as a solution for the cases where partitioning a region along one entire dimension forces splitting of the children subregion. This structure also helps to distribute the objects in subspaces more evenly when it is not possible by cutting across one dimension. As Figure~\ref{hbtree} illustrates, partitioning along one dimension in~\ref{hbsplita} results in uneven division of data while two-dimesional split in~\ref{hbsplitb} divides the objects more evenly.
+This gives more flexibility in patitioning and serves as a solution for the cases where partitioning a region along one entire dimension forces splitting of the children subregion. 
+
+This structure also helps to distribute the objects in subspaces more evenly when it is not possible by cutting across one dimension. Figure~\ref{hbtree} illustrates an example at which partitioning along one dimension in~\ref{hbsplita} results in uneven division of data while two-dimesional split in~\ref{hbsplitb} divides the objects more evenly.
 
 \begin{figure}
 \centering
 \subfigure[Single-dimensional split of data points]{
-\includegraphics[width=0.22\textwidth,height=0.12\textheight]{hbtree1}h
+\includegraphics[width=0.22\textwidth,height=0.12\textheight]{hbtree1}
 %\caption{R-tree structure}
 \label{hbsplita}
 }
@@ -337,7 +354,7 @@ This gives more flexibility in patitioning and serves as a solution for the case
 \label{hbtree}
 \end{figure}
 
-To represent the holey regions, HB-tree uses KD-tree within internal nodes to organize the information about the lower levels. It means that more complex data structure is required to represent a node. In addition, it might happen that a region is referenced by more than one leaf of KD-tree in internal nodes of HB-tree, such as node $G$ in Figure~\ref{fighbtree}. Splitting along $y$ in third level results in dividing into two subtrees, one having $1/3$ and the other $2/3$ of the nodes. To achieve this, the subtree with node $x_2$ shows the splitt along $x$ in the next level and therefore duplicates $G$ in both right and left subtrees. The subtrees with root noeds $x_1$, $x_2$, $y_3$, and $y_5$ are extracted to shows $F$ and $C$ regions.
+To represent the holey regions, HB-tree uses KD-tree within internal nodes to organize the information about the lower levels. It means that more complex data structure is required to represent a node. In addition, it might happen that a region is referenced by more than one leaf of KD-tree in internal nodes of HB-tree, such as node $G$ in Figure~\ref{fighbtree}. As it can be seen in this Figure, splitting along $y$ in third level results in dividing into two subtrees, one having $1/3$ and the other $2/3$ of the nodes. To achieve this, the subtree with node $x_2$ shows the splitt along $x$ in the next level and therefore duplicates $G$ in both right and left subtrees. The subtrees with root noeds $x_1$, $x_2$, $y_3$, and $y_5$ are extracted to shows $F$ and $C$ regions.
 %, since part of it is below and the other part is above $y_5$. Obviously, $F$ is in the left subtree as the lower region. Then, in the next level, partitioning along $x$ dimnesion puts $G$ in left and $F$ in right. This means, to represent the "hole"
 
 \begin{figure}
@@ -350,26 +367,26 @@ To represent the holey regions, HB-tree uses KD-tree within internal nodes to or
 %In HB-tree leaf nodes are called \textit{data nodes} and internal nodes are \textit{index nodes}. 
 %Index nodes  
 %A data space can be non-rectangular and space representation in internal nodes is by KD-trees. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through KD-tree recursive partitioning.
-As~\cite{hbtree1} states, removing the sparse nodes of the KDB-tree, gives better search and insert performance and decent space utilization in HB-tree. Nevertheless, expensive deletion and splitting are and multiple references to a data node that may lead to more than one traversal of a path are trade-off.
+As Lomet and Salzberg~\cite{hbtree1} states, removing the sparse nodes of the KDB-tree, gives better search and insert performance and decent space utilization in HB-tree. Nevertheless, expensive deletion and splitting as a result of complex structure, and multiple references to a data node that may lead to more than one traversal of a path are trade-off.
 
-\textbf{Matsuyama KD-tree.} Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In order to achieve this, a data page is associated to each leaf node containing pointer to the objects. Those objects that overlap several unpartiotioned spaces will be referenced in all corresponding pages. As mentioned in~\cite{survey}, this structure is not appropriate for data with large objects due to duplication.
+\textbf{Matsuyama KD-tree.} Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In order to achieve this, a data page is associated to each leaf node containing pointer to the objects. The pointers refer to objects either totally or partially included in the data space. Those objects that overlap several unpartiotioned spaces will be referenced in all corresponding pages. As mentioned in~\cite{survey}, this structure is not appropriate for data with large objects due to duplication.
 
-\textbf{4D-tree.} Another extension of KD-tree to make it useful for two-dimensional rectangular objects, is 4D-tree~\cite{4dtree}. 4D-tree maps objects into four-dimensional points which are indexed in KD-tree. It means a rectangle $(x‍‍_1, y_1)$, $(x_2, y_2)$ is considered as the point $(x‍‍_1, y_1, x_2, y_2)$. Similar to KD-tree, discriminator in each level is chosen repeatedly from the set $(x‍‍_1, y_1, x_2, y_2)$. For each node, a discriminator, a discriminator value, and pointers to two children are stored. 
+\textbf{4D-tree.} Another extension of KD-tree to make it useful for two-dimensional rectangular objects, is 4D-tree~\cite{4dtree}. The 4D-tree maps objects into four-dimensional points which are indexed in KD-tree. It means a rectangle $(x‍‍_1, y_1)$, $(x_2, y_2)$ is considered as the point $(x‍‍_1, y_1, x_2, y_2)$. Similar to KD-tree, discriminator in each level is chosen repeatedly from the set $(x‍‍_1, y_1, x_2, y_2)$. For each node, a discriminator, a discriminator value, and pointers to two children are stored. 
 For a region search $(qx_1, qx_2, qy_1, qy_2)$, depending on the discriminator, the result of one of the following operators,
 $$x_1 \leq qx_2, \quad x_2 \geq qx_1, \quad y_1 \leq qy_2, \quad y_2 \geq qy_1,$$ 
 determines which subtree (or both) has to be searched.
 The major problem of this approach is the high cost of its intersection search when the query needs propagating in both subtrees. 
 
 
-\textbf{SKD-tree.} The Spatial KD-Tree (SKD-tree)~\cite{skdtree} alters KD-tree such that the object duplication and object mapping is avoided. Similar to 4D-tree, it is proposed to handle non-point spatial objects. These objects may extend in more than one subspace in KD-tree. To prevent those objects to be divided and referenced multiple times, SKD-tree defines a virtual subspace for each subspace produced in KD-tree. Each virtual subspace determines the bounding area of all objects with the centroid inside the original subspaces. It means even though an object is not totally contained in the original subspace, it can be contained in the corresponding virtual subspace. More clearly, the objects will be placed in subspaces based on their centroid. Therefore, each node has the following parts necessarily~\cite{skdtreebook},
+\textbf{SKD-tree.} The Spatial KD-Tree (SKD-tree)~\cite{skdtree} alters KD-tree such that the object duplication and object mapping is avoided. Similar to 4D-tree, it is proposed to handle non-point spatial objects since they may extend in more than one subspace in the KD-tree. To prevent those objects to be divided and referenced multiple times, the SKD-tree defines a virtual subspace for each subspace produced in KD-tree. Each virtual subspace determines the bounding area of all objects with the centroid inside the original subspaces. It means even though an object is not totally contained in the original subspace, it can be contained in the corresponding virtual subspace. More clearly, the objects will be placed in subspaces based on their centroid. Therefore, each node has the following parts necessarily~\cite{skdtreebook},
 \begin{itemize}
 \item Pointers to two children
 \item The level discriminator
 \item The level discriminator value
-\item The maximum and minimum values of the left and right subtree objects respectively in the dimension that discriminator belongs to.
+\item The maximum and minimum values of the left and right subtree objects respectively in the dimension that the level discriminator belongs to.
 \end{itemize}    
 As Chin et al~\cite{survey} states, the SKD-tree directory is stored in secondary memory. Figure~\ref{figskdtree} illustrates the way that minimum and maximum boundries of each space is determined to shape a virtual subspace. In this example, the discrimator for the root node is $x$ with the value of $x_6$.
-The maximum boundary of the rectangle $r_3$ is $x_7$ which defines the maximum boundary of the left virtual subspace. Correspondingly, the minimum boundary of the right subspace is $x_5$ which the right boundary of the rectangle $r_8$.
+The maximum boundary of the rectangle $r_3$ is $x_7$ which defines the maximum boundary of the left virtual subspace. Correspondingly, the minimum boundary of the right subspace is $x_5$ which the right boundary of rectangle $r_8$.
 
 \begin{figure}
 \centering
@@ -377,8 +394,8 @@ The maximum boundary of the rectangle $r_3$ is $x_7$ which defines the maximum b
 \caption{An example of the SKD-tree structure (source~\cite{survey})}
 \label{figskdtree}
 \end{figure} 
-SKD-tree is at the advantage when the virtual subspace may bound the objects tighter than the partitioning line. In such cases, the intersection search cuts the search space efficiently. The containment search is directly supported in this structure and is useful to operators, like \textit{within} and \textit{contain}, since all objects, which are not contained totally in the query region, are ignored.
-As SKD-tree is memory-based, not disk-based, it is not suitable for very large databases.
+The SKD-tree is at the advantage when the virtual subspace may bound the objects tighter than the partitioning line. In such cases, the intersection search cuts the search space efficiently. The containment search is directly supported in this structure and is useful to operators, like \textit{within} and \textit{contain}, since all objects, which are not contained totally in the query region, are ignored.
+As the SKD-tree is memory-based, not disk-based, it is not suitable for very large databases.
 
 %Main memory storage of the index trees are mostly a problem, since it is too big to be placed there  [survay]. Hence, the storage has to be done into disk space. Using binary search tree paging techniques [CeS82 survay] or tree organization of B-trees [BaM72 survay] to store the kd-Tree proposes new indexing structures.
 %Using properties of both kd-tree and B-tree [reference], the KDB-tree rebuilds the kd-tree to improve some inefficiencies of it.  It means benefits of the balanced kd-trees and the I/O efficiency of B-trees are together. It uses the disk space to bring the kd-tree on disk. 
@@ -390,11 +407,10 @@ As SKD-tree is memory-based, not disk-based, it is not suitable for very large d
 \label{b-tree-based}
 B-tree is used extensively in databases due to its flexibility and ability to handle a large amount of data. However, it is not designed for the data in multi-dimensional spaces. Then it is not suitable for spatial searches like other classical one-dimensional index structures. Frequent queries in geospatial applications, such as finding the all places within $20 km$ of a point, make it important to find the objects according to their spatial location in a space. 
 
-R-tree~\cite{rtree} as one of the spatial indexing structures, extends B-tree by adding the support of multi-dimensional data. It also inherits the height balance from B-tree. This structure is designed based on the idea of grouping the neighbouring objects and representing them with their minimum bounding rectangle (MBR). This idea minimizes the visiting area in spatial search queries. Shapes and objects are described in leaf nodes by rectangles containing a single object. Each non-leaf node in higher levels is the smalles bounding rectangle spatially containing its children, either the rectangles or objects. The root node with at least two children, is the biggest minimum bounding rectangle which spatially contains the whole objects. Figure~\ref{rtree} represent how an R-tree is built for a spatial data set. Figure~\ref{rtreebox} illustrates the minimum bounding rectangles calculated for different levels
+R-tree~\cite{rtree} as one of the spatial indexing structures, extends B-tree by adding the support of multi-dimensional data. It also inherits the height balance from B-tree. This structure is designed based on the idea of grouping the neighbouring objects and representing them with their minimum bounding rectangle (MBR). This idea minimizes the visiting area in spatial search queries. Shapes and objects are described in leaf nodes by rectangles containing a single object. Each non-leaf node in higher levels is the smallest bounding rectangle spatially containing its children, either the rectangles or objects. The root node with at least two children, is the biggest minimum bounding rectangle which spatially contains the whole objects. Figure~\ref{rtree} represent how an R-tree is built for a spatial data set. Figure~\ref{rtreebox} illustrates the minimum bounding rectangles calculated for different levels
 % from those which contain the single objects to those containing the whole area. 
 and the corresponding R-tree is shown in Figure~\ref{rtreestruct}.
-It should be mentioned that this structure is designed for disk storage.
-Figure~\ref{rtreestruct} also shows that leaf nodes point to the data tuples on disk.
+As this structure is designed for disk storage, the leaf nodes in Figure~\ref{rtreestruct} point to the data tuples on disk.
 %More clearly, the leaf nodes in R-tree are the actual shapes while
 %other nodes are minimum bounding boxes of the actual geospatial data. Here, 
 %the actual bounding boxes have the dimension of the data.
@@ -419,7 +435,7 @@ Figure~\ref{rtreestruct} also shows that leaf nodes point to the data tuples on 
 \end{figure}
 
 According to Chin et al~\cite{survey}, the operations on the R-tree 
-are basically the same as the operations in B-tree. The only difference is that the 
+are basically the same as in B-tree. The only difference is that the 
 whole operations have to be done on bounding rectangles.
 Also, the order used in the element placement in B-tree
 is the set inclusion order on bounding rectangles and shapes in leaf nodes. 
@@ -439,10 +455,10 @@ As mentioned before, the idea of bounding rectangles helps to decide which parts
 \begin{enumerate}
 \item Filtering: This step selects those rectangles which overlap the query area.
 \item Spatial Operation: The requested spatial operation is applied on the selected rectangles from the previous step. 
-\item This process continues until it reaches those rectangles containig single objects. 
-\item At the end selected objects are checked against the query operation. 
+\item Step $2$ continues until it reaches those rectangles containig single objects. 
+\item The selected objects are checked against the query operation. 
 \end{enumerate}
-Figure~\ref{rtreequery} illustrates how an intersection query is done on the R-tree and how the rectangles are chosen to be included in calculations. In this example, the rectangles $R_2$, $R_5$, $R_6$, $R_{12}$, and $R_{14}$ are selected to be checked while the other areas remain untouced. At the end $R_{12}$ and $R_{14}$ are selected as rectangles containing the final results.
+Figure~\ref{rtreequery} represents how an intersection query is done on the R-tree and how the rectangles are chosen to be included in calculations. In this example, the rectangles $R_2$, $R_5$, $R_6$, $R_{12}$, and $R_{14}$ are selected to be checked while the other areas remain untouced. At the end $R_{12}$ and $R_{14}$ are selected as rectangles containing the final results.
 
 \begin{figure}
 \centering
@@ -451,11 +467,11 @@ Figure~\ref{rtreequery} illustrates how an intersection query is done on the R-t
 \label{rtreequery}
 \end{figure}
 
-R-tree benefits from the highly balanced structure and usually optimized implementation for secondary storage. Furthurmore, it gives a good perofrmance in low-dimensional spaces. Generally, R-tree is appropriate and common spatial index for both point and extended spatial data. However, there are two main disadvantages according to Manolopoulos et al~\cite{Manolopoulos:2005}, which motivate to revise the structure towards more efficient variations. First, point-location queries may lead to visit multiple paths in tree which detregates performance, specially when MBRs overlappings are considerable. Second, investigating empty spaces of large rectangles which have significant overlaps, deteriorates the performance. Here, we briefly explain some variations of R-tree to see how they alter the structure to prevent disadvantages.
+The R-tree benefits from the highly balanced structure and usually optimized implementation for secondary storage. Furthurmore, it gives a good perofrmance in low-dimensional spaces. Generally, this structure is appropriate and common spatial index for both point and extended spatial data. However, there are two main disadvantages according to Manolopoulos et al~\cite{Manolopoulos:2005}, which motivate to revise the structure towards more efficient variations. First, point-location queries may lead to visit multiple paths in tree which declines performance, specially when MBRs overlappings are considerable. Second, investigating empty spaces of large rectangles which have significant overlaps, deteriorates the performance. Here, we briefly explain some variations of R-tree to see how they alter the structure to prevent the disadvantages.
 
 
-\textbf{$R^+$-tree.}
-To avoid the above-mentioned disadvantages of R-tree, $R^+$-tree~/cite{Sellis:rplustree} is introduce as a compromise between R-tree and KDB-tree. In simple words, $R^+$-tree avoids overlapping of internal nodes (rectangles) at the same level in tree. To obtain this, objects will be inserted in more than one leaf if necessary. Figure~\ref{r+tree} shows an example of an $R^+$-tree together with its corresponding planer representation. As it can be seen, the node $e$ which is partially cantained in both rectangles $C$ and $B$, is referenced twice in the leaf nodes.
+\textbf{$\boldsymbol{R^+}$-tree.}
+To avoid the above-mentioned disadvantages of R-tree, $R^+$-tree~\cite{Sellis:rplustree} is introduced as a compromise between R-tree and KDB-tree. In simple words, $R^+$-tree avoids overlapping of internal nodes (rectangles) at the same level in the tree. To obtain this, objects will be inserted in more than one leaf if necessary. Figure~\ref{r+tree} shows an example of an $R^+$-tree together with its corresponding planer representation. As it can be seen, the node $e$ which is partially cantained in both rectangles $C$ and $B$, is referenced twice in the leaf nodes.
 
 %It has just some difference:
 %Nodes of an R+-tree are not guaranteed to be at least half filled.
@@ -469,14 +485,14 @@ To avoid the above-mentioned disadvantages of R-tree, $R^+$-tree~/cite{Sellis:rp
 \label{r+tree}
 \end{figure}
 
-With the changes made in structure, {$R^+$-tree} is at some advantages. Point query performance benefits from abscence of overlappings and instead of several paths, a single path is traversed and consequently fewer nodes are visited in queries. On the other hand, there are some disadvantages. 
+With the changes made in the structure, {$R^+$-tree} is at some advantages. Point queries performance benefits from the abscence of overlappings and instead of several paths, a single path is traversed. Consequently fewer nodes are visited in point queries. On the other hand, there are some disadvantages. 
 %The duplication of the objects avoids overlapping and consequently leads to less path traversals in point queries. 
 %On the other hand there is some disadvantages: 
-{$R^+$-tree} might be bigger than R-Tree as a result of duplicated rectangle. Additionally, construction and maintenance are more complex. In addition, more complex deletion algorithm is another drawback of the approach of avioding overlaps.  
-According to Günther~\cite{efficientstruct}, there is another problem in {$R^+$-tree} algorithm which could happen in some insertions. It happens when the covering rectangles do not allow each other to expand in order to include the inserted object. As a result, the so-called \textit{dead spaces} are produced in the current structure that cannot be covered. It means if a new object places in those regions, it cannot be fully covered. To cover the uncovered areas, one or more rectangles have to be split and this leads in split of some children as well. This case degrades the storage efficiency. However, Chin et al~\cite{survey} states that {$R^+$-tree} perform generally better for smaller objects and slightly worse for larger objects.
+The {$R^+$-tree} might be bigger than the R-tree as a result of duplicated rectangle. Additionally, construction and maintenance are more complex in the {$R^+$-tree}. Furthermore, more complex deletion algorithm is another drawback of the approach of avioding overlaps.  
+According to G{\"u}nther~\cite{efficientstruct}, there is another problem in the {$R^+$-tree} algorithm which could happen in some insertions. It happens when the covering rectangles do not allow each other to expand in order to include the inserted object. As a result, the so-called \textit{dead spaces} are produced in the current structure that cannot be covered. It means if a new object places in those regions, it cannot be fully covered. To cover the uncovered areas, one or more rectangles have to be split and this leads to splitting of some children as well. This case degrades the storage efficiency. However, Chin et al~\cite{survey} states that {$R^+$-tree} perform generally better for smaller objects and slightly worse for larger objects.
 %In performance study, in the comparison between R-trees and R+-trees, it is found that the R+-tree requires much more splits, especially for large data objects, but lesser splits for smaller data objects. 
 
-\textbf{The Cell Tree}
+\textbf{The Cell Tree.}
 To avoid the overlapping problem of R-tree and \textit{dead spaces} in $R^+$-tree, the cell tree~\cite{celltree} was introduced. The partitions in the cell tree may be convex polyhedra as bounding polygons, instead of rectangles, such that the partitions do not overlap. 
 Since some spatial object are shaped irregularly, this method gives a better apporximation of them.
 For example, the internal nodes in Figure~\ref{figcelltree} are polyons. 
@@ -488,11 +504,11 @@ For example, the internal nodes in Figure~\ref{figcelltree} are polyons.
 \end{figure} 
 
 Similar to $R^+$-tree, objects may be stored in more than one leaf if necessary. This could lead to division of new objects in order to place them in bounding polygons that do not overlap. 
-As an instance, the object $b$ in Figure~\ref{figcelltree} is contained in two different leaf nodes as $b1$ and $b2$.
-This will be more serious in populated databases. The solution, which is proposed to evercome this problem by Chin et al~\cite{survey}, improves storage efficieny but does not give significant query performance. 
+As an instance, the object $b$ in Figure~\ref{figcelltree} is contained in two different leaf nodes as $b_1$ and $b_2$.
+This will be more serious in populated databases. The solution proposed by Chin et al~\cite{survey}, improves storage efficieny but does not give significant query performance. 
 
-\textbf{$R^*$-tree}
-In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization by trying following criteria, as Manolopoulos et al~\cite{Manolopoulos:2005} explains,
+\textbf{$\boldsymbol{R^*}$-tree.}
+In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization by trying the following criteria, as Manolopoulos et al~\cite{Manolopoulos:2005} explains,
 \begin{itemize}
 \item Minimizing the covered area by MBRs to minimize the dead spaces which leads to fewer paths needed to be traversed in queries. 
 \item Minimizing the MBRs overlappings to reduce the paths which must be followed by queries.
@@ -500,12 +516,12 @@ In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond 
 \item Maximizing of storage utilization. 
 \end{itemize}
 In fact, unlike R-tree which determines the MBRs according to their area, $R^*$-tree determines them based on their area, margins of space, and the overlap with other MBRs. Additionally, \textit{Forced Reinsertion} is a key concept in this algorithm which deletes and reinserts elements of a full node to prevent splits.
-To find the best combination of the criteria, it is necessary to implement an optimized approch. This is important since the criteria can conflict sometimes. The optimization is obtained with revised node split and also forced reinsertion which finds a better place for a node than its original place. This revised structure results in the following performance improvements,
+To find the best combination of the criteria, it is necessary to implement an optimized approch. This is important since the criteria can conflict sometimes. The optimization is obtained with revised node split and also forced reinsertion which finds a better place for a node than its original place. This structure results in the following performance improvements,
 \begin{itemize}
 \item More rectangular pages produced by the revised split algorithm are better for many applications.
-\item Performance optimization is gained through the reinsertion method, however increases the complication.
+\item Better performance is gained through the reinsertion method, however it increases the complication.
 \end{itemize}
-As Beckmann et al~\cite{rstartree} states, the efficiency of $R^*$-tree is generally better than R-tree and some other variants, although it has slightly higher implementation cost than R-tree.
+As expressed by Beckmann et al~\cite{rstartree}, the efficiency of $R^*$-tree is generally better than R-tree and some other variants, although it has slightly higher implementation cost than R-tree.
 % $R^*$-tree is found to be more efficient than some other variants,
 %and R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. 
 %In general, $R^*$-tree is an improvement over the R-tree at the expense of more expensive insertion.
@@ -526,7 +542,7 @@ As Beckmann et al~\cite{rstartree} states, the efficiency of $R^*$-tree is gener
 %insertions efficient behavior for insertions and deletions very high fan out of the directory nodes)
 
 \textbf{X-tree.}
-X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to support the high-dimensional data processing. X-tree focuses on the prevention of MBRs overlappings in order to minimize the amount of paths that have to be traversed. Unlike $R^+$-tree, this approach does not split a data region. Instead, follows more complex algorithm by analyzing the size of overlap occured for each split. Then, decides on choosing the minimum overlapping or creating a new kind of node, called \textit{supernode}. \textit{Supernode} refers to internal nodes containing more data values and pointers than maxmimum capacity of normal nodes. Figure~\ref{figxtree} shows the supernodes in gray which are extended to contain six node links instead of three in normal nodes. This will help to decrease the tree levels and consequently improve search queries efficiency.
+The X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to support the high-dimensional data processing. X-trees focus on the prevention of MBRs overlappings in order to minimize the amount of paths that have to be traversed. Unlike $R^+$-tree, this approach does not split a data region. Instead, follows more complex algorithm by analyzing the size of overlap occured for each split. Then, decides on choosing the minimum overlapping or creating a new kind of node, called \textit{supernode}. \textit{Supernode} refers to internal nodes containing more data values and pointers than maxmimum capacity of normal nodes. Figure~\ref{figxtree} shows the supernodes in gray which are extended to contain six node links instead of three in normal nodes. This will help to decrease the tree levels and consequently improve search queries efficiency.
 
 \begin{figure}
 \centering
@@ -538,21 +554,21 @@ X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to suppor
 
 \textbf{R-tree with packing algorithms.}
 Suppose all the required data is available or at least does not change frequently when the tree is going to be built.
-In these cases, a postprocessing step, called the packing algorithm, minimizes the storage space, coverages, and overlaps in R-tree.
-Packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-tree which has this preprocessing step. To build this tree, the objects are ordered along one coordinate first, e.g. $x$. Then, the object with the minimum value of this coordinate is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also uses as the higher nodes. This step is repeated until the whole objects are assigned to a node. Also, shaping the tree is continued up to the root.
+In these cases, a preprocessing step, called the packing algorithm, minimizes the storage space, coverages, and overlaps in R-tree.
+Packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-trees which has this preprocessing step. To build this tree, the objects are ordered along one coordinate first, e.g. $x$. Then, the object with the minimum value of this coordinate is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also uses as the higher nodes. This step is repeated until the whole objects are assigned to a node. Also, shaping the tree is continued up to the root.
 %To achieve the best minimization of covering rectangles, 
 %The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 
-Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. Dynamically building an R-tree may not give always the best stucture, in addition to high load time and suboptimal space utilization. Therefore, static creation in cases which data do not change frequently is at an advantage as we discussed. The so-called STR-tree approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt{r/n}$ vertical slices such that he number of rectangles in each tile is $\sqrt{r/n}$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
-As stated in \cite{strtree}, this structure improves the space utilization and query performance as well as the other packing structures. 
+\textbf{Sort-Tile-Recursive (STR).} Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. As we discussed before, dynamically building an R-tree may not give always the best stucture, in addition to the high load time and suboptimal space utilization. Therefore, static creation in cases which data do not change frequently gives an advantage. The so-called STR-tree approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt{r/n}$ vertical tiles such that the number of rectangles in each tile is $\sqrt{r/n}$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
+As declared in \cite{strtree}, this structure improves the space utilization and query performance as well as the other packing structures. However, in case of data modification the whole structure must be rebuilt.
 
-\subsubsection{Quad-tree}
+\subsubsection{Quad-tree}???? raazi nistam! :P
 \label{quad-tree-based}
 Another general category of indexing structures is the space filling structures which is studied in Jagadish~\cite{spacefilling}.
-Among this category, we explain here Quad-tree~\cite{quadtree} briefly as the hierarchial spatial data structure. Quad-tree is based on the principle of recursive decomposition. The goal of this tree is to design a structure in main memory and often for the two-dimensional data. 
-Quad-tree is a class of tree structures in which the common structure, called \textit{region Quad-tree}, is based on the subdivision into four equal-size quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitraty shape. The leaf nodes represent the corresponding data contained in a region. The space is divided more and more in the regions that the data is more dense. As a result, this structure is very efficient for the sparse data.
-Several variants of Quad-tree have been introduced to optimize the convenient structure such as Quad-CIF-tree~\cite{quadcif}, MX Quad-tree~\cite{quadmx}, and a combination of both MX-CIF Quad-tree. However, most of them satisfy the common properties and benefits the simple implementation and good performance for two-dimensional data.
-It should be mentioned that the performance is not always good since it might be not balanced and main memory maintenance of the structure is tricky due to the poor IO performance.  Also, as we discussed, this data structure is basically designed for the two dimensional data. Then, another similar idea should be taken for higher dimensions.
+Among this category, we explain here the Quad-tree~\cite{quadtree} briefly as the hierarchial spatial data structure?????(cheraaaa). Quad-trees are based on the principle of recursive decomposition. The goal of this tree is to design a structure in main memory and often for the two-dimensional data. 
+Quad-tree is a class of tree structures in which the common structure, called \textit{region Quad-tree}, is based on the subdivision into four equal-sized quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitraty shape. The leaf nodes represent the corresponding data contained in a region. The space is divided more and more in the regions that the data is more dense. As a result, this structure is very efficient for the sparse data.
+Several variants of Quad-tree have been introduced to optimize the convenient structure such as Quad-CIF-tree~\cite{quadcif}, MX Quad-tree~\cite{quadmx}, and a combination of both, MX-CIF Quad-tree. However, most of them satisfy the common properties and benefit the simple implementation and good performance for two-dimensional data.
+It should be mentioned that the performance is not always good since it might not be balanced and main memory maintenance of the structure is tricky due to the poor I/O performance.  Also, as we discussed, this data structure is basically designed for the two dimensional data. Then, another similar idea should be taken for higher dimensions.
 %It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
 
 %\textbf{Cell Methods based on Dynamic Hashing}

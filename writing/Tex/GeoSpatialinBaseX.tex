@@ -80,6 +80,7 @@ emph={}
 
 \newpage
 \section*{Abstract}
+Geospatial information has been growing expotentionally and used in variety of applications such as GIS, bioinformatics, and decision support systems during the last decades. The number of applications are becoming more such that efficient  approaches for data manupulation are demanded to cover the requirements. XML-based data representation and manipulations is one of the approaches that has been developed and can be processed by native XML databases. To see how this process could be challenging in an XML database, this thesis represents the issues of geospatial querying, functionalities and more importantly query efficiency by following one of the possible ways in BaseX, as an open source native XML database. First, a number of indexing approaches are studied to compare various ways of efficient geospatial data manipulation. Second, general geospatial functionalities in some similar databases are investigated. Then, the geospatial functionalities are added to BaseX by using the widely used JTS library. To improve the efficiency in some queries, the included index structure in JTS is applied and the query timing improvment is evaluated. We have tried another querying approach, as an effort to find other efficient ways, by connection to a well-known database, named MongoDB, through BaseX and having the queries done. The evaluation of this approach shows improvements in update operations which can be considered in deciding on the future developments in BaseX.
 
 \thispagestyle{empty}
 
@@ -93,10 +94,10 @@ I must express my sincerest thanks towards
 Dr. Christian Gr{\"u}n for his continuous support and patience during my research.
 I should confess that I can not imagine a better person to guide and advise me. Besides, I would like to extend my gratitude to my supervisor Prof. Dr. Marc H. Scholl to give me the chance to be involved in this group.
 
-My special appreciation also goes to Prof. ...  for
-answering completely and accurately questions that I would ask
-frequently. I would like to offer my heartfull gratitude my parents and family for encouraging me 
-throughout my whole study at University. At the end, I am deeply appreciative of my beloved friend M. Ali Rostami which without who it was impossible to it do.
+My special appreciation also goes to Dr. Rolf A. de By from the University of Twente for
+answering completely and accurately the questions that I would ask
+frequently and providing me a sample data set to test. I would like to offer my heartfull gratitude my parents and family for encouraging me 
+throughout my whole study. At the end, I am deeply appreciative of my beloved, M. Ali Rostami, without whom it would have been impossible to continue.
 
 
 \newpage
@@ -106,25 +107,31 @@ throughout my whole study at University. At the end, I am deeply appreciative of
 \newpage
 \section{Introduction}
 \setcounter{page}{1}
-The geospatial data is increasingly becoming more important nowadays. example ...????
-Different ways of processing this data is studied over years. However, the huge existing data requires more efficient ways nowadays. The time complexity is specially of great interest. We talk about the motivations to ....
-chera XML khube.......
+Geospatial data supports a wide range of ever-expanding applications in various scientific, govermental, business, and industrial areas such as geoscience, energy exploration, environmental management, natural resource management, disaster management, transportation engineering, urban planning and design, and constructions. Numerous researchs and efforts have been dedicated to make the most efficient use of this data, either in representation or manipulation. XML-based structures are part of the wiedly used standards to represent the complex structure of geospatial data. GISs, traditional databases, and other systems have been developed or adopted to handle this type of data format. Storage and retrieval of geospatial data which benefits the XML advantages in native XML databases could also be a suitable way to fulfill the geospatial requirements. In this way, the first step is to have geospatial functionalities in the database which is the main focuse of this work.
+%main focuse of the current work is to add geospatial features in BaseX while investigating an insight some similar database systems in this topic. 
+However, performance improvement in geospatial data retrieval is a big challenge since this data is often huge in size and complex in structure. Numerous spatial indexing structures propose suitable ways for efficient querying according to specific requirements and focus. 
 
-\subsection{Motivation}
-BaseX~\cite{www/basex} is a high-performance XML~\cite{www/xml}
- database which is developed in Konstanz university.
-It has a powerful text processor as well as the full support 
-for XQuery~\cite{www/xquery,www/xqueryfun} language according to \cite{conf/xsym/GrunGHS09}.
-Our goal is to empower BaseX to process the geospatial data in an efficient way. This means to add the support of handling \emph{Geography Markup Language (GML)} data. The Open Geospatial Consortium (OGC)
-which is an internationally recognized organization for geospatial standards,
-is defined this new special XML grammar for the geographical data.
-We want to have a complete support of this language in BaseX
-which means the abilities to read, to write, and to query on this data.
-To achieve this goal we need extensive knowledge over existing researches on the geospatial data and specifically indexing techniques. In this work, a short survay is .....
-we also consider the othe xml databases to find the best solutions....
+The aim of this thesis is to introduce ways to empower BaseX to process geospatial data in an efficient way. To achieve this goal, the support of handling \emph{Geography Markup Language (GML)} data. as one of the widely use XML-based standards, together with an indexing structure is developed and evaluated in BaseX. Meanwhile, some other indexing structures and geospatail features in similar database systems is studied which is ofcourse an introductory point to find the most proper approach in providing geospatial functionalites in BaseX. As an experimental way to provide some efficient geospatial features, we make a connection to MongoDB, a powerful document-based database, and run some queries. The results and evaluations can arise some suggestions for further investigations and developments in BaseX. 
+%time complexity is specially of great interest. 
+%We talk about the motivations to ....
+%chera XML khube.......
+
+%\subsection{Motivation}
+%BaseX~\cite{www/basex} is a high-performance XML~\cite{www/xml}
+% database which is developed in Konstanz university.
+%It has a powerful text processor as well as the full support 
+%for XQuery~\cite{www/xquery,www/xqueryfun} language according to \cite{conf/xsym/GrunGHS09}.
+%Our goal is to empower BaseX to process the geospatial data in an efficient way. This means to add the support of handling \emph{Geography Markup Language (GML)} data. 
+%The Open Geospatial Consortium (OGC)
+%which is an internationally recognized organization for geospatial standards,
+%is defined this new special XML grammar for the geographical data.
+%We want to have a complete support of this language in BaseX
+%which means the abilities to read, write, and query this data.
+%To achieve this goal we need extensive knowledge over existing researches on the geospatial data and specifically indexing techniques. In this work, a short survay is .....
+%we also consider the othe xml databases to find the best solutions....
 
 \subsection{Overview}
-This essay will first define the concepts needed later in the discussion, called
+This thesis will first define the concepts needed later in the discussion, called
 Methodology, in Section~\ref{s.method}. In this section, the basic geospatial data
 and it's application areas will be introduced. Also, various ways that other works
 are processing this data will be investigated in Section~\ref{s.rwork}. BaseX,
@@ -140,15 +147,15 @@ Section~\ref{s.future}.
 \section{Geospatial Data Processing}
 \label{s.method}
 %TODO:in tarifa bere bakhshe badi, inja chanta jomle koli begam
-According to \emph{Collins} dictionary, the word \emph{geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{geospatial data} is the data representing any thing on the Earth's surface. Regarding the importance of the geospatial data, many standards and systems have been developed  during the years to manipukate, represent and make use of them. Different countries and organizations are using different systems and standards to represent geospatial data and consequently there are numerous systems to fulfill a range of requirements. The World Geodesic System (WGS) is one of the standard geospatial systems that is commonly used all around the world. WGS84 is the latest version of this standard which
+According to \emph{Collins} dictionary, the word \emph{geospatial} is an adjective relating to a position of things on the Earth's surface, also \emph{geospatial data} is the data representing any thing on the Earth's surface. Regarding the importance of the geospatial data, many standards and systems have been developed  during the years to manipulate, represent and make use of them. Different countries and organizations are using different systems and standards to represent geospatial data and consequently there are numerous systems to fulfill a range of requirements. A an example, the World Geodesic System (WGS) is one of these systems that is commonly used all around the world. WGS84 is the latest version of this standard which
 was introduced in $1984$ and is widely used for expressing the locations on Earth in wide range of services, including satellite services, notably Global Positioning System (GPS), and Google Maps which employ this system as a reference.
 
-In this section, we mainly explain some existing geospatial indexing structure as the most critical part of geospatial data processing in database systems. After some basic definitions in Section \ref{termsanddef}, general process of this data in the native databases is shortly discussed in Section \ref{s.geo-data-in-xml-data}.
+In this section, we mainly explain some existing geospatial indexing structures as the most critical part of geospatial data processing in database systems. After some basic definitions in Section \ref{termsanddef}, general view of the geospatial data processing in XML databases is shortly discussed in Section \ref{s.geo-data-in-xml-data}.
 Finally, a set of geospatial indexing algorithms are introduced in Section \ref{s.geospatial-index}.
 
 \subsection{Terms and Definitions}
 \label{termsanddef}
-As defined before, Geospatial data is the locational information describing \textit{features} and locations as well as their characteristics which have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. Here, a \textit{feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of real world phenomenons, such as geometries, attributes, and relationships. Hence, real world entities could be expressed as a set of features.
+As defined before, geospatial data is the locational information describing \textit{features} and locations as well as their characteristics which have a spatial component to connect them to a place on the Earth, such as countries, cities, buildings, roads, and rivers. Here, a \textit{feature} represents a physical entity, e.g. a structure, a lake, a tree, or a shape. In fact, it is an abstraction of real world phenomenons, such as geometries, attributes, and relationships. Hence, real world entities could be expressed as a set of features.
 Geospatial data also applies to the three-dimensional data, like above and below the Earth's surface~\cite{powell}. Quiet often, this information is described in a multi-layer hierarchy. Geospatial objects and entities are formulated through different encodings and formats which are developed in regards to the specific requirements. An ordered set of numbers, called coordinates, identifies the position of objects  defined in a specific \textit{coordinate system}. 
 %Open Geospatial Consortium (OGC)~\cite{ogc} is an international consortium, developing interface standards for geospatial content, services, data exchange, data communication, and data processing. Geospatial data is given usually by its position its coordinate.
 

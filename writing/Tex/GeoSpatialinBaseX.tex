@@ -85,11 +85,11 @@ The varierty of applications demanded efficient approaches for data manupulation
 The XML-based representation and manipulation of data is one of the approaches that has been developed recently. 
 Numerous native XML databases are implemented to handle this data. 
 The open-source software BaseX is one of these native XML databases. 
-The contribution of the current work is to see how the geospatial data process could be challenging in \textit{BaseX}. 
+The contribution of the current work is to see how the geospatial data process could be challenging in BaseX. 
 This thesis discussess the issues of geospatial querying, geospatial functionalities, and query efficiency by following the existing structure in BaseX. 
 First, a number of indexing approaches are studied to compare various ways of efficient geospatial data manipulation. 
 Second, general geospatial functionalities in similar databases are investigated. 
-Finally, the geospatial functionalities are added to BaseX based on GML2 standard.
+Finally, the geospatial functionalities are added to BaseX based on GML standard.
 The geospatial query is adpated also in the structure of BaseX. 
 To improve the query efficiency, the data is indexed by the indexing structure STR-tree.  
 We have tried another querying approach by connecting to MongoDB through BaseX as an effort to find more efficient ways.
@@ -139,7 +139,8 @@ recognized internationally for geospatial standards.
 Having the geospatial data in BaseX, the query can be done over them.
 Meanwhile, some other indexing structures and geospatail features in similar database systems is studied which is an introductory point 
 to find the most proper approach in providing geospatial functionalites in BaseX. 
-As an experimental way to provide more efficient geospatial features, we make a connection to MongoDB, a powerful document-based database, 
+As an experimental way to provide more efficient geospatial features, 
+we make a connection to MongoDB, a powerful document-based database, 
 and run some queries. The results and evaluations arise some suggestions for further investigations and developments in BaseX. 
 %time complexity is specially of great interest. 
 %We talk about the motivations to ....
@@ -160,8 +161,8 @@ and run some queries. The results and evaluations arise some suggestions for fur
 %we also consider the othe xml databases to find the best solutions....
 
 %\subsection{Overview}
-This thesis will first define the concepts needed later in the discussion, called
-Methodology, in Section~\ref{s.method}. In this section, the basic geospatial data
+This thesis is structred as follows. We first define the concepts needed later in the discussion
+in Section~\ref{s.method}. In this section, the basic geospatial data
 and it's application areas will be introduced. Also, various ways that other works
 are processing this data will be investigated in Section~\ref{s.rwork}. BaseX,
 as a native XML database, which is our focus in this essay, is studied and extended
@@ -357,7 +358,7 @@ A point page as a leaf node carries the object identifiers. Therefore, different
 
 As a property of the KDB-tree structure, the regions in every region page are disjoint and their union is the parent region. Moreover, the union of regions in a child region page is the parent region. Similarly, all points in a point page as a child of a region are necessarily in the region.
 As shown in Figure~\ref{figkdbtree}, $D$, $E$, $F$, and $G$ subspaces are disjoint and shape together the region $A$ as the parent node. Here, the black small points in the leaf nodes are representing the points belonging to a page. Also, the hatched areas in each node is the regions which are not included the page of that node. 
-As Robinson~\cite{kdbtree} states, KDB-tree give more efficient search structure for large multi-dimensional dynamic structures with optimized storage utilization. It should be mentioned that there is a trade-off between being height-balanced and the storage efficiency. Then, the storage efficiency can be even poorer in some cases. ?????
+As Robinson~\cite{kdbtree} states, KDB-tree give more efficient search structure for large multi-dimensional dynamic structures with optimized storage utilization. It should be mentioned that there is a trade-off between being height-balanced and the storage efficiency. Then, the storage efficiency can be even poorer in some cases.
 
 \begin{figure}
 \centering
@@ -598,10 +599,10 @@ Packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtr
 \textbf{Sort-Tile-Recursive (STR).} Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. As we discussed before, dynamically building an R-tree may not give always the best stucture, in addition to the high load time and suboptimal space utilization. Therefore, static creation in cases which data do not change frequently gives an advantage. The so-called STR-tree approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt{r/n}$ vertical tiles such that the number of rectangles in each tile is $\sqrt{r/n}$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
 As declared in \cite{strtree}, this structure improves the space utilization and query performance as well as the other packing structures. However, in case of data modification the whole structure must be rebuilt.
 
-\subsubsection{Quad-tree}???? raazi nistam! :P
+\subsubsection{Quad-tree}
 \label{quad-tree-based}
 Another general category of indexing structures is the space filling structures which is studied in Jagadish~\cite{spacefilling}.
-Among this category, we explain here the Quad-tree~\cite{quadtree} briefly as the hierarchial spatial data structure?????(cheraaaa). Quad-trees are based on the principle of recursive decomposition. The goal of this tree is to design a structure in main memory and often for the two-dimensional data. 
+Among this category, we explain here the Quad-tree~\cite{quadtree}, which is mostly used in geospatial indexing, as the hierarchial spatial data structure. Quad-trees are based on the principle of recursive decomposition. The goal of this tree is to design a structure in main memory and often for the two-dimensional data. 
 Quad-tree is a class of tree structures in which the common structure, called \textit{region Quad-tree}, is based on the subdivision into four equal-sized quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitraty shape. The leaf nodes represent the corresponding data contained in a region. The space is divided more and more in the regions that the data is more dense. As a result, this structure is very efficient for the sparse data.
 Several variants of Quad-tree have been introduced to optimize the convenient structure such as Quad-CIF-tree~\cite{quadcif}, MX Quad-tree~\cite{quadmx}, and a combination of both, MX-CIF Quad-tree. However, most of them satisfy the common properties and benefit the simple implementation and good performance for two-dimensional data.
 It should be mentioned that the performance is not always good since it might not be balanced and main memory maintenance of the structure is tricky due to the poor I/O performance.  Also, as we discussed, this data structure is basically designed for the two dimensional data. Then, another similar idea should be taken for higher dimensions.
@@ -1881,7 +1882,23 @@ Since the performance of two major functionalities, i.e., the \textit{near} feat
 \newpage
 \section{Future Work}
 \label{s.future}
-storing in the memory
+We added to BaseX the new functionality of processing geospatial data.
+However, there is still much room for future improvements. 
+In particular, the storage and indexings are in the center of attention.
+The indexing tree is stored in the main memory which results in the high reading time.
+One of the first idea is to bring some parts of the tree, which are addresses more,
+into RAM. Regarding the indexing, an interesting future work is to compare 
+the current STR-tree implementation with other indexing tree in the existence of
+different kinds of geospatial data.
+
+In this thesis, we consider MongoDB as an alternative for indexing.
+A feasible improvement would be the implementation of an flexible interface
+to this XML database. As we discussed in Section~\ref{conc}, 
+there would be an inconcsistency between 
+the geospatial data and indexing in BaseX and
+the simultanaesly indexed data in MongoDB. A future improvement is to 
+implement a module to give the user the whole control over these two possibilities.
+
 \newpage
 \bibliographystyle{unsrt}
 \bibliography{refs}

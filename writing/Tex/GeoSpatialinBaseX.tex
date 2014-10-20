@@ -8,9 +8,7 @@
     \begin{center}\large#1\end{center}
     \vskip0.5em}%
 }
-%\usepackage[graphicx]{realboxes}
 \usepackage{color}
-\usepackage{rotating}
 \usepackage{tabularx}
 \definecolor{light-gray}{gray}{0.80}
 \usepackage{url}
@@ -622,49 +620,61 @@ Among the presented trees, STR-tree is the one which we have selected for our fu
 
 
 \newpage
-%\Rotatebox{-90}
-\begin{turn}{270}
-\begin{tabular}{| c | c | c | c |}
+\begin{table}
+\begin{tabular}{| c | c | c |}
 \hline
-\textbf{The indexing tree} & \textbf{Based on} & \textbf{Advantage} & \textbf{Disadvantage} \\\hline
-KD-tree & Binary-tree & Early indexing for $k$-dimensional data & Storage inefficiency \\\hline
-Non-homogenous KD-tree & KD-tree & Optimized Deletion & - \\\hline
-KDB-tree & KD-tree & Paging Technique & Trade off between height-balanced   \\
-               &             &  Storage Efficiency & and storage efficiency   \\
-               &             & Balanced KD-tree   &                                       \\\hline
-HB-tree & KD-tree & Handling sparsity & expensive deletion \\  
-             &              & Beter search and insert performance &multiple reference to same data \\
-             &               & Decent space utilization & \\\hline
-Matsuyama's KD-tree & KD-tree & Non-point data indexing & Duplicate Storage \\\hline
-4D-tree & KD-tree & Non-point object indexing & high cost of its intersection search \\
-             &              &    Avoiding object duplication &            \\\hline
-SKD-tree & KD-tree & Non-point object indexing & Memory-based \\\hline
-R-tree & B-tree & Highly balanced point  & Large covered area  \\
-           &           &                                      & and overlappings by MBRs \\\hline
-           &          &  and non-point objects indexing    &  Multiple path traversal \\ 
-           &           &                                                      & in point queries \\\hline
-$R^+$-tree & R-tree & No overlappings of MBRs  & Rectangle duplication\\
-                     &           & No multiple path traversal  &  Bigger and complicated structure\\
-                     &           &                                            & Complex deletion process, Dead spaces\\\hline
-Cell-tree & R-tree & No overlappings and dead spaces & Object duplication\\\hline
-$R^*$-tree & R-tree & Minimizing the coverage area, overlappings  & Silghtly more cost than R-tree\\
-                    &           &  and margin of MBRs                                     & \\
-                    &           & Minimizing the storage utilization                  &\\\hline
-Packed-tree & R-tree & Only one time-consuming preprocessing step & Poor performance \\
-               &           & Storage and performance efficiency                & in frequent modification of data\\\hline
-STR-tree & R-tree & Only one time-consuming preprocessing step & Poor performance \\
-               &           & Packed in more dimensions                            & in frequent modification of data\\\hline
-X-tree & R-tree & No overlappings of MBRs & Good performance\\\hline
-Quad-tree & Space filing structures & Efficient for sparse data & Poor performance \\
-                 &                                     &                                     & in high-dimensional data\\\hline
-\label{t.trees}
+\textbf{Indexing Tree} & \textbf{Advantage} & \textbf{Disadvantage} \\\hline
+ \multicolumn{3}{c}{Based on the Binary-tree:}\\\hline
+KD-tree &  Early indexing for  & Storage inefficiency \\
+        & $k$-dimensional data & Storage inefficiency \\\hline
+ \multicolumn{3}{c}{Based on the KD-tree:}\\\hline
+NH KD-tree  & Optimized Deletion & - \\\hline
+KDB-tree  & Paging Technique & Trade off between   \\
+           &  Storage Efficiency & height-balanced   \\
+           & Balanced KD-tree   &  storage efficiency     \\\hline
+HB-tree  & Handling sparsity & expensive deletion \\  
+              & Beter search performacne & multiple reference \\
+              & Beter insert performacne & to same data \\
+             & Decent space utilization & \\\hline
+M's KD-tree  & Non-point data indexing & Duplicate Storage \\\hline
+4D-tree  & Non-point object indexing & high cost of  \\
+          &    Avoiding object duplication & its intersection search \\\hline
+SKD-tree  & Non-point object indexing & Memory-based \\\hline
+ \multicolumn{3}{c}{Based on the B-tree:}\\\hline
+R-tree  & Highly balanced point  & Large covered area  \\
+        & and non-point objects  & and overlappings by MBRs \\
+       & indexing               &  Multiple path traversal \\ 
+        &                        & in point queries \\\hline
+ \multicolumn{3}{c}{Based on the R-tree:}\\\hline
+$R^+$-tree & No overlappings of MBRs  & Rectangle duplication\\
+           & No multiple path traversal  &  Bigger structure\\
+           &                             & Complicated structure\\
+           &                             & Complex deletion process\\
+           &                             & Dead spaces\\\hline
+Cell-tree  & No overlappings and & Object duplication\\
+          & no dead spaces      &        \\\hline
+$R^*$-tree  & Minimizing coverage area,  & Silghtly more cost\\
+           &  overlappings,& than R-tree\\
+            &  margin of MBRs, and& \\
+            &  storage utilization          &\\\hline
+Packed-tree & Only one time-consuming & Poor performance \\
+             &  preprocessing step  & in frequent modification\\
+             &                      &   of data \\\hline
+STR-tree  & Only one time-consuming  & Poor performance \\
+           &  preprocessing step       & in frequent modification\\
+          &                      &   of data \\\hline
+X-tree  & No overlappings of MBRs & Good performance\\\hline
+ \multicolumn{3}{c}{Space filling structures:}\\\hline
+Quad-tree   & Efficient for sparse data & Poor performance \\
+            &                           & in high-dimensional data\\\hline
 \end{tabular}
-\end{turn}
-%}
+\caption{A table of indexing trees together with
+their advantages and disadvantages.}
+\label{t.tree}
+\end{table}
+
 
 \newpage
-
-
 
 
 \section{Related Work}

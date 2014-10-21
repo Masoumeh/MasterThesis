@@ -17,6 +17,7 @@
 \usepackage[tight,footnotesize]{subfigure}  
 \usepackage[top=2cm, bottom=2cm, left=4cm, right=2cm]{geometry}
 \usepackage{amsmath}
+\usepackage{float}
 %\begin{titlepage}
 %\begin{center}
 \title{Processing Geospatial Data in BaseX}
@@ -610,9 +611,7 @@ In fact, Quad-tree is a class of tree structures in which the common structure, 
 Several variants of Quad-tree have been introduced to optimize the convenient structure such as Quad-CIF-tree~\cite{quadcif}, MX Quad-tree~\cite{quadmx}, and a combination of both, MX-CIF Quad-tree. However, most of them satisfy the common properties and benefit the simple implementation and good performance for two-dimensional data.
 It should be mentioned that the performance is not always good since it might not be balanced and main memory maintenance of the structure is tricky due to the poor I/O performance.  Also, as we discussed, this data structure is basically designed for the two dimensional data. Then, another similar idea should be taken for higher dimensions.
 %It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
-
 %\textbf{Cell Methods based on Dynamic Hashing}
-
 \subsection{Summary}
 Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. We explained some important indexing trees which were introduced mostly in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes}. Also, we looked at the actual paper of each tree to gather the advantages and disadvantages. However having an extensive research on these indexing trees was not our focus, we wanted to have at least an introduction about the huge area of spatial indexing. 
 Table~\ref{t.trees} summarizes the discussed indexing structues together with the advantages and disadvantages. 
@@ -623,10 +622,8 @@ This structure which is included in JTS library, the API used in BaseX implement
 %\item Many spatial databases are using this tree as the indexing basis. 
 %\item Since our focus was on almost fixed given data, the indexing tree with the packing algorithms would be best choice. 
 %\end{itemize}
-
-
 \newpage
-\begin{table}
+\begin{table}[H]
 \begin{tabular}{|>{\centering\arraybackslash}m{8mm}| >{\centering\arraybackslash}m{3cm} | >{\centering\arraybackslash}m{5cm} | >{\centering\arraybackslash}m{5cm} |}
 \hline
 \multicolumn{2}{|c|}{\textbf{Indexing Tree}} & \multicolumn{1}{c|}{\textbf{Advantage}} & \multicolumn{1}{c|}{\textbf{Disadvantage}} \\\hline
@@ -655,10 +652,7 @@ R-tree  & Highly balanced point and non-point objects indexing & Large covered a
 \caption{Summary of index structures}
 \label{t.trees}
 \end{table}
-
-
 \newpage
-
 
 \section{Related Work}
 \label{s.rwork}

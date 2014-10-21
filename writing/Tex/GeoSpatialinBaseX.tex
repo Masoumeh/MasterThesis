@@ -10,6 +10,7 @@
 }
 \usepackage{color}
 \usepackage{tabularx}
+\usepackage{array,multirow}
 \definecolor{light-gray}{gray}{0.80}
 \usepackage{url}
 \usepackage{listings}
@@ -551,13 +552,13 @@ In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond 
 \item Minimizing the MBR margins to shape squarish rectangles which improve the performance of queries with large quadratic shapes.
 \item Maximizing of storage utilization. 
 \end{itemize}
-In fact, unlike the R-tree which determines the MBRs according to their area, the $R^*$-tree determines them based on their area, margins of space, and the overlaps with other MBRs. Additionally, \textit{Forced Reinsertion} is a key concept in this algorithm which deletes and reinserts elements of a full node to prevent splits.
-To find the best combination of the criteria, it is necessary to implement an optimized approach. This is important since the criteria can conflict sometimes. The optimization is obtained with revised node split and also forced reinsertion which finds a better place for a node than its original place. This structure results in the following performance improvements,
+In fact, unlike the R-tree which determines the MBRs according to their area, the $R^*$-tree determines them based on their area, margins of space, and overlaps with other MBRs. Additionally, \textit{Forced Reinsertion} is a key concept in this algorithm which deletes and reinserts elements of a full node to prevent splits.
+To find the best combination of the criteria, it is necessary to implement an optimized approach. This is important since the criteria can conflict sometimes. The optimization is obtained with a revised node split algorithm and also forced reinsertion which finds a better place for a node than its original place. This structure results in the following performance improvements,
 \begin{itemize}
 \item More rectangular pages produced by the revised split algorithm are better for many applications.
 \item Better performance is gained through the reinsertion method, however it increases the complication.
 \end{itemize}
-As expressed by Beckmann et al~\cite{rstartree}, the efficiency of $R^*$-tree is generally better than R-tree and some other variants, although it has slightly higher implementation cost than R-tree.
+As expressed by Beckmann et al~\cite{rstartree}, the efficiency of $R^*$-tree is generally better than R-tree and some other variants, although it has slightly higher implementation cost than the R-tree.
 % $R^*$-tree is found to be more efficient than some other variants,
 %and R-tree using linear splitting algorithm is substantially less efficient than the one with quadratic splitting algorithm. 
 %In general, $R^*$-tree is an improvement over the R-tree at the expense of more expensive insertion.
@@ -578,7 +579,7 @@ As expressed by Beckmann et al~\cite{rstartree}, the efficiency of $R^*$-tree is
 %insertions efficient behavior for insertions and deletions very high fan out of the directory nodes)
 
 \textbf{X-tree.}
-The X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to support the high-dimensional data processing. X-trees focus on the prevention of MBRs overlappings in order to minimize the amount of paths that have to be traversed. Unlike $R^+$-tree, this approach does not split a data region. Instead, follows more complex algorithm by analyzing the size of overlap occurred for each split. Then, decides on choosing the minimum overlapping or creating a new kind of node, called \textit{supernode}. \textit{Supernode} refers to internal nodes containing more data values and pointers than maximum capacity of normal nodes. Figure~\ref{figxtree} shows the supernodes in gray which are extended to contain six node links instead of three in normal nodes. This will help to decrease the tree levels and consequently improve search queries efficiency.
+The X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to support the high-dimensional data processing. X-trees focus on the prevention of MBR overlappings in order to minimize the amount of paths that have to be traversed. Unlike $R^+$-tree, this approach does not split a data region. Instead, follows more complex algorithm by analyzing the size of overlap occurred for each split. Then, decides on choosing the minimum overlapping or creating a new kind of node, called \textit{supernode}. \textit{Supernode} refers to internal nodes containing more data values and pointers than maximum capacity of normal nodes. Figure~\ref{figxtree} shows the supernodes in gray which are extended to contain six node links instead of three in normal nodes. This will help to decrease the tree levels and consequently improve search queries efficiency.
 
 \begin{figure}
 \centering
@@ -590,19 +591,22 @@ The X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to su
 
 \textbf{R-tree with packing algorithms.}
 Suppose all the required data is available or at least does not change frequently when the tree is going to be built.
-In these cases, a preprocessing step, called the packing algorithm, minimizes the storage space, coverages, and overlaps in R-tree.
-Packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-trees which has this preprocessing step. To build this tree, the objects are ordered along one coordinate first, e.g. $x$. Then, the object with the minimum value of this coordinate is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also uses as the higher nodes. This step is repeated until the whole objects are assigned to a node. Also, shaping the tree is continued up to the root.
+In this case, a preprocessing step, called the packing algorithm, minimizes the storage space, coverages, and overlaps in the R-tree.
+Packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-trees which has this preprocessing step. To build this tree, the objects are ordered along one coordinate first, e.g. $X$. Then, the object with the minimum value of this coordinate is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also shape the higher nodes. This step is repeated until the whole objects are assigned to a node and the tree is completed up to the root.
+
+The packed R-tree could be created with other packing algorithms. In the followings another packing algorithm is described which we will use it to create a static index structure.
 %To achieve the best minimization of covering rectangles, 
 %The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 
-\textbf{Sort-Tile-Recursive (STR).} Another paking algorithm to build static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. As we discussed before, dynamically building an R-tree may not give always the best structure, in addition to the high load time and suboptimal space utilization. Therefore, static creation in cases which data do not change frequently gives an advantage. The so-called STR-tree approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt{r/n}$ vertical tiles such that the number of rectangles in each tile is $\sqrt{r/n}$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
+\textbf{Sort-Tile-Recursive (STR).} Another paking algorithm to build a static R-tree is Sort-Tile-Recursive (STR)~\cite{strtree}. As we discussed before, a dynamic R-tree may not give always the best structure, in addition to the high load time and suboptimal space utilization. Therefore, static creation in cases at which the data do not change frequently, gives an advantage. The so-called STR-tree approach sorts the rectangles by $X$ coordinate and then place them into $\sqrt{r/n}$ vertical tiles such that the number of rectangles in each tile is $\sqrt{r/n}$. Here, $r$ is the number of total rectangles and $n$ is the maximum number of rectangles that can be inserted in each node. Then, the rectangles are sorted by $y$ coordinates. At the end, the rectangles are inserted in tree nodes in the sorted order.
 As declared in \cite{strtree}, this structure improves the space utilization and query performance as well as the other packing structures. However, in case of data modification the whole structure must be rebuilt.
 
 \subsubsection{Quad-tree}
 \label{quad-tree-based}
 Another general category of indexing structures is the space filling structures which is studied in Jagadish~\cite{spacefilling}.
-Among this category, we explain here the Quad-tree~\cite{quadtree}, which is mostly used in geospatial indexing, as the hierarchical spatial data structure. Quad-trees are based on the principle of recursive decomposition. The goal of this tree is to design a structure in main memory and often for the two-dimensional data. 
-Quad-tree is a class of tree structures in which the common structure, called \textit{region Quad-tree}, is based on the subdivision into four equal-sized quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitrary shape. The leaf nodes represent the corresponding data contained in a region. The space is divided more and more in the regions that the data is more dense. As a result, this structure is very efficient for the sparse data.
+Among this category, we explain here the Quad-tree~\cite{quadtree}, which is mostly used in geospatial indexing, as the hierarchical spatial data structure. Quad-trees are based on the principle of recursive decomposition. The goal of this tree is to design a structure in main memory, often for the two-dimensional data. 
+
+In fact, Quad-tree is a class of tree structures in which the common structure, called \textit{region Quad-tree}, is based on the subdivision into four equal-sized quadrants. It means each internal node has four children. The spaces may have rectangular or any arbitrary shape. The leaf nodes represent the corresponding data contained in a region. The space is divided more and more in the regions that the data is more dense. As a result, this structure is very efficient for the sparse data.
 Several variants of Quad-tree have been introduced to optimize the convenient structure such as Quad-CIF-tree~\cite{quadcif}, MX Quad-tree~\cite{quadmx}, and a combination of both, MX-CIF Quad-tree. However, most of them satisfy the common properties and benefit the simple implementation and good performance for two-dimensional data.
 It should be mentioned that the performance is not always good since it might not be balanced and main memory maintenance of the structure is tricky due to the poor I/O performance.  Also, as we discussed, this data structure is basically designed for the two dimensional data. Then, another similar idea should be taken for higher dimensions.
 %It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
@@ -611,8 +615,10 @@ It should be mentioned that the performance is not always good since it might no
 
 \subsection{Summary}
 Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. We explained some important indexing trees which were introduced mostly in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes}. Also, we looked at the actual paper of each tree to gather the advantages and disadvantages. However having an extensive research on these indexing trees was not our focus, we wanted to have at least an introduction about the huge area of spatial indexing. 
-Table~\ref{t.trees} summarizes the discussed indexing trees together with the advantages and disadvantages. 
-Among the presented trees, STR-tree is the one which we have selected for our further implementation. This structure which is included in JTS library, the API used in BaseX implementing Geo Module, is suitable to focus on almost fixed data and improves the intersection queries. %There were several reasons:
+Table~\ref{t.trees} summarizes the discussed indexing structues together with the advantages and disadvantages. 
+Among the presented indexes, STR-tree is the one which we have selected for our further implementation.
+%There are two advantages to consider this tree. First, this tree is efficient when the data is almost fixed which means the data has minor changed after importing. Second, the JTS library which we use as the basic for Geometry operation, already includes this tree as one of its indexing trees.
+This structure which is included in JTS library, the API used in BaseX implementing Geo Module, is suitable to focus on the data with minor changes and improves the intersection queries. %There were several reasons:
 %\begin{itemize}
 %\item Many spatial databases are using this tree as the indexing basis. 
 %\item Since our focus was on almost fixed given data, the indexing tree with the packing algorithms would be best choice. 
@@ -621,56 +627,33 @@ Among the presented trees, STR-tree is the one which we have selected for our fu
 
 \newpage
 \begin{table}
-\begin{tabular}{| c | c | c |}
+\begin{tabular}{|>{\centering\arraybackslash}m{8mm}| >{\centering\arraybackslash}m{3cm} | >{\centering\arraybackslash}m{5cm} | >{\centering\arraybackslash}m{5cm} |}
 \hline
-\textbf{Indexing Tree} & \textbf{Advantage} & \textbf{Disadvantage} \\\hline
- \multicolumn{3}{c}{Based on the Binary-tree:}\\\hline
-KD-tree &  Early indexing for  & Storage inefficiency \\
-        & $k$-dimensional data & Storage inefficiency \\\hline
- \multicolumn{3}{c}{Based on the KD-tree:}\\\hline
-NH KD-tree  & Optimized Deletion & - \\\hline
-KDB-tree  & Paging Technique & Trade off between   \\
-           &  Storage Efficiency & height-balanced   \\
-           & Balanced KD-tree   &  storage efficiency     \\\hline
-HB-tree  & Handling sparsity & expensive deletion \\  
-              & Better search performance & multiple reference \\
-              & Better insert performance & to same data \\
-             & Decent space utilization & \\\hline
-M's KD-tree  & Non-point data indexing & Duplicate Storage \\\hline
-4D-tree  & Non-point object indexing & high cost of  \\
-          &    Avoiding object duplication & its intersection search \\\hline
-SKD-tree  & Non-point object indexing & Memory-based \\\hline
- \multicolumn{3}{c}{Based on the B-tree:}\\\hline
-R-tree  & Highly balanced point  & Large covered area  \\
-        & and non-point objects  & and overlapping by MBRs \\
-       & indexing               &  Multiple path traversal \\ 
-        &                        & in point queries \\\hline
- \multicolumn{3}{c}{Based on the R-tree:}\\\hline
-$R^+$-tree & No overlapping of MBRs  & Rectangle duplication\\
-           & No multiple path traversal  &  Bigger structure\\
-           &                             & Complicated structure\\
-           &                             & Complex deletion process\\
-           &                             & Dead spaces\\\hline
-Cell-tree  & No overlapping and & Object duplication\\
-          & no dead spaces      &        \\\hline
-$R^*$-tree  & Minimizing coverage area,  & Slightly more cost\\
-           &  overlapping,& than R-tree\\
-            &  margin of MBRs, and& \\
-            &  storage utilization          &\\\hline
-Packed-tree & Only one time-consuming & Poor performance \\
-             &  preprocessing step  & in frequent modification\\
-             &                      &   of data \\\hline
-STR-tree  & Only one time-consuming  & Poor performance \\
-           &  preprocessing step       & in frequent modification\\
-          &                      &   of data \\\hline
-X-tree  & No overlapping of MBRs & Good performance\\\hline
- \multicolumn{3}{c}{Space filling structures:}\\\hline
-Quad-tree   & Efficient for sparse data & Poor performance \\
-            &                           & in high-dimensional data\\\hline
+\multicolumn{2}{|c|}{\textbf{Indexing Tree}} & \multicolumn{1}{c|}{\textbf{Advantage}} & \multicolumn{1}{c|}{\textbf{Disadvantage}} \\\hline
+\multirow{14}{*}{\rotatebox[origin=c]{90}{Based on the Binary-tree}} & KD-tree &  Simple implementation, Good  performance for $2$D if tree is balanced & Not balanced, Storage inefficiency, Poor deletion\\
+      \cline{2-4}
+% \multirow{3}{|c|}{Based on the KD-tree:}\\\hline
+	& Non-Homo KD-tree  & Optimized deletion & Not balanced, Storage inefficiency \\\cline{2-4}
+	& KDB-tree  & Balanced, Paging Technique, Storage Efficiency & Trade off between height-balanced and storage efficiency  \\\cline{2-4}
+	& HB-tree  & Handling sparsity, Better search performance, Better insert performance, Decent space utilization & Expensive deletion, Multiple reference to the same data\\ 
+        \cline{2-4}
+	& Matsu.'s KD-tree  & Non-point data indexing & Duplicate Storage \\\cline{2-4}
+	& 4D-tree  & Non-point object indexing, Avoiding object duplication & High cost of its intersection search \\\cline{2-4}
+	& SKD-tree  & Non-point object indexing & Memory-based \\\cline{1-4}
+\multirow{22}{*}{\rotatebox[origin=c]{90}{Based on the B-tree}} &
+R-tree  & Highly balanced point and non-point objects indexing & Large covered area and overlapping by MBRs, Multiple path traversal in point queries\\\cline{2-4}
+% \multicolumn{3}{c}{Based on the R-tree:}\\\hline
+	& $R^+$-tree & No overlapping of MBRs, No multiple path traversal & Rectangle duplication, Bigger structure, Complicated structure, Complex deletion process, Dead spaces\\\cline{2-4}
+	& Cell-tree  & No MBR overlapping, No dead spaces & Object duplication\\\cline{2-4}
+	& $R^*$-tree  & Minimizing coverage area, overlapping, and margin of MBRs, storage utilization & Slightly more cost than R-tree\\\cline{2-4}
+	& Packed-tree & Only one time-consuming preprocessing step& Poor performance in frequent data modification\\\cline{2-4}
+	& STR-tree & Only one time-consuming preprocessing step& Poor performance in frequent data modification\\\cline{2-4}
+	& X-tree  & No overlapping of MBRs, Good performance & - \\\cline{1-4}
+% \multicolumn{3}{c}{Space filling structures:}\\\hline
+\rotatebox[origin=t]{90}{\begin{minipage}{0.5in}Space filling\end{minipage}} & Quad-tree   & Efficient for sparse data & Poor performance in high-dimensional data \\\hline
 \end{tabular}
-\caption{A table of indexing trees together with
-their advantages and disadvantages.}
-\label{t.tree}
+\caption{Summary of index structures}
+\label{t.trees}
 \end{table}
 
 

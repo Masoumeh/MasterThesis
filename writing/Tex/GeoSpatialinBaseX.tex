@@ -423,15 +423,24 @@ The major problem of this approach is the high cost of its intersection search w
 \item The level discriminator value
 \item The maximum and minimum values of the left and right subtree objects respectively in the dimension that the level discriminator belongs to.
 \end{itemize}    
-As Chin et al~\cite{survey} states, the SKD-tree directory is stored in secondary memory. Figure~\ref{figskdtree} illustrates the way that minimum and maximum boundaries of each space is determined to shape a virtual subspace. In this example, the discriminator for the root node is $x$ with the value of $x_6$.
-The maximum boundary of the rectangle $r_3$ is $x_7$ which defines the maximum boundary of the left virtual subspace. Correspondingly, the minimum boundary of the right subspace is $x_5$ which the right boundary of rectangle $r_8$.
-
+As Chin et al~\cite{survey} states, the SKD-tree directory is stored in secondary memory. Figure~\ref{figskdtree} shows an example of a data set and the space partitioning together with the corresponding SKD-tree. Figure~\ref{skdtree2} illustrates the way that minimum and maximum boundaries of each space is determined to shape a virtual subspace. In this example, the discriminator for the root node is $x$ with the value of $x_6$.
+The maximum boundary of the rectangle $r_3$ is $x_7$ which defines the maximum boundary of the left virtual subspace. Correspondingly, the minimum boundary of the right subspace is $x_5$ which the right boundary of rectangle $r_8$. Figure~\ref{skdtree1} shows the tree directory of this sample data.
 \begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth,height=0.6\textheight]{skdtree}
+\subfigure[Space partiotioning in the SKD-tree]{
+\includegraphics[width=0.5\textwidth,height=0.19\textheight]{skdtree2}
+%\caption{}
+\label{skdtree2}
+}
+\centering
+\subfigure[A 2D directory of the SKD-tree]{
+\includegraphics[width=0.5\textwidth,height=0.19\textheight]{skdtree1}
+%\caption{}
+\label{skdtree1}
+}
 \caption{An example of the SKD-tree structure (source~\cite{survey})}
 \label{figskdtree}
-\end{figure} 
+\end{figure}
 The SKD-tree is at the advantage when the virtual subspace may bound the objects tighter than the partitioning line. In such cases, the intersection search cuts the search space efficiently. The containment search is directly supported in this structure and is useful to operators, like \textit{within} and \textit{contain}, since all objects, which are not contained totally in the query region, are ignored.
 As the SKD-tree is memory-based, not disk-based, it is not suitable for very large databases.
 
@@ -457,7 +466,7 @@ As this structure is designed for disk storage, the leaf nodes in Figure~\ref{rt
 
 \begin{figure}
 \centering
-\subfigure[Minimum bounding rectangles of an object set to build R-tree]{
+\subfigure[Minimum bounding rectangles of an object set to build the R-tree]{
 \includegraphics[width=0.47\textwidth,height=0.17\textheight]{Rtree-box}
 %\caption{R-tree structure}
 \label{rtreebox}
@@ -468,7 +477,7 @@ As this structure is designed for disk storage, the leaf nodes in Figure~\ref{rt
 %\caption{R-tree}
 \label{rtreestruct}
 }
-\caption{A sample of R-tree creation for a set of data objects in 2D}
+\caption{A sample of R-tree creation for a set of spatial objects in 2D}
 \label{rtree}
 \end{figure}
 
@@ -485,7 +494,7 @@ Achieving these goals largely depends on the splitting algorithm chosen for defi
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth,height=0.17\textheight]{R-treeMBR}
-\caption{Two different split strategies in R-tree (created based on~\cite{rtree})}
+\caption{Two different split strategies in the R-tree (created based on~\cite{rtree})}
 \label{rtreesplit}
 \end{figure}
 
@@ -501,7 +510,7 @@ Figure~\ref{rtreequery} represents how an intersection query is done on the R-tr
 \begin{figure}
 \centering
 \includegraphics[width=0.6\textwidth,height=0.2\textheight]{Rtree-query}
-\caption{Querying R-tree}
+\caption{Querying the R-tree}
 \label{rtreequery}
 \end{figure}
 

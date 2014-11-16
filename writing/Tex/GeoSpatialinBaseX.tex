@@ -121,12 +121,12 @@ throughout my whole study. At the end, I am deeply appreciative of my beloved, M
 \newpage
 \section{Introduction}
 \setcounter{page}{1}
-Geospatial data supports a wide range of ever-expanding applications in various scientific, governmental, business, and industrial areas such as geoscience, energy exploration, environmental management, natural resource management, disaster management, transportation engineering, and urban planning. 
-Numerous researchers and efforts have been dedicated to make the most efficient use of this data, either in representation or manipulation. 
+Geospatial data supports a wide range of ever-expanding applications in various scientific, governmental, business, and industrial areas such as geoscience, energy exploration, natural resource management, disaster management, transportation engineering, and urban planning. 
+Numerous researches and efforts have been dedicated to make the most efficient use of this data, either in representation or manipulation. 
 XML-based structures are parts of the widely used standards to represent the complex structure of geospatial data. 
 Geographic Information Systems (GIS), traditional databases, and other systems have been developed or adopted to handle this type of data format. 
-Storage and retrieval of geospatial data which is represented in an XML-based structure in native XML databases is also a suitable way to fulfill the geospatial requirements. 
-In this way, the first step is to have geospatial functionalities in the database which is the main focus of this work.
+Storage and retrieval of XML-based geospatial data in native XML databases are also suitable ways to fulfill the geospatial requirements.
+Therefore, the main step is to have geospatial functionalities in these databases which would be the focus of this work. 
 %main focuse of the current work is to add geospatial features in BaseX while investigating an insight some similar database systems in this topic. 
 However, performance improvement in data retrieval is a big challenge since this data is often huge in size and complex in structure. 
 Spatial indexing structures are developed to find the suitable ways of efficient querying according to specific requirements. 
@@ -134,15 +134,18 @@ Spatial indexing structures are developed to find the suitable ways of efficient
 %BaseX~\cite{www/basex} is a high-performance XML database which is developed in Konstanz university.
 %It has a powerful text processor as well as the full support 
 %for XQuery~\cite{www/xquery,www/xqueryfun} language according to \cite{conf/xsym/GrunGHS09}.
-Our goal is to empower BaseX to process geospatial data in an effective way. 
+Our main goal is to empower BaseX~\cite{www/basex} to process geospatial data in an effective way. 
 Hence, we add the support of geospatial data in \emph{Geography Markup Language (GML)} format together with an indexing structure. This implementation uses the JTS library to implement the spatial functions and calculations and also the index structure.
-GML is a widely used XML grammar for geographical data which is defined by Open Geospatial Consortium (OGC), the international organization for developing geospatial standards.
+%GML is a widely used XML grammar for geographical data which is defined by Open Geospatial Consortium (OGC), the international organization for developing geospatial standards.
 %Having the geospatial data in BaseX, the query can be done over them.
 Meanwhile, a set of spatial indexing structures and geospatial features in similar database systems are studied which is an introductory point 
 to find the most proper approach in providing geospatial functionalities in BaseX. The structures are selected among the most widely accepted ones in the literature. However there are other efforts discussing the index structures, here we provide a comprehensible explanation and different prespectives which are collected from various sources. The goal of this part is to add a new source of discussion for these structures that helps to understand them more effectively for further developments in BaseX. Moreover, other database systems are practical samples of geospatial functionalities which can give an insight into the ways of implementation.
 
 As an experimental way towards more efficient geospatial features, 
-we provide a driver to connect to the well-known document-based database MongoDB, to run the queries. Trought this connection the queries which are written in BaseX, are run in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionalities of MongoDB. The results and evaluations of this approach are the basis for further investigations and developments in BaseX. 
+we provide a driver to connect to the well-known document-based database MongoDB.
+Throught this connection the queries which are written in BaseX, are executed in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionalities of MongoDB. 
+We compare the query time and indexing via this connection with the direct query on BaseX. 
+These results and evaluations are the basis for further investigations and developments in BaseX. 
 %time complexity is especially of great interest. 
 %We talk about the motivations to ....
 %chera XML khube.......
@@ -600,13 +603,12 @@ The X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to su
 \label{figxtree}
 \end{figure}
 
-
 \textbf{R-tree with packing algorithms.}
 Suppose all the required data is available or at least does not change frequently when the tree is going to be built. For instance, in census and cartographic and environmental data insertions ade deletions rarely or even never happens. 
 For such applications, constructing an optimal structure should be focused with regards to some tree characteristics, such as maximizing the storage utilization and minimizing the storage overhead, coverages, and overlaps in the R-tree. The methods to build such an R-tree contain a preprocessing step and are known as \textit{packing} or \textit{bulk loading}. 
 The packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-trees which has this preprocessing step. This early effort simply suggests to order the objects based on a criterion, like ascending $X$ coordinate. Then, to build the tree, the object with the minimum value of in the ordered set is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also shape the higher nodes. This step is repeated until the whole objects are assigned to a node and the tree is completed up to the root.
 
-The Hilbert Packed R-tree is another method to construct a static R-tree using Hilbert Sort~\cite{} packing algorithm proposed by Kamel and Faloutsos~\cite{}. This method with $100%$ space utilization, proposes sorting the objects based on their Hilbert value of their center and then inserting them into the tree.
+The Hilbert Packed R-tree is another method to construct a static R-tree using the packing algorithm by Kamel and Faloutsos~\cite{hilbert-rtree}. This method which has a full space utilization, proposes sorting the objects based on their Hilbert value of their center and then inserting them into the tree.
 The packed R-trees could be created with other packing algorithms. In the following, another packing algorithm is described which we will use to create a static index structure.
 %To achieve the best minimization of covering rectangles, 
 %The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.

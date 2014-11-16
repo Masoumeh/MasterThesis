@@ -607,7 +607,7 @@ For such applications, constructing an optimal structure should be focused with 
 The packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-trees which has this preprocessing step. This early effort simply suggests to order the objects based on a criterion, like ascending $X$ coordinate. Then, to build the tree, the object with the minimum value of in the ordered set is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also shape the higher nodes. This step is repeated until the whole objects are assigned to a node and the tree is completed up to the root.
 
 The Hilbert Packed R-tree is another method to construct a static R-tree using Hilbert Sort~\cite{} packing algorithm proposed by Kamel and Faloutsos~\cite{}. This method with $100%$ space utilization, proposes sorting the objects based on their Hilbert value of their center and then inserting them into the tree.
-The packed R-tree could be created with other packing algorithms. In the following, another packing algorithm is described which we will use to create a static index structure.
+The packed R-trees could be created with other packing algorithms. In the following, another packing algorithm is described which we will use to create a static index structure.
 %To achieve the best minimization of covering rectangles, 
 %The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 
@@ -1653,7 +1653,7 @@ In other words, $nscanned\geq nscannedObjects\geq n$ always. Ofcourse, the most 
 %and it could be reached with compound indexes and rephrasing the query statement in some cases as well.
 %TODO mesal for optimization from: http://Java.dzone.com/articles/optimizing-mongodb-compound
 
-Running the same queries as before, like \textit{intersects}, in both databases, Figure~\ref{figBXvsMongoNoIndexIntersects} shows the timing of various queries without using any geospatial index. As it could be seen, all query times are more or less the same, since the whole data is scanned when no index is used. It is also obvious from the following query plan in MongoDB which specifies the cursor type, number of index keys scanned (nscsnned), and number of documents scanned to get the result (nscsnnedObjects),
+Running the same queries as before, like \textit{intersects}, in both databases, Figure~\ref{figBXvsMongoNoIndexIntersects} shows the timing of various queries without using any geospatial index. As it could be seen, all query times are more or less the same, since the whole data is scanned when no index is used. It is also obvious from the following query plan in MongoDB which specifies the cursor type, number of index keys scanned (nscanned), and number of documents scanned to get the result (nscannedObjects),
 \begin{fakeJSON}
 ...
 "n" : 12773,

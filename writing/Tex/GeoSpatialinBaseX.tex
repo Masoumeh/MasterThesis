@@ -627,11 +627,12 @@ It should be mentioned that the performance is not always good since the tree mi
 %It is organized in a way similar to the region quad-tree. A region is recursively partitioned until the resulting quadrants do not contain any rectangle. During the subdivision, all rectangles that intersect with either of the two partitioning lines are associated with the partitioning lines. The rectangles that are associated with a quadrant must not belong to any ancestor quadrant. It is assumed that no two rectangles overlap.
 %\textbf{Cell Methods based on Dynamic Hashing}
 \subsection{Summary}
-In this section we explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in this area and in various sources they are categorized differently. However having an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends first on the characterisitc of the system and also the factionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
+In this section, we explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. These structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends first on the characterisitc of the system and also the factionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
 Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. Together with the explanations, we also provided a brief description of advantages and disadvantages for each index. %structure is briefly mentioned based on the studies and experiments.% in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes} together with. 
 %Besides, we looked at the actual paper of each tree to gather the advantages and disadvantages. 
 %However having an extensive research on these indexing trees was not our focus, we wanted to have at least an introduction about the huge area of spatial indexing.  
 Table~\ref{t.trees} lists these structuers and summerizes their advantages and disadvantages from different viewpoints. 
+
 Among the presented indexes, the STR-tree is the one which we have selected for further implementation. 
 %There are two advantages to consider this tree. First, this tree is efficient when the data is almost fixed which means that the data has minor changed after importing. Second, the JTS library which we use as the basic for Geometry operation, already includes this tree as one of its indexing trees.
 This structure is included in the JTS library, a widely used open source API that is used in BaseX implementing the Geo Module. Since the number of open source implemented solutions is not big enough and we did not aim to implement a structure from the begining, the STR-tree package in the JTS API which is compatible with BaseX Geo Module is a good option to choose. Besides, the STR-tree as a static variant of the R-tree is counted as an advanced one and is effective for datasets with few changes, which we have started with. In the future developments of the index strcture, dynamic indexes could be the focus.
@@ -1912,18 +1913,19 @@ We added to BaseX the new functionality of processing geospatial data.
 However, there is still much room for future improvements. 
 In particular, the storage and indexings are in the center of attention.
 The indexing tree is stored in the main memory which results in poor I/O efficiency.% reading time.
-One of the first ideas is to bring some parts of the tree, which are addresses more, ????
-into RAM. Regarding the indexing, an interesting future work is to compare 
+One of the first ideas is to bring some parts of the tree into RAM which are addresses more.
+Regarding the indexing, an interesting future work is to compare 
 the current STR-tree implementation with other indexing tree in the existence of
-different kinds of geospatial data.???
+different kinds of geospatial data. For example, an interesting research would be
+the comparison between STR-tree and Quadtree having dynamic datasets.
 
 In this thesis, we have considered MongoDB as an alternative for querying and indexing.
 A feasible improvement would be the implementation of a flexible interface
 for this database. As we discussed in Section~\ref{conc}, 
 there would be an inconsistency between 
 the geospatial data and indexing in BaseX and
-the simultaneously indexed data in MongoDB. ??? A future improvement is to 
-implement a module to give the user the whole control over these two possibilities. ??
+the simultaneously indexed data in MongoDB. A future improvement is to 
+implement a module to give the user the whole control over these two possibilities.
 
 \newpage
 \bibliographystyle{unsrt}

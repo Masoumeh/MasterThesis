@@ -606,8 +606,10 @@ Suppose all the required data is available or at least does not change frequentl
 For such applications, constructing an optimal structure should be focused with regards to some tree characteristics, such as maximizing the storage utilization and minimizing the storage overhead, coverages, and overlaps in the R-tree. The methods to build such an R-tree contain a preprocessing step and are known as \textit{packing} or \textit{bulk loading}. 
 The packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-trees which has this preprocessing step. This early effort simply suggests to order the objects based on a criterion, like ascending $X$ coordinate. Then, to build the tree, the object with the minimum value of in the ordered set is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also shape the higher nodes. This step is repeated until the whole objects are assigned to a node and the tree is completed up to the root.
 
-The Hilbert Packed R-tree is another method to construct a static R-tree using Hilbert Sort~\cite{} packing algorithm proposed by Kamel and Faloutsos~\cite{}. This method with $100%$ space utilization, proposes sorting the objects based on their Hilbert value of their center and then inserting them into the tree.
-The packed R-tree could be created with other packing algorithms. In the following, another packing algorithm is described which we will use to create a static index structure.
+The packed R-tree could be created with other packing algorithms. 
+The Hilbert Packed R-tree is another method to construct a static R-tree using Hilbert Sort~\cite{hilbert-rtree} packing algorithm proposed by Kamel and Faloutsos. This method with $100\%$ space utilization, proposes sorting the objects based on their Hilbert value of their center and then inserting them into the tree.
+T
+In the following, another packing algorithm is described which we will use to create a static index structure.
 %To achieve the best minimization of covering rectangles, 
 %The main objective of this algorithm is to reduce the storage space, the coverage and overlap of rectangles, in order to improve the search efficiency.
 

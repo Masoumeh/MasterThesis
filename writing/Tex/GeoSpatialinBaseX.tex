@@ -661,16 +661,18 @@ Based on the requirements, one can search this table for the propert tree of tha
 Among the presented indexes, the STR-tree is the one which we have selected for further implementation. 
 We had different reasons for this selection.
 In general, trees based on B-tree are designed to search efficiently structures stored in disk files.
-Also, R-trees are a common technique which is widely used in spatial databases.
+According to Lee et al~\cite{Lee}, R-trees are a common technique which is widely used in spatial databases.
 They have mostly one hundered percent space utilization.
 Another advantage of STR-tree is the preprocessing data which reduces the query time later in the execution time.
-Besides!!!, the STR-tree as a static variant of the R-tree is counted as an advanced one 
+Also, the STR-tree as a static variant of the R-tree is counted as an advanced one 
 and is effective for datasets with few changes, which we have started with.
+Papadopoulos~\ref{Papadopoulos2010} states that STR-tree generally outperforms
+the previously proposed Bulk-loading methods except some minor cases.
 Besides, this structure is included in the JTS library, a widely used open source API that is used in BaseX implementing the Geo Module. Since the number of open source libraries which implements these tree structures is small and we did not aim to implement a structure from the begining, the STR-tree package in the JTS API which is compatible with BaseX Geo Module is a good option to choose.
 
 Another tree structure which could be considered for the implementation is Quadtree.  
 It is also included in the JTS library. 
-In contrast to STR-tree, it is particularly optimized when the data set is changed dynamically.
+In contrast to STR-tree, it is particularly optimized when the data set changes dynamically.
 However, this is not the focus of this study and is considered as future work.
 %There are two advantages to consider this tree. First, this tree is efficient when the data is almost fixed which means that the data has minor changed after importing. Second, the JTS library which we use as the basic for Geometry operation, already includes this tree as one of its indexing trees.
 %In the future developments of the index strcture, dynamic indexes could be also the focus.

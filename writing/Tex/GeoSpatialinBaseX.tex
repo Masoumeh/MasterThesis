@@ -124,16 +124,18 @@ throughout my whole study. At the end, I am deeply appreciative of my beloved, M
 Geospatial data supports a wide range of ever-expanding applications in various scientific, governmental, business, and industrial areas such as geoscience, energy exploration, natural resource management, disaster management, transportation engineering, and urban planning. 
 Numerous researches and efforts have been dedicated to make the most efficient use of this data, either in representation or manipulation. 
 XML-based structures are parts of the widely used standards to represent the complex structure of geospatial data. 
-Geographic Information Systems (GIS), traditional databases, and other systems have been developed or adopted to handle this type of data format. 
+Geographic Information Systems (GIS)~\cite{gis-intro}, traditional databases, and other systems have been developed or adopted to handle this type of data format. 
 Storage and retrieval of XML-based geospatial data in native XML databases are also suitable ways to fulfill the geospatial requirements. This requires adding geospatial functionalitie as a starting point.
 
-Our contribution is to add geospatial functionalities in the native XML database \textit{BaseX}~\cite{www/basex} which supports geospatial data in \emph{Geography Markup Language (GML)} format. To do the spatial calculations on GML existing open source libraries are applied.
-The big challenge of implementation is effectiveness of operations
+Our contribution is to add geospatial functionalities to BaseX with the support of \emph{Geography Markup Language (GML)} as a geospatial data format. 
+To do the spatial operations on GML, existing open source libraries are applied.
+The big challenge of implementation is the effectiveness of operations
 since geospatial data is often huge in size and complex in structure.
 Hence, performance improvement of data retrieval from such a data structure 
-needs special thought and effort. 
+needs special efforts. 
+
 Spatial indexing structures are common solutions to improve query performance according to specific constraints and properties of spatial data.
-As various spatial index algorithms consider different requirements, choosing a proper index should be based on the our individual system requirements and properties.
+As various spatial index algorithms consider different requirements, choosing a proper index should be based on our individual system properties.
 We have followed this purpose first throught a short study over a huge set of indexing structures.
 % and then an overview of the geospatial features in similar database systems.
 %the following tasks,
@@ -155,15 +157,15 @@ This summary helps to decide the optimum structure for our approach.
 Then, an overview of the geospatial features in similar database systems is provided. Since the database systems with geospatial functionalities are practical samples, this overview can help us to gain an insight into the different ways of implementation% of geospatial functionalities,
 %some other database systems with the geospatial ability are practical samples.
 In this part we expalin how the geospatial functionlities are provided in each database.
-Furthermore, the indexing structures together with different possibilites 
-are discussed briefly.
+Furthermore, the indexing structures together with different abilities
+supplied by each of these databases are discussed briefly.
 
-In the next steps, we develope the \textit{Geo Module} together with the indexing structure in BaseX.
+In the next steps, we develop the \textit{Geo Module} together with an indexing structure in BaseX.
 Evaluation of this module using the real-world data
 comes hereafter to demonstrate the efficiecny of implementation.
 As an experimental way towards more effective geospatial features, 
 we provide a driver to connect to the well-known document-based database MongoDB.
-Throught this connection the queries which are written in BaseX, are executed in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionalities of MongoDB. 
+Throught this connection, the queries which are written in BaseX, are executed in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionalities of MongoDB. 
 We compare the query time and indexing via this connection with the direct query on BaseX. 
 These results and evaluations are the basis for further investigations and developments in BaseX. 
 %time complexity is especially of great interest. 
@@ -657,14 +659,14 @@ Table~\ref{t.trees} lists these structuers and summerizes their advantages and d
 
 Among the presented indexes, the STR-tree is the one which we have selected for further implementation. 
 We had different reasons for this selection.
-In general, trees based on B-tree are designed to search efficiently structures stored in disk files.
-According to Lee et al~\cite{Lee}, R-trees are a common technique which is widely used in spatial databases.
+In general, B-tree based structures are designed to search efficiently structures stored in disk files.
+Among those, the R-tree are a common technique which is widely used in spatial databases according to Lee et al~\cite{Lee}. 
 They have mostly one hundered percent space utilization.
 Another advantage of STR-tree is the preprocessing data which reduces the query time later in the execution time.
 Also, the STR-tree as a static variant of the R-tree is counted as an advanced one 
 and is effective for datasets with few changes, which we have started with.
-Papadopoulos~\ref{Papadopoulos2010} states that STR-tree generally outperforms
-the previously proposed Bulk-loading methods except some minor cases.
+Papadopoulos~\cite{Papadopoulos2010} states that STR-tree generally outperforms
+the previously proposed bulk-loading methods except some minor cases.
 Besides, this structure is included in the JTS library, a widely used open source API that is used in BaseX implementing the Geo Module. Since the number of open source libraries which implements these tree structures is small and we did not aim to implement a structure from the begining, the STR-tree package in the JTS API which is compatible with BaseX Geo Module is a good option to choose.
 
 Another tree structure which could be considered for the implementation is Quadtree.  
@@ -1528,7 +1530,7 @@ In addition to the \textit{split} function, we omit the $Z$ values in parsing pr
 \label{figBXZvalue}
 \end{figure}
 
-Up to this point we have tried various ways to decrease the query times in the Geo Module. Further attempts could be done following the aforementioned Java profiling list (Table~\ref{javaprofiling}), if the implementation will be continued in the current direction.
+Up to this point we have tried various ways to decrease the query times in the Geo Module. Further attempts could be done following the aforementioned Java profiling list (Table~\ref{javaprofile}), if the implementation will be continued in the current direction.
 
 \subsection{Conclusion}
 \label{BXconc}
@@ -1971,7 +1973,7 @@ the simultaneously indexed data in MongoDB. A future improvement is to
 implement a module to give the user the whole control over these two possibilities.
 
 \newpage
-\bibliographystyle{unsrt}
+\bibliographystyle{plain}
 \bibliography{refs}
 \newpage
 \listoffigures

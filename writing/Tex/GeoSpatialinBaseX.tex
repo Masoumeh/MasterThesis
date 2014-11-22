@@ -125,46 +125,43 @@ Geospatial data supports a wide range of ever-expanding applications in various 
 Numerous researches and efforts have been dedicated to make the most efficient use of this data, either in representation or manipulation. 
 XML-based structures are parts of the widely used standards to represent the complex structure of geospatial data. 
 Geographic Information Systems (GIS), traditional databases, and other systems have been developed or adopted to handle this type of data format. 
-Storage and retrieval of XML-based geospatial data in native XML databases are also suitable ways to fulfill the geospatial requirements.
+Storage and retrieval of XML-based geospatial data in native XML databases are also suitable ways to fulfill the geospatial requirements. This requires adding geospatial functionalitie as a starting point.
 
-Our contribution is to add geospatial functionalities in the native XML database \textit{BaseX}~\cite{www/basex}.
-Toward this goal, we support geospatial data in \emph{Geography Markup Language (GML)} format
-and existing libraries are used to do the spatial calculations on GML.
-The big challenge is the effectiveness of implementation
+Our contribution is to add geospatial functionalities in the native XML database \textit{BaseX}~\cite{www/basex} which supports geospatial data in \emph{Geography Markup Language (GML)} format. To do the spatial calculations on GML existing open source libraries are applied.
+The big challenge of implementation is effectiveness of operations
 since geospatial data is often huge in size and complex in structure.
-Hence, performance improvement of data retrieval from a huge data structure 
-needs a second thought. 
-Spatial indexing structures are common solutions 
-to find the suitable ways of efficient querying according to specific constraints.
-Then, we need to find a specific indexing structure that fulfills our requirements.
-We have followed this purpose throught the following tasks,
-\begin{itemize}
-\item a short study over a huge set of indexing structures
-\item an overview of the geospatial features in similar database systems,
-\end{itemize}
-to find the most proper approach in providing geospatial functionalities in BaseX. 
-
-Since the number of indexing structures are large for the first task, 
-we selected the structures among the most widely accepted ones in the literature.
-The goal in this task is to add a new source of discussion 
+Hence, performance improvement of data retrieval from such a data structure 
+needs special thought and effort. 
+Spatial indexing structures are common solutions to improve query performance according to specific constraints and properties of spatial data.
+As various spatial index algorithms consider different requirements, choosing a proper index should be based on the our individual system requirements and properties.
+We have followed this purpose first throught a short study over a huge set of indexing structures.
+% and then an overview of the geospatial features in similar database systems.
+%the following tasks,
+%\begin{itemize}
+%\item a short study over a huge set of indexing structures
+%\item an overview of the geospatial features in similar database systems,
+%\end{itemize}
+%to find the most proper approach in providing geospatial functionalities in BaseX. 
+Since the number of indexing structures are large, 
+we have selected the structures among the most widely accepted ones in the literature.
+The goal of this study is to add a new source of discussion 
 for these structures that helps to understand them more effectively for further developments in BaseX. 
 However there are other efforts discussing the index structures, 
 here we provide a comprehensible explanation and different prespectives which are collected from various sources.
 To make a quick and efficient overview over these structures, 
-we also provide a short summary explaining the indexing structures, advantages, and disadvantages.
+we add a short summary explaining the indexing structures, advantages, and disadvantages.
 This summary helps to decide the optimum structure for our approach. 
 
-To gain an insight into the different ways of implementation of geospatial functionalities,
-some other database systems with the geospatial ability are practical samples.
-We study these selective databases in the second task.
-We expalin how the geospatial functionlities are provided in each database.
+Then, an overview of the geospatial features in similar database systems is provided. Since the database systems with geospatial functionalities are practical samples, this overview can help us to gain an insight into the different ways of implementation% of geospatial functionalities,
+%some other database systems with the geospatial ability are practical samples.
+In this part we expalin how the geospatial functionlities are provided in each database.
 Furthermore, the indexing structures together with different possibilites 
 are discussed briefly.
 
-In the next steps, we develope the Geo Module together with the indexing structure in BaseX.
+In the next steps, we develope the \textit{Geo Module} together with the indexing structure in BaseX.
 Evaluation of this module using the real-world data
-comes hereafter to see the efficiecny of the implementation.
-As an experimental way towards more efficient geospatial features, 
+comes hereafter to demonstrate the efficiecny of implementation.
+As an experimental way towards more effective geospatial features, 
 we provide a driver to connect to the well-known document-based database MongoDB.
 Throught this connection the queries which are written in BaseX, are executed in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionalities of MongoDB. 
 We compare the query time and indexing via this connection with the direct query on BaseX. 
@@ -628,7 +625,7 @@ The X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to su
 
 \textbf{R-tree with packing algorithms.}
 Suppose all the required data is available or at least does not change frequently when the tree is going to be built. For instance, in census and cartographic and environmental data insertions ade deletions rarely or even never happens. 
-For such applications, constructing an optimal structure should be focused with regards to some tree characteristics, such as maximizing the storage utilization and minimizing the storage overhead, coverages, and overlaps in the R-tree. The methods to build such an R-tree contain a preprocessing step and are known as \textit{packing} or \textit{bulk loading}. 
+For such applications, constructing an optimal structure should be focused with regards to some tree characteristics, such as maximizing the storage utilization and minimizing the storage overhead, coverages, and overlaps in the R-tree. The methods to build such an R-tree contain a preprocessing step and are known as \textit{packing} or \textit{bulk-loading}. 
 The packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-trees which has this preprocessing step. This early effort simply suggests to order the objects based on a criterion, like ascending $X$ coordinate. Then, to build the tree, the object with the minimum value of in the ordered set is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also shape the higher nodes. This step is repeated until the whole objects are assigned to a node and the tree is completed up to the root.
 
 The Hilbert Packed R-tree is another method to construct a static R-tree using the packing algorithm by Kamel and Faloutsos~\cite{hilbert-rtree}. This method which has a full space utilization, proposes sorting the objects based on their Hilbert value of their center and then inserting them into the tree.
@@ -651,17 +648,19 @@ It should be mentioned that the performance is not always good since the tree mi
 %\textbf{Cell Methods based on Dynamic Hashing}
 \subsection{Summary}
 \label{indexsummary}
-In this section, we explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. These structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends on the characterisitc of the system and also the functionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
-Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. Together with the explanations, we also provided a brief description of advantages and disadvantages for each index. %structure is briefly mentioned based on the studies and experiments.% in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes} together with. 
+In this section, we explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. Also, these structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends on the characterisitc of system and also the functionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
+Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. Together with the explanations, we provided a brief description of advantages and disadvantages for each index. %structure is briefly mentioned based on the studies and experiments.% in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes} together with. 
 %Besides, we looked at the actual paper of each tree to gather the advantages and disadvantages. 
 %However having an extensive research on these indexing trees was not our focus, we wanted to have at least an introduction about the huge area of spatial indexing.  
 Table~\ref{t.trees} lists these structuers and summerizes their advantages and disadvantages from different viewpoints. 
-Based on the requirements, one can search this table for the propert tree of that special case.
+%Based on the requirements, one can search this table for the suitable tree of that special case.
 
 Among the presented indexes, the STR-tree is the one which we have selected for further implementation. 
-We had different reasons for this selection.
-In general, trees based on B-tree are designed to search efficiently structures stored in disk files.
-Also, R-trees are a common technique which is widely used in spatial databases.
+%We had different reasons for this selection.
+Here, we discuss our reasons for this selection.
+In general, trees based on B-tree are designed to efficiently search structures stored in disk files.
+Among those, R-tree is a common technique which is widely used in spatial databases.
+Focusing the static R-tree
 They have mostly one hundered percent space utilization.
 Another advantage of STR-tree is the preprocessing data which reduces the query time later in the execution time.
 Besides!!!, the STR-tree as a static variant of the R-tree is counted as an advanced one 
@@ -700,7 +699,7 @@ R-tree  & Highly balanced point and non-point objects indexing & Large covered a
 	& $R^+$-tree & No overlapping of MBRs, No multiple path traversal & Rectangle duplication, Bigger structure, Complicated structure, Complex deletion process, Dead spaces\\\cline{2-4}
 	& Cell-tree  & No MBR overlapping, No dead spaces & Object duplication\\\cline{2-4}
 	& $R^*$-tree  & Minimizing coverage area, overlapping, and margin of MBRs, storage utilization & Slightly more cost than R-tree\\\cline{2-4}
-	& Packed-tree & Only one time-consuming preprocessing step& Poor performance in frequent data modification\\\cline{2-4}
+	& Packed R-tree & Only one time-consuming preprocessing step& Poor performance in frequent data modification\\\cline{2-4}
 	& STR-tree & Only one time-consuming preprocessing step& Poor performance in frequent data modification\\\cline{2-4}
 	& X-tree  & No overlapping of MBRs, Good performance & - \\\cline{1-4}
 % \multicolumn{3}{c}{Space filling structures:}\\\hline

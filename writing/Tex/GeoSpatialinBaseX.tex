@@ -678,7 +678,7 @@ with BaseX Geo Module is a good option to choose.
 
 Another tree structure in the JTS library 
 which could be considered for the implementation is Quadtree.  
-In contrast to STR-tree, it is particularly optimized when the data set changes dynamically.
+In contrast to the STR-tree, it is particularly optimized when the data set changes dynamically.
 However, this is not the focus of this study and is considered as future work.
 %There are two advantages to consider this tree. First, this tree is efficient when the data is almost fixed which means that the data has minor changed after importing. Second, the JTS library which we use as the basic for Geometry operation, already includes this tree as one of its indexing trees.
 %In the future developments of the index strcture, dynamic indexes could be also the focus.
@@ -1962,14 +1962,18 @@ Since the performance of two major functionalities, i.e., the \textit{near} feat
 \section{Future Work}
 \label{s.future}
 We added to BaseX the new functionality of processing geospatial data.
-However, there is still much room for future improvements. 
+However, there is still room for future improvements. 
 In particular, the storage and indexings are in the center of attention.
-The indexing tree is stored in the main memory which results in poor I/O efficiency.% reading time.
-One of the first ideas is to bring some parts of the tree into RAM which are addresses more.
-Regarding the indexing, an interesting future work is to compare 
-the current STR-tree implementation with other indexing tree in the existence of
+Right now, the indexing tree is stored in the main memory 
+which results in poor I/O efficiency.% reading time.
+One of the first ideas is to bring some parts of the tree, 
+which are addressed more, into RAM.
+Regarding the indexing, an interesting future work is to practically compare 
+the current STR-tree implementation with other indexing trees in the existence of
 different kinds of geospatial data. For example, an interesting research would be
 the comparison between STR-tree and Quadtree having dynamic datasets.
+Moreover, the support of higher versions of GML and other geospatial data 
+formats alike, could be a topic to work on.
 
 In this thesis, we have considered MongoDB as an alternative for querying and indexing.
 A feasible improvement would be the implementation of a flexible interface
@@ -1978,6 +1982,7 @@ there would be an inconsistency between
 the geospatial data and indexing in BaseX and
 the simultaneously indexed data in MongoDB. A future improvement is to 
 implement a module to give the user the whole control over these two possibilities.
+Besides, we can follow this idea by connection to the other well-known databases.
 
 \newpage
 \bibliographystyle{plain}

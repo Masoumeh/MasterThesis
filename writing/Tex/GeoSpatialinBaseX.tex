@@ -89,7 +89,8 @@ The XML-based data representation and manipulation in this field is one of these
 This work tries to investigate the challenges of geospatial data processing in BaseX~\cite{www/basex}, an open-source native XML database, by discussing the issues in geospatial querying, geospatial functionalities, and query efficiency. 
 At first, this thesis starts with introducing a number of indexing approaches as various ways of efficient geospatial data manipulation. 
 Next, general geospatial functionalities in some similar databases are investigated. 
-Then, the geospatial features for GML~\cite{gml} data representation are added to BaseX, using JTS library and based on the EXPath specification.
+Then, the geospatial features for GML~\cite{gml} data representation are added to BaseX, 
+using the JTS library~\cite{jts} and based on the EXPath specification.
 %The geospatial query is adpated also in the structure of BaseX. 
 
 To improve the performance of spatial queries, an indexing structure is applied as an external library.
@@ -650,27 +651,33 @@ It should be mentioned that the performance is not always good since the tree mi
 %\textbf{Cell Methods based on Dynamic Hashing}
 \subsection{Summary}
 \label{indexsummary}
-In this section, we explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. Also, these structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends on the characterisitc of system and also the functionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
+In this section, we mainly explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. Also, these structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends on the characterisitc of system and also the functionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
 Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. Together with the explanations, we provided a brief description of advantages and disadvantages for each index. %structure is briefly mentioned based on the studies and experiments.% in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes} together with. 
 %Besides, we looked at the actual paper of each tree to gather the advantages and disadvantages. 
 %However having an extensive research on these indexing trees was not our focus, we wanted to have at least an introduction about the huge area of spatial indexing.  
 Table~\ref{t.trees} lists these structuers and summerizes their advantages and disadvantages from different viewpoints. 
-%Based on the requirements, one can search this table for the suitable tree of that special case.
+Based on the requirements, one can search this table for the suitable tree of that special case.
 
 Among the presented indexes, the STR-tree is the one which we have selected for further implementation. 
-We had different reasons for this selection.
-In general, B-tree based structures are designed to search efficiently structures stored in disk files.
-Among those, the R-tree are a common technique which is widely used in spatial databases according to Lee et al~\cite{Lee}. 
-They have mostly one hundered percent space utilization.
-Another advantage of STR-tree is the preprocessing data which reduces the query time later in the execution time.
-Also, the STR-tree as a static variant of the R-tree is counted as an advanced one 
-and is effective for datasets with few changes, which we have started with.
-Papadopoulos~\cite{Papadopoulos2010} states that STR-tree generally outperforms
+Here, we explain different reasons for this selection.
+In general, the B-tree based structures are designed to search efficiently structures stored in disk files.
+Among those, the R-tree is a common technique which is widely used in spatial databases according to Lee et al~\cite{Lee}.
+Focusing on the packed R-trees,
+they have a preprocessing stage which results in
+$100\%$ space utilization and better query time (see~\cite{Lee}).
+The STR-tree as one of these packed R-trees is counted as an advanced one 
+and is effective for datasets with few changes.
+Also, Papadopoulos~\cite{Papadopoulos2010} states that the STR-tree generally outperforms
 the previously proposed bulk-loading methods except some minor cases.
-Besides, this structure is included in the JTS library, a widely used open source API that is used in BaseX implementing the Geo Module. Since the number of open source libraries which implements these tree structures is small and we did not aim to implement a structure from the begining, the STR-tree package in the JTS API which is compatible with BaseX Geo Module is a good option to choose.
+Besides, this structure is also included in the widely used JTS library
+which we will use in the implementation of the Geo Module.  
+Since the number of open source libraries providing these tree structures is small 
+and we do not aim to implement a structure from the begining, 
+the STR-tree package in the JTS API which is compatible 
+with BaseX Geo Module is a good option to choose.
 
-Another tree structure which could be considered for the implementation is Quadtree.  
-It is also included in the JTS library. 
+Another tree structure in the JTS library 
+which could be considered for the implementation is Quadtree.  
 In contrast to STR-tree, it is particularly optimized when the data set changes dynamically.
 However, this is not the focus of this study and is considered as future work.
 %There are two advantages to consider this tree. First, this tree is efficient when the data is almost fixed which means that the data has minor changed after importing. Second, the JTS library which we use as the basic for Geometry operation, already includes this tree as one of its indexing trees.
@@ -742,7 +749,7 @@ In general, these kinds of strategies follow the below steps,
 \item Partition and store the GML document into the corresponding collection
 \item Record the log file containing the GML partitioning information
 \end{enumerate}
-Zhang et al~\cite{Zhang2008} as an example of these approaches develops a prototype system based on \textit{Java API for XML Processing} (JAXP) and JTS~\cite{jts} library to implement the above-mentioned steps. 
+Zhang et al~\cite{Zhang2008} as an example of these approaches develops a prototype system based on \textit{Java API for XML Processing} (JAXP) and JTS library to implement the above-mentioned steps. 
 This prototype contains three building blocks: the schema mapping constructor, the document storage tool, 
 and the spatial analyzer.
 

@@ -126,21 +126,44 @@ Numerous researches and efforts have been dedicated to make the most efficient u
 XML-based structures are parts of the widely used standards to represent the complex structure of geospatial data. 
 Geographic Information Systems (GIS), traditional databases, and other systems have been developed or adopted to handle this type of data format. 
 Storage and retrieval of XML-based geospatial data in native XML databases are also suitable ways to fulfill the geospatial requirements.
-Therefore, the main step is to have geospatial functionalities in these databases which would be the focus of this work. 
-%main focuse of the current work is to add geospatial features in BaseX while investigating an insight some similar database systems in this topic. 
-However, performance improvement in data retrieval is a big challenge since this data is often huge in size and complex in structure. 
-Spatial indexing structures are developed to find the suitable ways of efficient querying according to specific requirements. 
 
-%BaseX~\cite{www/basex} is a high-performance XML database which is developed in Konstanz university.
-%It has a powerful text processor as well as the full support 
-%for XQuery~\cite{www/xquery,www/xqueryfun} language according to \cite{conf/xsym/GrunGHS09}.
-Our main goal is to empower BaseX~\cite{www/basex} to process geospatial data in an effective way. 
-Hence, we add the support of geospatial data in \emph{Geography Markup Language (GML)} format together with an indexing structure. This implementation uses the JTS library to implement the spatial functions and calculations and also the index structure.
-%GML is a widely used XML grammar for geographical data which is defined by Open Geospatial Consortium (OGC), the international organization for developing geospatial standards.
-%Having the geospatial data in BaseX, the query can be done over them.
-Meanwhile, a set of spatial indexing structures and geospatial features in similar database systems are studied which is an introductory point 
-to find the most proper approach in providing geospatial functionalities in BaseX. The structures are selected among the most widely accepted ones in the literature. However there are other efforts discussing the index structures, here we provide a comprehensible explanation and different prespectives which are collected from various sources. The goal of this part is to add a new source of discussion for these structures that helps to understand them more effectively for further developments in BaseX. Moreover, other database systems are practical samples of geospatial functionalities which can give an insight into the ways of implementation.
+Our contribution is to add geospatial functionalities in the native XML database \textit{BaseX}~\cite{www/basex}.
+Toward this goal, we support geospatial data in \emph{Geography Markup Language (GML)} format
+and existing libraries are used to do the spatial calculations on GML.
+The big challenge is the effectiveness of implementation
+since geospatial data is often huge in size and complex in structure.
+Hence, performance improvement of data retrieval from a huge data structure 
+needs a second thought. 
+Spatial indexing structures are common solutions 
+to find the suitable ways of efficient querying according to specific constraints.
+Then, we need to find a specific indexing structure that fulfills our requirements.
+We have followed this purpose throught the following tasks,
+\begin{itemize}
+\item a short study over a huge set of indexing structures
+\item an overview of the geospatial features in similar database systems,
+\end{itemize}
+to find the most proper approach in providing geospatial functionalities in BaseX. 
 
+Since the number of indexing structures are large for the first task, 
+we selected the structures among the most widely accepted ones in the literature.
+The goal in this task is to add a new source of discussion 
+for these structures that helps to understand them more effectively for further developments in BaseX. 
+However there are other efforts discussing the index structures, 
+here we provide a comprehensible explanation and different prespectives which are collected from various sources.
+To make a quick and efficient overview over these structures, 
+we also provide a short summary explaining the indexing structures, advantages, and disadvantages.
+This summary helps to decide the optimum structure for our approach. 
+
+To gain an insight into the different ways of implementation of geospatial functionalities,
+some other database systems with the geospatial ability are practical samples.
+We study these selective databases in the second task.
+We expalin how the geospatial functionlities are provided in each database.
+Furthermore, the indexing structures together with different possibilites 
+are discussed briefly.
+
+In the next steps, we develope the Geo Module together with the indexing structure in BaseX.
+Evaluation of this module using the real-world data
+comes hereafter to see the efficiecny of the implementation.
 As an experimental way towards more efficient geospatial features, 
 we provide a driver to connect to the well-known document-based database MongoDB.
 Throught this connection the queries which are written in BaseX, are executed in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionalities of MongoDB. 
@@ -628,15 +651,29 @@ It should be mentioned that the performance is not always good since the tree mi
 %\textbf{Cell Methods based on Dynamic Hashing}
 \subsection{Summary}
 \label{indexsummary}
-In this section, we explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. These structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends first on the characterisitc of the system and also the factionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
+In this section, we explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. These structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends on the characterisitc of the system and also the functionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
 Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. Together with the explanations, we also provided a brief description of advantages and disadvantages for each index. %structure is briefly mentioned based on the studies and experiments.% in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes} together with. 
 %Besides, we looked at the actual paper of each tree to gather the advantages and disadvantages. 
 %However having an extensive research on these indexing trees was not our focus, we wanted to have at least an introduction about the huge area of spatial indexing.  
 Table~\ref{t.trees} lists these structuers and summerizes their advantages and disadvantages from different viewpoints. 
+Based on the requirements, one can search this table for the propert tree of that special case.
 
 Among the presented indexes, the STR-tree is the one which we have selected for further implementation. 
+We had different reasons for this selection.
+In general, trees based on B-tree are designed to search efficiently structures stored in disk files.
+Also, R-trees are a common technique which is widely used in spatial databases.
+They have mostly one hundered percent space utilization.
+Another advantage of STR-tree is the preprocessing data which reduces the query time later in the execution time.
+Besides!!!, the STR-tree as a static variant of the R-tree is counted as an advanced one 
+and is effective for datasets with few changes, which we have started with.
+Besides, this structure is included in the JTS library, a widely used open source API that is used in BaseX implementing the Geo Module. Since the number of open source libraries which implements these tree structures is small and we did not aim to implement a structure from the begining, the STR-tree package in the JTS API which is compatible with BaseX Geo Module is a good option to choose.
+
+Another tree structure which could be considered for the implementation is Quadtree.  
+It is also included in the JTS library. 
+In contrast to STR-tree, it is particularly optimized when the data set is changed dynamically.
+However, this is not the focus of this study and is considered as future work.
 %There are two advantages to consider this tree. First, this tree is efficient when the data is almost fixed which means that the data has minor changed after importing. Second, the JTS library which we use as the basic for Geometry operation, already includes this tree as one of its indexing trees.
-This structure is included in the JTS library, a widely used open source API that is used in BaseX implementing the Geo Module. Since the number of open source implemented solutions is not big enough and we did not aim to implement a structure from the begining, the STR-tree package in the JTS API which is compatible with BaseX Geo Module is a good option to choose. Besides, the STR-tree as a static variant of the R-tree is counted as an advanced one and is effective for datasets with few changes, which we have started with. In the future developments of the index strcture, dynamic indexes could be the focus.
+%In the future developments of the index strcture, dynamic indexes could be also the focus.
 %is suitable to focus on the data with minor changes and improves the intersection queries. %There were several reasons:
 %\begin{itemize}
 %\item Many spatial databases are using this tree as the indexing basis. 
@@ -647,7 +684,7 @@ This structure is included in the JTS library, a widely used open source API tha
 \begin{tabular}{|>{\centering\arraybackslash}m{8mm}| >{\centering\arraybackslash}m{3cm} | >{\centering\arraybackslash}m{5cm} | >{\centering\arraybackslash}m{5cm} |}
 \hline
 \multicolumn{2}{|c|}{\textbf{Indexing Tree}} & \multicolumn{1}{c|}{\textbf{Advantage}} & \multicolumn{1}{c|}{\textbf{Disadvantage}} \\\hline
-\multirow{14}{*}{\rotatebox[origin=c]{90}{Based on the Binary-tree}} & KD-tree &  Simple implementation, Good  performance for $2$D if tree is balanced & Not balanced, Storage inefficiency, Poor deletion\\
+\multirow{14}{*}{\rotatebox[origin=c]{90}{Based on the Binary-tree}} & KD-tree &  Simple implementation, Good  performance for $2$D if the tree is balanced & Not balanced, Storage inefficiency, Poor deletion\\
       \cline{2-4}
 % \multirow{3}{|c|}{Based on the KD-tree:}\\\hline
 	& Non-Homo KD-tree  & Optimized deletion & Not balanced, Storage inefficiency \\\cline{2-4}
@@ -669,7 +706,7 @@ R-tree  & Highly balanced point and non-point objects indexing & Large covered a
 % \multicolumn{3}{c}{Space filling structures:}\\\hline
 \rotatebox[origin=t]{90}{\begin{minipage}{0.5in}Space filling\end{minipage}} & Quad-tree   & Efficient for sparse data & Poor performance in high-dimensional data \\\hline
 \end{tabular}
-\caption{Summary of index structures}
+\caption{Summary of the index structures studied in Section~\ref{s.geospatial-index}.}
 \label{t.trees}
 \end{table}
 \newpage

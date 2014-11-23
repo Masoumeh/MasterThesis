@@ -228,7 +228,7 @@ In geographic information systems (GIS), coordinate systems are categorized in t
 \begin{itemize}
 \item \textbf{Global or spherical coordinate system} 
 
-Also referred as \textit{geographic coordinate system}, represents the data on Earth in a 3D spherical surface by longitudes and latitudes. Points are referenced by their longitude and latitude values which are angles measured often in degrees (or in grads) from the Earth's center to a point on the Earth's surface. Sometimes it is useful to associate longitude and latitude values with $x$ and $y$ axis respectively. WGS84, NAD\footnote{North American Datum} 1927, and NAD 1983 are examples of geographic coordinate systems. 
+Also referred as \textit{geographic coordinate system}, represents the data on Earth in a 3D spherical surface by longitudes and latitudes. Points are referenced by their longitude and latitude values which are angles measured often in degrees (or in grads) from Earth's center to a point on Earth's surface. Sometimes it is useful to associate longitude and latitude values with $x$ and $y$ axis respectively. WGS84, NAD\footnote{North American Datum} 1927, and NAD 1983 are examples of geographic coordinate systems. 
 
 \item \textbf{Projected coordinate system} 
 
@@ -1140,88 +1140,46 @@ cts:point(10,20))
 \end{fakeJSON}
 \vspace{10px}
 
-%Geospatial Index Positions
-%	For each geispatial index there is a positions options, which is used for queries with restrictions of data distance inside the document.
-
-%Geospatial Lexicons1
-%Provided by spatial index, containing unique values of  geospatial data. 
-
-%“geo” XQuery Library
-%geo:box
-%Create a cts:point value from an element representing a box in one of the supported markup vocabularies.
-%geo:circle
-%Create a cts:circle value from a radius and an element representing a point in one of the supported 5
-%markup vocabularies.
-%geo:geospatial-query
-%Returns a cts:query matching points within given regions.
-%geo:geospatial-query-from-elements
-%Returns a cts:query matching points within given regions.
-%geo:interior-polygon
-%Create a sequence of cts:polygon values from a polygon element in one of the supported markup vocabularies.
-%geo:point
-%Create a cts:point value from an element representing a point in one of the supported markup vocabularies.
-%geo:polygon
-%Create a cts:polygon value from a sequence of point elements in one of the supported markup vocabularies.
-
-
-%“gml” XQuery Library
-%gml:box
-%Create a cts:box value from a GML Envelope element.
-%gml:circle
-%Create a cts:circle value from a radius and GML Point element.
-%gml:geospatial-query
-%Returns a cts:query matching points within given regions.
-%gml:geospatial-query-from-elements
-%Returns a cts:query matching points within given regions.
-%gml:interior-polygon
-%Create a sequence of cts:polygon values from a GML Polygon element.
-%gml:point
-%Create a cts:point value from a GML Point element.
-%gml:polygon
-%Create a cts:polygon value from a sequence of GML Point elements or a GML Polygon element.
-
-
-%“geoRss” XQuery Library
-%georss:circle
-%Create a cts:circle value from a radius and GeoRSS point element.
-%georss:geospatial-query
-%Returns a cts:query matching points within given regions.
-%georss:point
-%Create a cts:point value from a GeoRSS point element.
-
-%“kml” XQuery Library
-%kml:box
-%Create a cts:point value from a KML LatLongBox element.
-%kml:circle
-%Create a cts:circle value from a radius and KML Point or Location element.
-%kml:geospatial-query
-%Returns a cts:query matching points within given regions.
-%kml:geospatial-query-from-elements
-%Returns a cts:query matching points within given regions.
-%kml:interior-polygon
-%Create a sequence of cts:polygon values from a KML Polygon element.
-%kml:point
-%Create a cts:point value from a KML Point or Location element.
-%kml:polygon
-%Create a cts:polygon value from a KML polygon or a sequence of KML Point or Location elements.
-
-
-%“cts” Functions
-%Part of these functions also contain geospatial function: 1 2
-%----------------------------------------------------------------------------------------------------------------------------
 For querying on geospatial data in MarkLogic, after loading the data into the database and making the indexes, primitive types should be constructed to be used in query functions. Then, geospatial queries are constructed using these primitive types. 
 
 \subsubsection{eXist-db}
 %Here, we briefly describe the concepts of geospatial support in eXist-db\footnote{The spatial module in eXist-db is still in experimental satus.} to see the properties and implementation model of the functions and the index structure. 
 
-The database eXist-db~\cite{existdb} version $1.2$\footnote{The spatial module in eXist-db is still in experimental status.} supports geospatial data in GML $2.1.2$ format. The geospatial features are provided using the JTS API in geospatial computations. 
+eXist-db~\cite{existdb} version $1.2$\footnote{The spatial module in eXist-db is still in experimental status.} supports geospatial data in GML $2.1.2$ format. The geospatial features are provided using the JTS API in geospatial computations. 
 The general development idea of indexing in eXist-db follows a modular architecture.
 The geospatial index is developed based on this model and maintained as a pluggable extension. 
 %To create the geospatial index, it must be configured in collection-specific configuration XML files that are located in the system collection: "/db/system/config". 
-The geospatial index in eXist-db is made by a relational database to index spatial data. The index doesn't store character data from the document. It stores WKB index entries through the JDBC in  the HSQLDB which could be any other relational database such as PostGIS. The index creation relies on the open source libraries of the GeoTools~\cite{geotools} project. Geometries are stored both in the original coordinate system and WGS84 system in index structure to allow the operations on data originated from the different systems. In this way, transformations between coordinate systems are included using GeoTools library.
+eXist-db connects to a relational database to index spatial data. The index doesn't store character data from the document. Instead, WKB index entries are stored through the JDBC in the HSQLDB or any other relational database namely PostGIS. 
+
+The index creation relies on the open source libraries of the GeoTools~\cite{geotools} project. Geometries are stored both in the original coordinate system and WGS84 system in index structure to allow the operations on data originated from the different systems. In this way, transformations between coordinate systems are included using GeoTools library.
  
 %In other words, the spatial data is stored in the DB, but geometries, as JTS Geometry instances, are held in memory, waiting for a special mode to be flushed into a relational DB, insertion or removal. The Geometry WKT representation would be serialized and deserialized to and from the database.
 
+To query a spatial dataset, the spatial index and the spatial module must be enabled in the main configuration file (conf.xml). The following content in a configuration file of a collection in a database configures the spatial index on GML geometries. 
+\vspace{10px}
+\begin{fakeJSON}
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+  <index>
+    <gml flushAfter="200"/>
+  </index>
+</collection>
+\end{fakeJSON}
+\vspace{10px}
+The attribute \textit{flushAfter="200"} says that the index entries in memory will be flushed into the HSQLDB. Now, the dataset is ready to query and Code~\ref{} is a sample query that return the whole polygons which intersect with the second argument of the \textit{spatial:intersects} function.
+\begin{fakeXML}[label=intersectexist,caption=A spatial sample query in eXist-db using \textit{spatial:intersects} function]
+declare namespace gml = "http://www.opengis.net/gml";
+spatial:intersects(//gml:Polygon,
+  <gml:Polygon srsName="osgb:BNG" xmlns:gml='http://www.opengis.net/gml'>
+    <gml:outerBoundaryIs>
+      <gml:LinearRing>
+        <gml:coordinates>
+	  08.278200,187600 278400,187600 278400,188000 278200,188000 278200,187600
+	</gml:coordinates>
+      </gml:LinearRing>
+    </gml:outerBoundaryIs>
+  </gml:Polygon>
+) 
+\end{fakeXML}
 \subsubsection{MonetDB}
 MonetDB\footnote{This information which are presented here, are from January 2014 Bugfix.} basically is a relational column-store database which has implemented a separate module to support the objects and functions in the OGC "Simple Features Specification for SQL"~\cite{ogcsfs}. The current implementation of spatial support is still simple. MonetDB stores XML in its relational architecture as Boncz et al~\cite{Boncz2006} describes. The geospatial component in MonetDB wraps the open source GEOS libraries~\cite{GEOS}
 which is the \textit{C++} implementation of the JTS API. When \textit{geom}, the geospatial module in MonetDB/SQL component, is enabled, then the created databases are spatially-enabled by default. MonetDB supports the OGC geospatial types. Besides, a non-OGC type, called \textit{mbr}, is used for stroing a 2D box for fast access. Numerous functions exist in MonetDB to provide SQL-based geospatial querying. These functions are categorized in geometry constructors, functions an specific geometry, and functions on bounding boxes. Function on boxes could be used for pre-filtering in some complicated queries. Below shows some geospatial functions that can be used in queries.
@@ -1261,7 +1219,7 @@ The first idea, presented in the first paragraph, is about the unification of th
 is coming from different sources. The second idea, presented in the second paragraph, is pointing to a 
 completely different idea of finding a path between to points in these database.
 
-Schwarz et al\cite{Schwarz2004} introduced a library for geospatial data management to enable handling the different coordinate systems. This library provides geospatial functions which are delegated to JTS library. As mentioned before, JTS library only supports the Cartesian coordinate system and the input geometries should be in a common systems to be processed. It can happen that the geometries have different coordinate systems. For example, the geospatial data is provided from different sources. In order to work with JTS library, a common coordinate system is chosen to which other systems of the current data is converted. This coordinate system is chosen considering the the transformation issues to have the minimum differences from the original data and to maximize the transformations precision.
+Schwarz et al~\cite{Schwarz2004} introduced a library for geospatial data management to enable handling the different coordinate systems. This library provides geospatial functions which are delegated to JTS library. As mentioned before, JTS library only supports the Cartesian coordinate system and the input geometries should be in a common systems to be processed. It can happen that the geometries have different coordinate systems. For example, the geospatial data is provided from different sources. In order to work with JTS library, a common coordinate system is chosen to which other systems of the current data is converted. This coordinate system is chosen considering the the transformation issues to have the minimum differences from the original data and to maximize the transformations precision.
 
 
 Padmaja et al~\cite{short-path} introduces an alternative way of finding the shortest path regarding existing cost. The k-shortest path and many other path finding algorithms are efficient as long as the effecting cost factors do not change dynamically. This provided method first finds the shortest paths without considering the cost factors. At the end, the factors are used to rank the paths. All paths between each two points could be stored in database in pre-processing stage to reduce the further combinations. To find the paths, each edge in the network of the connected points should be provided with the start and end points. The process starts from the starting point and finds the whole connected ones and continues till reaches the destination. The paths would be obtained by joining the edges detected in each step.
@@ -1288,7 +1246,7 @@ Padmaja et al~\cite{short-path} introduces an alternative way of finding the sho
 %TODO:why gml:http://www.w3.org/Mobile/posdep/GMLIntroduction.html - 
 %TODO: and  http://spatialnews.geocomm.com/features/gml/topten.html
 Spatial query is a special type of query which requires the processing of geometries with two certain properties in general. First, it has geometries as inputs and outputs as well as other primitive types, like double, integer, etc. Second, it considers spatial relations between the geometries.
-As we discussed in Section~\ref{s.dbs}, there are various viewpoints in providing geospatial features in a database to fulfill the expected requirements. Following the OGC Simple Feature (OGCSF)~\cite{springergeo} data model, geospatial features in BaseX adapt the specification of EXPath geospatial API function interface. This specification defines commonly used functions from the OGCSF Common Access API \cite{simpleFeature}. Since the OGCSF data model is typically represented in GML, we concentrate to add the support of GML format in BaseX. However, an implementation could support other encodings such as KML. 
+As we discussed in Section~\ref{s.dbs}, there are various viewpoints in providing geospatial features in a database to fulfill the expected requirements. Following the OGC Simple Feature (OGCSF)~\cite{springergeo} data model, geospatial features in BaseX adapt the specification of EXPath geospatial API function interface. This specification defines commonly used functions from the OGCSF Common Access API~\cite{simpleFeature}. Since the OGCSF data model is typically represented in GML, we concentrate to add the support of GML format in BaseX. However, an implementation could support other encodings such as KML. 
 
 Throughout the following sections, we discuss the integration of geospatial data processing in BaseX. We introduce geospatial functions as a new module, called \textit{Geo Module}, in Section~\ref{geomodule}. Query efficiency is improved later in Section~\ref{indexBX} by implementing an index structure. Indexing and the related time complexities are discussed hereafter in Section~\ref{indexFunc} and Section~\ref{BXevaluation}, as the critical issue in this topic. Finally, the concluding points are explained in Section~\ref{BXconc}.
 

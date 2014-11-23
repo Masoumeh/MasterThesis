@@ -81,14 +81,15 @@ emph={}
 
 \newpage
 \section*{Abstract}
-Geospatial information has been growing exponentially and has been used in variety of applications such as GIS, bioinformatics, and decision support systems. 
+Geospatial information has been growing exponentially and has been used in variety of applications 
+such as Geographic Information SystemsGeographic Information Systems, bioinformatics, and decision support systems. 
 Variety of applications have demanded efficient approaches of data manipulation to cover their requirements. 
 The XML-based data representation and manipulation in this field is one of these approaches that also has been considered and applied by databases, especially native XML databases. 
 %The open-source software BaseX is one of these native XML databases. 
 
-This work tries to investigate the challenges of geospatial data processing in BaseX~\cite{www/basex}, an open-source native XML database, by discussing the issues in geospatial querying, geospatial functionalities, and query efficiency. 
+This work tries to investigate the challenges of geospatial data processing in BaseX~\cite{www/basex}, an open-source native XML database, by discussing the issues in geospatial querying, geospatial functionality, and query efficiency. 
 At first, this thesis starts with introducing a number of indexing approaches as various ways of efficient geospatial data manipulation. 
-Next, general geospatial functionalities in some similar databases are investigated. 
+Next, general geospatial functionality in some similar databases are investigated. 
 Then, the geospatial features for GML~\cite{gml} data representation are added to BaseX, 
 using the JTS library~\cite{jts} and based on the EXPath specification.
 %The geospatial query is adpated also in the structure of BaseX. 
@@ -109,9 +110,9 @@ I must express my sincerest thanks towards
 Dr. Christian Gr{\"u}n for his continuous support and patience during my research.
 I should confess that I can not imagine a better person to guide and advise me. Besides, I would like to extend my gratitude to my supervisor Prof. Dr. Marc H. Scholl to give me the chance to be involved in this group.
 
-My special appreciation also goes to Dr. Rolf A. de By from the University of Twente for
+My special appreciation also goes to \textit{Dr. Rolf A. de By} from the University of Twente for
 answering completely and accurately the questions that I would ask
-frequently and providing me a sample data set to test. I would like to offer my heartfull gratitude my parents and family for encouraging me 
+frequently and providing me a sample data set to test. I would like to offer my heartful gratitude my parents and family for encouraging me 
 throughout my whole study. At the end, I am deeply appreciative of my beloved, M. Ali Rostami, without whom it would have been impossible to continue.
 
 
@@ -126,9 +127,9 @@ Geospatial data supports a wide range of ever-expanding applications in various 
 Numerous researches and efforts have been dedicated to make the most efficient use of this data, either in representation or manipulation. 
 XML-based structures are parts of the widely used standards to represent the complex structure of geospatial data. 
 Geographic Information Systems (GIS)~\cite{gis-intro}, traditional databases, and other systems have been developed or adopted to handle this type of data format. 
-Storage and retrieval of XML-based geospatial data in native XML databases are also suitable ways to fulfill the geospatial requirements. This requires adding geospatial functionalitie as a starting point.
+Storage and retrieval of XML-based geospatial data in native XML databases are also suitable ways to fulfill the geospatial requirements. This requires adding geospatial functionality as a starting point.
 
-Our contribution is to add geospatial functionalities to BaseX with the support of \emph{Geography Markup Language (GML)} as a geospatial data format. 
+Our contribution is to add geospatial functionality to BaseX with the support of \emph{Geography Markup Language (GML)} as a geospatial data format. 
 To do the spatial operations on GML, existing open source libraries are applied.
 The big challenge of implementation is the effectiveness of operations
 since geospatial data is often huge in size and complex in structure.
@@ -137,7 +138,7 @@ needs special efforts.
 
 Spatial indexing structures are common solutions to improve query performance according to specific constraints and properties of spatial data.
 As various spatial index algorithms consider different requirements, choosing a proper index should be based on our individual system properties.
-We have followed this purpose first throught a short study over a huge set of indexing structures.
+We have followed this purpose first through a short study over a huge set of indexing structures.
 % and then an overview of the geospatial features in similar database systems.
 %the following tasks,
 %\begin{itemize}
@@ -150,23 +151,23 @@ we have selected the structures among the most widely accepted ones in the liter
 The goal of this study is to add a new source of discussion 
 for these structures that helps to understand them more effectively for further developments in BaseX. 
 However there are other efforts discussing the index structures, 
-here we provide a comprehensible explanation and different prespectives which are collected from various sources.
+here we provide a comprehensible explanation and different perspectives which are collected from various sources.
 To make a quick and efficient overview over these structures, 
 we add a short summary explaining the indexing structures, advantages, and disadvantages.
 This summary helps to decide the optimum structure for our approach. 
 
-Then, an overview of the geospatial features in similar database systems is provided. Since the database systems with geospatial functionalities are practical samples, this overview can help us to gain an insight into the different ways of implementation% of geospatial functionalities,
+Then, an overview of the geospatial features in similar database systems is provided. Since the database systems with geospatial functionality are practical samples, this overview can help us to gain an insight into the different ways of implementation% of geospatial functionalities,
 %some other database systems with the geospatial ability are practical samples.
-In this part we expalin how the geospatial functionlities are provided in each database.
+In this part we explain how the geospatial functionality is provided in each database.
 Furthermore, the indexing structures together with different abilities
 supplied by each of these databases are discussed briefly.
 
 In the next steps, we develop the \textit{Geo Module} together with an indexing structure in BaseX.
 Evaluation of this module using the real-world data
-comes hereafter to demonstrate the efficiecny of implementation.
+comes hereafter to demonstrate the efficiency of implementation.
 As an experimental way towards more effective geospatial features, 
 we provide a driver to connect to the well-known document-based database MongoDB.
-Throught this connection, the queries which are written in BaseX, are executed in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionalities of MongoDB. 
+Through this connection, the queries which are written in BaseX, are executed in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionality of MongoDB. 
 We compare the query time and indexing via this connection with the direct query on BaseX. 
 These results and evaluations are the basis for further investigations and developments in BaseX. 
 %time complexity is especially of great interest. 
@@ -297,11 +298,11 @@ GML versions before Version 3.0 encode a set of 2D geometries, i.e. Point, LineS
 
 \subsection{Geospatial Data in Native XML Databases}
 \label{s.geo-data-in-xml-data}
-As a powerful platform-independent XML grammar introduced by the GIS community(OGC), GML plays an important role in spatial data modeling, integration, sharing, transmission, and exchange because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering the XML-based structure of GML, it could be embedded and queried anywhere in the document, and be mixed with any other type of XML, images, etc. 
+As a powerful platform-independent XML grammar introduced by the GIS community (OGC), GML plays an important role in spatial data modeling, integration, sharing, transmission, and exchange because of its flexibility in application schema, self-descriptive format, and rich data expression. Considering the XML-based structure of GML, it could be embedded and queried anywhere in the document, and be mixed with any other type of XML, images, etc. 
 %TODO:In classic relational databases,... In XML native databases, geospatial data are handled ...
 
 In addition to the general functions and features on the structure of GML data, geospatial concepts and requirements could be included in the native XML databases. To start with, the GML elements should be read and treated as geometries. Therefore, the string information is not enough to satisfy the geospatial features. The positions, locations, and relations between an arbitrary set of geometries raise some requirements regarding to the topics and definitions in related scientific fields like Geometry and Geoscience. For example, "What is the distance between two geometries?" or "Which geometries intersect a particular geometry?". Furthermore, there are features related to single geometries, such as the length and area of a geometry, the number of interior rings of a polygon, and the starting point of a line. These features can be provided as XQuery functions by a database system or XQuery processor and be mixed with standard XQuery, full-text, and other functions.
-To this date, numerous ideas have been introduced for geospatial functionalities as well as indexing. Here we discuss some geospatial index structures and then we will have a look at some sample implementations in Section~\ref{s.dbs}.
+To this date, numerous ideas have been introduced for geospatial functionality as well as indexing. Here we discuss some geospatial index structures and then we will have a look at some sample implementations in Section~\ref{s.dbs}.
 %In order to investigate the related functionalities we start with the existing approaches in the indexing and the 
 
 %Indeed in a database system the features related to a set of geometries are of more importance ...................
@@ -317,7 +318,7 @@ To this date, numerous ideas have been introduced for geospatial functionalities
 
 \subsection{Geospatial Indexing}
 \label{s.geospatial-index}
-According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on data manipulation and storage. Conventional index types are not suitable for supporting geospatial data since it is very large and complex in structure and relations. Besides, the spatial queries differ from non-spatial queries in several important ways. For example, spatial queries include geometry data types and consider the spatial reletionships,e.g. containment, between the geometrirs. Additionally, the operators used for geospatial data retrieval are complicated and spatial orderings would be hard to define. An important reason which makes the traditional indices not appropriate is that indexing strategies will consider the spatial objects in one dimension and do not preserve the spatial proximity.
+According to the survey of Chin et al~\cite{survey}, indexing has dramatic influences on data manipulation and storage. Conventional index types are not suitable for supporting geospatial data since it is very large and complex in structure and relations. Besides, the spatial queries differ from non-spatial queries in several important ways. For example, spatial queries include geometry data types and consider the spatial relationships,e.g. containment, between the geometries. Additionally, the operators used for geospatial data retrieval are complicated and spatial orderings would be hard to define. An important reason which makes the traditional indices not appropriate is that indexing strategies will consider the spatial objects in one dimension and do not preserve the spatial proximity.
 
 %As Chin et al~\cite{survey} has examined, As already has studied in several suryays, 
 In order to fulfill the geospatial specialty and improve the data retrieval, a large number of spatial indexes has been introduced. The strength or weakness of an indexing approach mostly depends on the requirements, query types, and applications for which it is developed. 
@@ -333,7 +334,8 @@ these approaches enclose the polygon as accurate as possible by dividing the spa
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{Trees}
-\caption{An overview of some important indexing structures developed over the years}
+\caption{An overview of some important indexing structures developed over the years 
+(created based on ideas mainly from \cite{survey}).}
 \label{trees}
 \end{figure}
 
@@ -354,7 +356,7 @@ It is a generalization of the binary tree structure for organizing $k$-dimension
 
 Figure~\ref{figkdtree} shows the representation of some sample data and the corresponding KD-tree. As it can be seen, according to the discriminator $x$ in the first level, nodes $B, C, D$ in the left subtree of $A$ have a smaller $x$ value and nodes $E, F$ in the right subtree have a greater $x$ value. In the next level that the discriminator is $y$, the same consequently happens for $y$ values. For example, node $C$ which is in the subspace half below $B$, has a smaller $y$ value.
 
-The KD-tree as an important search structure, has been widely used and studied~\cite{ilprints723}. With a simple implementation, it works effectively for range queries since they are formed by splitting the space by planes orthogonal to axis. The balanced KD-tree is also effective in searching the Nearest Neighbour in 2D which plays critical roles in database retrievals, classification problems, and clustering problems together with other reange queries. However, some variants have been introduced to allow for better performance in clustering, searching, storage efficiency,  
+The KD-tree as an important search structure, has been widely used and studied~\cite{ilprints723}. With a simple implementation, it works effectively for range queries since they are formed by splitting the space by planes orthogonal to axis. The balanced KD-tree is also effective in searching the Nearest Neighbour in 2D which plays critical roles in database retrievals, classification problems, and clustering problems together with other range queries. However, some variants have been introduced to allow for better performance in clustering, searching, storage efficiency,  
 and balancing, especially in higher dimensions. We discuss some of these variants in the followings.
 
 \begin{figure}
@@ -434,7 +436,7 @@ To represent the holey regions, the HB-tree uses the KD-tree within internal nod
 %A data space can be non-rectangular and space representation in internal nodes is by KD-trees. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through KD-tree recursive partitioning.
 As Lomet and Salzberg~\cite{hbtree1} states, removing the sparse nodes of the KDB-tree gives better search and insert performance and decent space utilization in the HB-tree. Nevertheless, expensive deletion and splitting as a result of complex structure, and multiple references to a data node that may lead to more than one traversal of a path are the trade-off.
 
-\textbf{Matsuyama's KD-tree.} Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In order to achieve this, a data page is associated to each leaf node containing pointer to the objects. The pointers refer to objects either totally or partially included in the data space. Those objects that overlap several unpartitioned spaces will be referenced in all corresponding pages. As mentioned in~\cite{survey}, this structure is not appropriate for data with large objects due to duplication.
+\textbf{Matsuyama's KD-tree.} Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama et al~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In order to achieve this, a data page is associated to each leaf node containing pointer to the objects. The pointers refer to objects either totally or partially included in the data space. Those objects that overlap several unpartitioned spaces will be referenced in all corresponding pages. As an advantage, it should be mentioned that this structure is not appropriate for data with large objects due to duplication.
 
 \textbf{4D-tree.} Another extension of the KD-tree to make it useful for two-dimensional rectangular objects is the 4D-tree~\cite{4dtree}. This data structure maps objects into four-dimensional points which are indexed in the KD-tree. It means that a rectangle $(x‍‍_1, y_1)$, $(x_2, y_2)$ is considered as the point $(x‍‍_1, y_1, x_2, y_2)$. Similar to the KD-tree, the discriminator in each level is chosen repeatedly from the set $(x‍‍_1, y_1, x_2, y_2)$. For each node, a discriminator, a discriminator value, and pointers to two children are stored. 
 For a region search $(qx_1, qx_2, qy_1, qy_2)$, depending on the discriminator, the result of one of the following operators,
@@ -450,11 +452,12 @@ The major problem of this approach is the high cost of its intersection search w
 \item The level discriminator value
 \item The maximum and minimum values of the left and right subtree objects respectively in the dimension that the level discriminator belongs to.
 \end{itemize}    
-As Chin et al~\cite{survey} state, the SKD-tree directory is stored in secondary memory. Figure~\ref{figskdtree} shows an example of a data set and the space partitioning together with the corresponding SKD-tree. Figure~\ref{skdtree2} illustrates the way that minimum and maximum boundaries of each space are determined to shape a virtual subspace. In this example, the discriminator for the root node is $x$ with the value of $x_6$.
+%As Chin et al~\cite{survey} state, the SKD-tree directory is stored in secondary memory. 
+Figure~\ref{figskdtree} shows an example of a data set and the space partitioning together with the corresponding SKD-tree. Figure~\ref{skdtree2} illustrates the way that minimum and maximum boundaries of each space are determined to shape a virtual subspace. In this example, the discriminator for the root node is $x$ with the value of $x_6$.
 The maximum boundary of the rectangle $r_3$ is $x_7$ which defines the maximum boundary of the left virtual subspace. Correspondingly, the minimum boundary of the right subspace is $x_5$, which is the right boundary of rectangle $r_8$. Figure~\ref{skdtree1} shows the tree directory of this sample data.
 \begin{figure}
 \centering
-\subfigure[Space partiotioning in the SKD-tree]{
+\subfigure[Space partitioning in the SKD-tree]{
 \includegraphics[width=0.5\textwidth,height=0.19\textheight]{skdtree2}
 %\caption{}
 \label{skdtree2}
@@ -508,8 +511,7 @@ As this structure is designed for disk storage, the leaf nodes in Figure~\ref{rt
 \label{rtree}
 \end{figure}
 
-According to Chin et al~\cite{survey}, the operations on the R-tree 
-are basically the same as in the B-tree. The only difference is that the 
+The operations on the R-tree are basically the same as in the B-tree. The only difference is that the 
 whole operations have to be done on bounding rectangles.
 Also, the order used in the element placement in B-tree
 is the set inclusion order on bounding rectangles and shapes in leaf nodes. 
@@ -540,7 +542,7 @@ Figure~\ref{rtreequery} depicts how an intersection query is done on the R-tree 
 \label{rtreequery}
 \end{figure}
 
-The R-tree benefits from the highly balanced structure and organizes the data in pages. This structure is designed for secondary storage and most of implementations often keep the inner nodes in main memory while the leaves are loaded from disk. It yields good performance in low-dimensional spaces. Generally, this structure is common indexing technique for efficient execution of multi-dimensional queries on both point and extended spatial data. However, there are two main disadvantages according to Manolopoulos et al~\cite{Manolopoulos:2005}, which motivate to revise the structure towards more efficient variations. First, point-location queries may lead to multiple path navigations in the tree leading to declined performance, especially when MBRs overlapping are considerable. Second, investigating empty spaces of large rectangles which have significant overlaps, deteriorates the performance. Here, we briefly explain some of the most important variations of the R-tree to see how they alter the algorithm to circumvent the disadvantages. The improvements for R-trees can be grouped into two groups with distince objectives, \textit{dynamic} and \textit{static}. The dynamic variants effectively handle insertions and deletions on an existing tree while the static ones must be known in advance and build an efficient tree from scratch. 
+The R-tree benefits from the highly balanced structure and organizes the data in pages. This structure is designed for secondary storage and most of implementations often keep the inner nodes in main memory while the leaves are loaded from disk. It yields good performance in low-dimensional spaces. Generally, this structure is common indexing technique for efficient execution of multi-dimensional queries on both point and extended spatial data. However, there are two main disadvantages according to Manolopoulos et al~\cite{Manolopoulos:2005}, which motivate to revise the structure towards more efficient variations. First, point-location queries may lead to multiple path navigation in the tree leading to declined performance, especially when MBRs overlapping are considerable. Second, investigating empty spaces of large rectangles which have significant overlaps, deteriorates the performance. Here, we briefly explain some of the most important variations of the R-tree to see how they alter the algorithm to circumvent the disadvantages. The improvements for R-trees can be grouped into two groups with distinct objectives, \textit{dynamic} and \textit{static}. The dynamic variants effectively handle insertions and deletions on an existing tree while the static ones must be known in advance and build an efficient tree from scratch. 
 
 
 \textbf{$\boldsymbol{R^+}$-tree.}
@@ -580,7 +582,8 @@ For example, the internal nodes in Figure~\ref{figcelltree} are polygons.
 
 Similar to the $R^+$-tree, objects may be stored in more than one leaf if necessary. This could lead to a division of new objects in order to place them in bounding polygons that do not overlap. 
 As an instance, the object $b$ in Figure~\ref{figcelltree} is contained in two different leaf nodes as $b_1$ and $b_2$.
-This will be more serious in populated databases. The solution proposed by Chin et al~\cite{survey} improves storage efficiency, but does not give significant query performance. 
+This will be more serious in populated databases. 
+%The solution proposed by Chin et al~\cite{survey} improves storage efficiency, but does not give significant query performance. 
 
 \textbf{$\boldsymbol{R^*}$-tree.}
 In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization by trying the following criteria, as Manolopoulos et al~\cite{Manolopoulos:2005} explains:
@@ -628,7 +631,7 @@ The X-tree, proposed by Berchtold et al~\cite{xtree}, is another extension to su
 
 \textbf{R-tree with packing algorithms.}
 Suppose all the required data is available or at least does not change frequently when the tree is going to be built. For instance, in census and cartographic and environmental data insertions ade deletions rarely or even never happens. 
-For such applications, constructing an optimal structure should be focused with regards to some tree characteristics, such as maximizing the storage utilization and minimizing the storage overhead, coverages, and overlaps in the R-tree. The methods to build such an R-tree contain a preprocessing step and are known as \textit{packing} or \textit{bulk-loading}. 
+For such applications, constructing an optimal structure should be focused with regards to some tree characteristics, such as maximizing the storage utilization and minimizing the storage overhead, coverage, and overlaps in the R-tree. The methods to build such an R-tree contain a preprocessing step and are known as \textit{packing} or \textit{bulk-loading}. 
 The packed R-tree, proposed by Roussopoulos and Leifker~\cite{packedrtree, packedrtree2}, is one of the statically constructed R-trees which has this preprocessing step. This early effort simply suggests to order the objects based on a criterion, like ascending $X$ coordinate. Then, to build the tree, the object with the minimum value of in the ordered set is chosen to find its \textit{M nearest objects}. Here, $M$ is the maximum number of objects that are allowed in a page. These nearest objects form a node. The bounding boxes of these objects also shape the higher nodes. This step is repeated until the whole objects are assigned to a node and the tree is completed up to the root.
 
 The Hilbert Packed R-tree is another method to construct a static R-tree using the packing algorithm by Kamel and Faloutsos~\cite{hilbert-rtree}. This method which has a full space utilization, proposes sorting the objects based on their Hilbert value of their center and then inserting them into the tree.
@@ -651,11 +654,11 @@ It should be mentioned that the performance is not always good since the tree mi
 %\textbf{Cell Methods based on Dynamic Hashing}
 \subsection{Summary}
 \label{indexsummary}
-In this section, we mainly explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. Also, these structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends on the characterisitc of system and also the functionalities that the system provides. Of course the spatial characteristic of data should be considered as well. 
+In this section, we mainly explained some important spatial indexing trees which are widely studied in the literature. Indeed, there is a huge number of indexing structures introduced in various sources over this area. Also, these structures are categorized differently in each source. However an extensive research on indexing trees was not our focus, we tried to cover a set of leading ones as an introduction in developing a proper index structure in BaseX. As mentioned before, choosing an index depends on the characteristics of system and also the functionality that the system provides. Of course the spatial characteristic of data should be considered as well. 
 Regarding the discussion in this section, there is no optimum indexing structure for any type of data and requirements. Based on the application, each structure has own pros and cons. Together with the explanations, we provided a brief description of advantages and disadvantages for each index. %structure is briefly mentioned based on the studies and experiments.% in Chin et al~\cite{survey} and Brown et al~\cite{tree-basedindexes} together with. 
 %Besides, we looked at the actual paper of each tree to gather the advantages and disadvantages. 
 %However having an extensive research on these indexing trees was not our focus, we wanted to have at least an introduction about the huge area of spatial indexing.  
-Table~\ref{t.trees} lists these structuers and summerizes their advantages and disadvantages from different viewpoints. 
+Table~\ref{t.trees} lists these structures and summarizes their advantages and disadvantages from different viewpoints. 
 Based on the requirements, one can search this table for the suitable tree of that special case.
 
 Among the presented indexes, the STR-tree is the one which we have selected for further implementation. 
@@ -672,7 +675,7 @@ the previously proposed bulk-loading methods except some minor cases.
 Besides, this structure is also included in the widely used JTS library
 which we will use in the implementation of the Geo Module.  
 Since the number of open source libraries providing these tree structures is small 
-and we do not aim to implement a structure from the begining, 
+and we do not aim to implement a structure from the beginning, 
 the STR-tree package in the JTS API which is compatible 
 with BaseX Geo Module is a good option to choose.
 
@@ -929,12 +932,12 @@ return $x
 
 \subsection{Geospatial Processing in Databases} 
 \label{s.dbs}
-Besides analyzing various general ideas of geospatial processing in databases, it would be advantageous to know the geospatial features and functionalities in well-known database systems. In this section, we briefly introduce the geospatial issues in the widely used databases, MongoDB, eXist, MarkLogic, and MonetDB as all of them have geospatial functionalities. We will see how the different ideas are provided and used in practice.
+Besides analyzing various general ideas of geospatial processing in databases, it would be advantageous to know the geospatial features and functionality in well-known database systems. In this section, we briefly introduce the geospatial issues in the widely used databases, MongoDB, eXist, MarkLogic, and MonetDB as all of them have geospatial functionality. We will see how the different ideas are provided and used in practice.
 
 \subsubsection{MongoDB}
 \label{mongo}
 MongoDB~\cite{mongogeneral2010,mongoinaction2011} is one of the leading databases used especially in web applications. Here, we consider the $2.4$ version series of this software. MongoDB supports both flat and spherical space in geospatial processing. Geospatial features in MongoDB are mainly executed by a few operators which can be combined to produce more advance queries based on the use cases. 
-The operators are \textit{\$geoIntersects}, \textit{\$geoWithin}, \textit{\$near}, and \textit{\$nearSphere} which first indicate the query operation. Then, the geometry specifiers serve to form the query conditions. These specifiers, \textit{\$geometry}, \textit{\$maxDistance}, \textit{\$center}, \textit{\$box}, \textit{\$centerSphere}, \textit{\$polygon}, and \textit{\$uniqueDocs}, define the various geometries and conditions in GeoJSON or in legacy coordinate pairs to filter the results. The calculation units in the spherical space can be meter or radian. The units in the flat space are determined by the given coordinate system. 
+The operators are \textit{\$geoIntersects}, \textit{\$geoWithin}, \textit{\$near}, and \textit{\$nearSphere} which first indicate the query operation. Then, the geometry specifiers serve to form the query conditions. These specifiers, \textit{\$geometry}, \textit{\$maxDistance}, \textit{\$center}, \textit{\$box}, \textit{\$centerSphere}, \textit{\$polygon}, and \textit{\$uniqueDocs}, define the various geometries and conditions in GeoJSON or in legacy coordinate pairs to filter the results. The calculation units in the spherical space can be meter or radiant. The units in the flat space are determined by the given coordinate system. 
 
 Apart from the operators, some particular geospatial queries can be done through the geospatial commands, 
 \textit{geoNear}, \textit{geoSearch}, and \textit{geoWalk}. The command \textit{geoNear} is an alternative to the \textit{\$near} operator which returns additional information, for example the distance of each returned item from the given point or some troubleshooting diagnostic information. The command \textit{geoSearch} is an interface to use the haystack index and \textit{geoWalk} is an internal command.
@@ -942,7 +945,7 @@ Apart from the operators, some particular geospatial queries can be done through
 \textbf{The Geospatial Index.}
 The geospatial index in MongoDB is based on the \textit{geohash}~\cite{www/geohash} data structure. Regarding the importance of geohash, we shortly explain it before discussing the index in detail.
 
-The geohash value is calculated by recursively dividing the space into buckets of grids and assigns a two-bit value to each part (Figure~\ref{figmongoindex}). This number, called geohash value, does not really point to the coordinates, rather the boundings of the coordinate is represented. 
+The geohash value is calculated by recursively dividing the space into buckets of grids and assigns a two-bit value to each part (Figure~\ref{figmongoindex}). This number, called geohash value, does not really point to the coordinates, rather the bounding of the coordinate is represented. 
 As the division goes further, the geohash values are becoming longer and the areas are becoming smaller. 
 At the end, we will have a hierarchical spatial structure. Here are some properties of geohashing,
 \begin{itemize}
@@ -1071,7 +1074,7 @@ cts:search(doc("/points.xml")//item,
 \vspace{10px}
 
 Primitive types are another fact in the geospatial queries which might be needed in query conditions 
-as shown in the previous Codes~\ref{marklogic-region} and \ref{marklogic-path} using the \textit{box} constructor. These types as instancs of the base type \textit{region}, encompassing \textit{box}, \textit{circle}, \textit{complex-polygon}, \textit{linestring}, \textit{point}, and \textit{polygon}. For instance, the contents of the polygon element in the document "zip.xml" can be cast to a \textit{cts:polygon} using the \textit{cts:polygon} constructor as in the following,
+as shown in the previous Codes~\ref{marklogic-region} and \ref{marklogic-path} using the \textit{box} constructor. These types as instances of the base type \textit{region}, encompassing \textit{box}, \textit{circle}, \textit{complex-polygon}, \textit{linestring}, \textit{point}, and \textit{polygon}. For instance, the contents of the polygon element in the document "zip.xml" can be cast to a \textit{cts:polygon} using the \textit{cts:polygon} constructor as in the following,
 \vspace{10px}
 \begin{fakeJSON}
 cts:polygon(fn:data(fn:doc("zip.xml")//polygon[@id eq "712"]))
@@ -1085,7 +1088,7 @@ Marklogic also provides functions to handle the WKT datatype. The function \text
 cts:parse-wkt("POINT(10 10)")
 \end{fakeJSON}
 \vspace{10px}
-This point can be used in queries as any other type. Conversly the function \textit{to-wkt} converts \textit{region} type to WKT.
+This point can be used in queries as any other type. Conversely, the function \textit{to-wkt} converts \textit{region} type to WKT.
 
 
 \textbf{The Geospatial Index.}
@@ -1165,7 +1168,8 @@ To query a spatial dataset, the spatial index and the spatial module must be ena
 </collection>
 \end{fakeJSON}
 \vspace{10px}
-The attribute \textit{flushAfter="200"} says that the index entries in memory will be flushed into the HSQLDB. Now, the dataset is ready to query and Code~\ref{} is a sample query that return the whole polygons which intersect with the second argument of the \textit{spatial:intersects} function.
+The attribute \textit{flushAfter="200"} says that the index entries in memory will be flushed into the HSQLDB. 
+Now, the dataset is ready to query and Code~\ref{intersectexist} is a sample query that return the whole polygons which intersect with the second argument of the \textit{spatial:intersects} function.
 \begin{fakeXML}[label=intersectexist,caption=A spatial sample query in eXist-db using \textit{spatial:intersects} function]
 declare namespace gml = "http://www.opengis.net/gml";
 spatial:intersects(//gml:Polygon,
@@ -1182,14 +1186,14 @@ spatial:intersects(//gml:Polygon,
 \end{fakeXML}
 \subsubsection{MonetDB}
 MonetDB\footnote{This information which are presented here, are from January 2014 Bugfix.} basically is a relational column-store database which has implemented a separate module to support the objects and functions in the OGC "Simple Features Specification for SQL"~\cite{ogcsfs}. The current implementation of spatial support is still simple. MonetDB stores XML in its relational architecture as Boncz et al~\cite{Boncz2006} describes. The geospatial component in MonetDB wraps the open source GEOS libraries~\cite{GEOS}
-which is the \textit{C++} implementation of the JTS API. When \textit{geom}, the geospatial module in MonetDB/SQL component, is enabled, then the created databases are spatially-enabled by default. MonetDB supports the OGC geospatial types. Besides, a non-OGC type, called \textit{mbr}, is used for stroing a 2D box for fast access. Numerous functions exist in MonetDB to provide SQL-based geospatial querying. These functions are categorized in geometry constructors, functions an specific geometry, and functions on bounding boxes. Function on boxes could be used for pre-filtering in some complicated queries. Below shows some geospatial functions that can be used in queries.
+which is the \textit{C++} implementation of the JTS API. When \textit{geom}, the geospatial module in MonetDB/SQL component, is enabled, then the created databases are spatially-enabled by default. MonetDB supports the OGC geospatial types. Besides, a non-OGC type, called \textit{mbr}, is used for storing a 2D box for fast access. Numerous functions exist in MonetDB to provide SQL-based geospatial querying. These functions are categorized in geometry constructors, functions an specific geometry, and functions on bounding boxes. Function on boxes could be used for pre-filtering in some complicated queries. Below shows some geospatial functions that can be used in queries.
 \begin{itemize}
 \item \textbf{\texttt{ST\char`_GeometryFromText(wkt string)}}, which creates a geometry out of WKT string.
 \item \textbf{\texttt{ST\char`_AsText(geom Geometry)}}, which returns the WKT representation of the Geometry.
 \item \textbf{\texttt{ST\char`_ConvexHull(geom Geometry)}}, which returns the convex hull of the Geometry in the Geometry format.
 \item \textbf{\texttt{ST\char`_InteriorRingN(geom Polygon, ringNum integer)}}, which returns the n-th interior ring of the Polygon as a linestring.
 \item \textbf{\texttt{ST\char`_IsRing(geom LineString)}}, which returns a boolean value showing whether the LineString is both closed and simple or not.
-\item \textbf{\texttt{ST\char`_XMax(box mbr)}/\texttt{ST\char`_XMax(geom Geometry)}}, which returns the maximum $X$ coordintate of the provided bounding box. In latter case which a 2D geometry is provided, first its bounding box is computed.
+\item \textbf{\texttt{ST\char`_XMax(box mbr)}/\texttt{ST\char`_XMax(geom Geometry)}}, which returns the maximum $X$ coordinate of the provided bounding box. In latter case which a 2D geometry is provided, first its bounding box is computed.
 \item \textbf{mbr(geom Geometry)}, which returns the minimum bounding box created for the geometry.
 \item \textbf{@} (mbrContained function), which returns a boolean value expressing whether box1 is contained by box2 in \textit{box1:mbr @ box2:mbr}.
 \item \textbf{\&\&} (mbrOverlaps function), which returns a boolean value showing whether two bounding boxes overlap in \textit{box1:mbr \&\& box2:mbr}.
@@ -1252,7 +1256,7 @@ Throughout the following sections, we discuss the integration of geospatial data
 
 \subsection{Geo Module}
 \label{geomodule}
-As mentioned above, geospatial features in BaseX are implemented based on the EXPath Geo Module Specification~\cite{expath}. This specification contains the definition of functions for widely used geographic and geometric analysis operations, from OGCSF Common Access API version $1.2$. These functions apply to geometries in different formats, such as GML, KML, GeoJSON, Well Known Text (WKT), and even Well Known Binary (WKB). Based on the specification, Geo Module in BaseX comprises a set of functions, like intersection, within, distance, boundary, centroid, diference, and union, added to the \textit{basex-api} package. The geometries supported in this module are Point, LineString, Polygon, MultiPoint, MultiLineString, and MultiPolygon. This module is an individual package with a set of classes as briefly described below,
+As mentioned above, geospatial features in BaseX are implemented based on the EXPath Geo Module Specification~\cite{expath}. This specification contains the definition of functions for widely used geographic and geometric analysis operations, from OGCSF Common Access API version $1.2$. These functions apply to geometries in different formats, such as GML, KML, GeoJSON, Well Known Text (WKT), and even Well Known Binary (WKB). Based on the specification, Geo Module in BaseX comprises a set of functions, like intersection, within, distance, boundary, centroid, difference, and union, added to the \textit{basex-api} package. The geometries supported in this module are Point, LineString, Polygon, MultiPoint, MultiLineString, and MultiPolygon. This module is an individual package with a set of classes as briefly described below,
 \begin{itemize}
 \item \textit{Geo}: This class is the main class, in which all geospatial functions are defined. The set of functions in this class is provided to be directly used in XQuery statements. The complete list of functions and their description are available in the online BaseX documentation~\cite{basexgeo}.
 \item \textit{GeoError}: This class defines error functions with related massages which are thrown when an error occurs.
@@ -1261,7 +1265,7 @@ As mentioned above, geospatial features in BaseX are implemented based on the EX
 \item \textit{GeoIndex}: This class implements the functions related to the geospatial index. 
 \end{itemize}
 
-Geospatial index structure is implemented in BaseX core. Spatial indexing and related implementation details will be described in Section~\ref{indexBX}. Here, we explain general functionalities of this module.
+Geospatial index structure is implemented in BaseX core. Spatial indexing and related implementation details will be described in Section~\ref{indexBX}. Here, we explain general functionality of this module.
 
 The geospatial functions are defined as public methods in the \textit{Geo} class. They use some private methods to read geometries or write them out into the GUI. Besides, each function employs the corresponding function from the JTS library to do the required geometric operation and provide the appropriate result. Here, we shortly explain how the input geometries, either from a variable or a database node, are processed.
 
@@ -1297,7 +1301,7 @@ Now, the geometries are ready to be processed in geometric operations, like:
 \item finding the symmetric distance of two geometries
 \item getting the number of inner rings of a polygon.
 \end{itemize}
-These operations are done using the JTS functions. The output could be either in any XML Schema (XSD) data types such as integer, boolean, string, and URI or GML Geometry. The XSD type are equivalent to the BaseX defined data types. For example, the primitve data types boolean, integer, and string are represented in BaseX as the classes \textit{Bln}, \textit{Str}, and \textit{Int}, respectively. In addition, the Geometry type which is the output of functions like intersection, union, and difference of two geometries, must be returned as an element in the abstract node type (\textit{ANode}) to be in compliance with the specification. Having the output geometries in GML format, GMLWriter function converts them first to a string, using JTS GmlWriter and builds a database node (\textit{DBNode}) hereafter. Considering the point that DBNode extends ANode, the output node is sent to the GUI and is shown as a GML element, expressing the geometric result. 
+These operations are done using the JTS functions. The output could be either in any XML Schema (XSD) data types such as integer, boolean, string, and URI or GML Geometry. The XSD type are equivalent to the BaseX defined data types. For example, the primitive data types boolean, integer, and string are represented in BaseX as the classes \textit{Bln}, \textit{Str}, and \textit{Int}, respectively. In addition, the Geometry type which is the output of functions like intersection, union, and difference of two geometries, must be returned as an element in the abstract node type (\textit{ANode}) to be in compliance with the specification. Having the output geometries in GML format, GMLWriter function converts them first to a string, using JTS GmlWriter and builds a database node (\textit{DBNode}) hereafter. Considering the point that DBNode extends ANode, the output node is sent to the GUI and is shown as a GML element, expressing the geometric result. 
 
 Now, it time to discuss the query performance that seems not satisfying. Having commonly huge geospatial data, we encounter serious performance problems. The common solution is an indexing algorithm designed to improve efficiency. Since the geospatial data is a written form of geometries positioned in the space, an indexing structure should be designed considering the positions. In the following sections, we discuss an indexing approach and its influence on performance compared with the querying without using any geospatial index.
 
@@ -1321,7 +1325,7 @@ To enhance the geospatial query time in BaseX, we discuss an index structure. Th
 
 Among the spatial index structures discussed in Section~\ref{s.geospatial-index}, JTS supports the STR-tree and Quad-tree. Davis~\cite{jts-presentation} discussed that STR-tree in contrast with Quad-tree can not be updated after the generation. However, we choose the STR-tree since it has better performance for our performance as we discussed in Section~\ref{indexsummary}. As mentioned before, STR-tree has the basic of R-Tree with the improved performance. The index tree, holding the bounding boxes in inner nodes and geometries in leaves, is made once when the spatial index for the database is requested. Then, this structure is stored in a file on disk. This process is illustrated in Figure~\ref{figIndexinFile}. Each time the index is requested, the file is read 
 into main memory and will be kept there for future requests.
-At the end, the two step filltering is executed. 
+At the end, the two step filtering is executed. 
 It should be mentioned that only the following queries would benefit from this index. The definitions of these functions are provided in EXPath Geo Module specification.
 \begin{itemize}
 \item intersects (geometry1, geometry2)
@@ -1334,11 +1338,11 @@ It should be mentioned that only the following queries would benefit from this i
 
 The geospatial index structure is involved both in BaseX core and the \textit{basex-api} package. The main structure of index is added as a package in core, called \textit{index.spatial}. This package contains the index builder classes based on the core index structure of BaseX. The class \textit{SpatialBuilder} which extends \textit{IndexBuilder}, builds the index tree using pre-values instead of the tag names to address the database elements. Then, the JTS serializer writes this tree into a file, called \textit{STR-treeIndex}.
 
-The other \textit{GeoIndex} class in the \textit{basex-api} package extends \textit{QueryModule} and implements the method defined by the JTS STR-tree class for reading the index file from hard disk into memory. Additionally, this class implements the \textit{filter} method to do the first step of two step filtering. The datails of the index implementation is described in the following section.
+The other \textit{GeoIndex} class in the \textit{basex-api} package extends \textit{QueryModule} and implements the method defined by the JTS STR-tree class for reading the index file from hard disk into memory. Additionally, this class implements the \textit{filter} method to do the first step of two step filtering. The details of the index implementation is described in the following section.
  
 \subsection{Index Functions Implementation}
 \label{indexFunc}
-To add the geospatial index, we tought of two approaches. The first approach implements new signature for the aforementioned functions in a new class. It means that the index filter function is encoded directly in the existing geo functions. Then, queries can be done with the new spatial function as in Code~\ref{intersectIndx}. In this query, the function \textit{geo-index:intersects} in the new namespace and signature applies the index functionalities inside the function. Therefore, we have two \textit{intersects} functions.
+To add the geospatial index, we thought of two approaches. The first approach implements new signature for the aforementioned functions in a new class. It means that the index filter function is encoded directly in the existing geo functions. Then, queries can be done with the new spatial function as in Code~\ref{intersectIndx}. In this query, the function \textit{geo-index:intersects} in the new namespace and signature applies the index functionality inside the function. Therefore, we have two \textit{intersects} functions.
 \vspace{10px}
 \begin{fakeXML}[label=intersectIndx,caption=The geo function containing the index functions]
 import module namespace geo-index = "http://expath.org/ns/GeoIndex";
@@ -1506,9 +1510,9 @@ In this Section, we discussed the Geo Module implementation details and assessme
 \label{s.mongo}
 %TODO:Complete
 
-An introduction of MongoDB geospatial features is provided before in Section~\ref{mongo}. In this section, we will have a more-detailed overview of these functionalities and a comparison between BaseX and MongoDB. However these two systems follow distinct approaches, it would be beneficial to review MongoDB as a rather new, recently developed, and widely used database system. MongoDB is among the few NOSQL systems providing geospatial features. Here, we will mainly see differences between these systems, particularly in performance of the same features. This comparison empowers us to improve the geospatial querying performance in BaseX. 
+An introduction of MongoDB geospatial features is provided before in Section~\ref{mongo}. In this section, we will have a more-detailed overview of this functionality and a comparison between BaseX and MongoDB. However these two systems follow distinct approaches, it would be beneficial to review MongoDB as a rather new, recently developed, and widely used database system. MongoDB is among the few NOSQL systems providing geospatial features. Here, we will mainly see differences between these systems, particularly in performance of the same features. This comparison empowers us to improve the geospatial querying performance in BaseX. 
 
-As we discussed in Section~\ref{mongo}, geospatial data can be represented in MongoDB either as planar or spherical maps. Since Earth is a spherical globe, the geospatial calculations on planar maps are only an approximation~\cite{coordsys,coordsys-mongo}. As an example, the measurement of distances in planar maps are accurate only in a small region. It means that the spherical maps are the better representation when the calculations are expected as real ones on Earth. As our goal is to assess some geospatial features of MongoDB and compare it with Basex Geo Module, we focus merely on the spherical approach. Correspondingly, WGS84 is used instead of legacy coordinate pairs to express the spherical maps. 
+As we discussed in Section~\ref{mongo}, geospatial data can be represented in MongoDB either as planar or spherical maps. Since Earth is a spherical globe, the geospatial calculations on planar maps are only an approximation~\cite{coordsys,coordsys-mongo}. As an example, the measurement of distances in planar maps are accurate only in a small region. It means that the spherical maps are the better representation when the calculations are expected as real ones on Earth. As our goal is to assess some geospatial features of MongoDB and compare it with BaseX Geo Module, we focus merely on the spherical approach. Correspondingly, WGS84 is used instead of legacy coordinate pairs to express the spherical maps. 
 
 \vspace{10px}
 \begin{fakeXML}[label=feature-collection,caption=A GeoJSON file containing a \textit{FeatureCollection} object]
@@ -1590,9 +1594,9 @@ this problem disappeared.
 \vspace{10px}
 %TODO:explain about the query difficulties and aggregation of the above structure
 After importing the file, we examined the common features, i.e., intersection, within, 
-functionalities in both databases.
+functionality in both databases.
 %and near  
-The queries in Code~\ref{basex-query} and Code~\ref{mongo-query} find the intersecting geometries from the Netherlands' dataset with the given polygon in BaseX and MongoDB, respectively. The polygon coordinates are determined for different queries in the following way. At first, the maximum and minimum coordinates are found in the dataset. After that, we generate different input polygons in regard to these boundaries. The polygons coordinate are altered such that the number of results differes in each query.
+The queries in Code~\ref{basex-query} and Code~\ref{mongo-query} find the intersecting geometries from the Netherlands' dataset with the given polygon in BaseX and MongoDB, respectively. The polygon coordinates are determined for different queries in the following way. At first, the maximum and minimum coordinates are found in the dataset. After that, we generate different input polygons in regard to these boundaries. The polygons coordinate are altered such that the number of results differs in each query.
 \vspace{10px}
 \begin{fakeXML}[label=basex-query,caption=Example query of \textit{intersects} function in BaseX]
 import module namespace geo = "http://expath.org/ns/Geo";
@@ -1665,7 +1669,7 @@ Ofcourse, the most optimum state is where $nscanned=nscannedObjects=n$.
 %and it could be reached with compound indexes and rephrasing the query statement in some cases as well.
 %TODO mesal for optimization from: http://Java.dzone.com/articles/optimizing-mongodb-compound
 
-Running the same queries as before like \textit{intersects} in both databases without index, expectedly shows that all query times are more or less the same, since the whole data is scanned. This is also obvious from the following query plan in MongoDB which specifies the cursor type, number of the scaned index keys (nscanned), and number of the scanned documents (nscannedObjects),
+Running the same queries as before like \textit{intersects} in both databases without index, expectedly shows that all query times are more or less the same, since the whole data is scanned. This is also obvious from the following query plan in MongoDB which specifies the cursor type, number of the scanned index keys (nscanned), and number of the scanned documents (nscannedObjects),
 \vspace{10px}
 \begin{fakeJSON}
 ...
@@ -1695,7 +1699,7 @@ In this way, we also cover \textit{near} and \textit{nearSphere} queries in Mong
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Indexing in the Databases}
 \label{index}
-The assessment process is continued by applying the geospatial index. In MongoDB there are two choices for using geospatial index, \textit{2d} for data expressed in legacy coordinate pairs and \textit{2dsphere} for both GeoJSON data objects and legacy coordinate pairs. We use \textit{2dsphere} which fits to the choice of sherical maps via the following shell command,
+The assessment process is continued by applying the geospatial index. In MongoDB there are two choices for using geospatial index, \textit{2d} for data expressed in legacy coordinate pairs and \textit{2dsphere} for both GeoJSON data objects and legacy coordinate pairs. We use \textit{2dsphere} which fits to the choice of spherical maps via the following shell command,
 \vspace{10px}
 \begin{fakeJSON}
 db.Collection.ensureIndex({geometry:"2dsphere"}) 
@@ -1720,7 +1724,7 @@ The same step is also taken in BaseX. Running again the same queries using a geo
 %\label{figBXvsMongoIndexIntersects}
 %\end{figure}
 
-The next widely used type of query is finding the near places or geometries up to a distance from a specific point. It could be also expressed as finding the geometries inside a circle with the distance value as the radius lenght. This feature is provided in MongoDB via \textit{\$near} and \textit{\$nearSphere} operators which simply get the reference point and the disance and hereafter returns the whole geometries in the specified distance from the point. Both near operators need a geospatial index, either \textit{2d} or \textit{2dsphere}. A specific distance in meter is defined as a condition to filter those geometries within this area. Below, we provide a sample query of the \textit{\$nearSphere} oprator.  
+The next widely used type of query is finding the near places or geometries up to a distance from a specific point. It could be also expressed as finding the geometries inside a circle with the distance value as the radius length. This feature is provided in MongoDB via \textit{\$near} and \textit{\$nearSphere} operators which simply get the reference point and the distance and hereafter returns the whole geometries in the specified distance from the point. Both near operators need a geospatial index, either \textit{2d} or \textit{2dsphere}. A specific distance in meter is defined as a condition to filter those geometries within this area. Below, we provide a sample query of the \textit{\$nearSphere} oprator.  
 \vspace{10px}
 \begin{fakeJSON}
 db.collection.find({{geometry:
@@ -1757,7 +1761,7 @@ For the data provided in a geographic coordinate system, calculations do not wor
 \label{figTransform}
 \end{figure}
 
-The aforementioned \textit{near} feature as a common use case is available in BaseX only for metric coordinate systems. To provide this feature also for geographic systems via the current geo functions, we need to convert the geographic coordinates to metric ones. In this way, we convert the specified input geometry in WGS84 to a metric system. Then, we compute the buffer of converted geometry up to the input distance in the same metric system and convert the buffer back to the original geographic coordinate system. A buffer of geometry is an identified region within a specific distance of the geometry. At the end, we find the all geometries within the buffer in geographic coorsinate system. This approach benefits from the geospatial index structure via the \textit{within} function while the approach with the \textit{distance} function do not utilize the geospaial index. This process is illustrated in Figure~\ref{figTransform}. 
+The aforementioned \textit{near} feature as a common use case is available in BaseX only for metric coordinate systems. To provide this feature also for geographic systems via the current geo functions, we need to convert the geographic coordinates to metric ones. In this way, we convert the specified input geometry in WGS84 to a metric system. Then, we compute the buffer of converted geometry up to the input distance in the same metric system and convert the buffer back to the original geographic coordinate system. A buffer of geometry is an identified region within a specific distance of the geometry. At the end, we find the all geometries within the buffer in geographic coordinate system. This approach benefits from the geospatial index structure via the \textit{within} function while the approach with the \textit{distance} function do not utilize the geospatial index. This process is illustrated in Figure~\ref{figTransform}. 
 This procedure is expressed as below, using the \textit{buffer} and \textit{within} functions and should return the same result as the previous query, 
 
 \vspace{10px}
@@ -1771,7 +1775,7 @@ within(geometry,
       )
 \end{fakeJSON}
 \vspace{10px}
-Having the same use cases, we have tested this feature in both databases, with the timing result shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function while \textit{\$nearSphere} operator finds the geometries in MongoDB. Obviously, MongoDB has a better performance, specifically with smaller number of results. The qurey times and the number of results are directly proportional in MongoDB, since the geospatial index is used and both chaneges accompany each other. BaseX do not use the geospatial index and consequently returns every result more or less in the same time.
+Having the same use cases, we have tested this feature in both databases, with the timing result shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function while \textit{\$nearSphere} operator finds the geometries in MongoDB. Obviously, MongoDB has a better performance, specifically with smaller number of results. The query times and the number of results are directly proportional in MongoDB, since the geospatial index is used and both changed accompany each other. BaseX do not use the geospatial index and consequently returns every result more or less in the same time.
 
 %TODO: figure for converion method in BX
 %TODO:change the chart for new queries of distance in BaseX
@@ -1796,8 +1800,8 @@ Updating a database as a significant interaction supplied by the database system
 
 Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means that the STR-tree do not get updated automatically and the geospatial index has to be rebuilt manually. It causes redundant constructions and consequently worse performance. Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
 
-Considering the manual update of the geospatial index in BaseX, reindexing time must be examined to evaluate the updating process. This implies that the index creation time plus reopeneing the index file into the main memory should be included in the evaluation. 
-Figure~\ref{figBXvsMongoUpdate} illustrates that the performance of all update operations in MongoDB are apparantly better. As mentioned before, reindexing in BaseX causes a huge growth in time, which individually takes the greatest amount of total time (see Figure~\ref{figBXUpdate}). We skip the result of deletion and insertion since they follow the similar pattern as update.
+Considering the manual update of the geospatial index in BaseX, reindexing time must be examined to evaluate the updating process. This implies that the index creation time plus reopening the index file into the main memory should be included in the evaluation. 
+Figure~\ref{figBXvsMongoUpdate} illustrates that the performance of all update operations in MongoDB are apparently better. As mentioned before, reindexing in BaseX causes a huge growth in time, which individually takes the greatest amount of total time (see Figure~\ref{figBXUpdate}). We skip the result of deletion and insertion since they follow the similar pattern as update.
 
 The unsatisfactory performance of the updating and also the \textit{near} feature in BaseX lead us to a new approach to use the MongoDB geospatial index from BaseX. The strategy is explained in the next section.
 
@@ -1817,7 +1821,7 @@ The unsatisfactory performance of the updating and also the \textit{near} featur
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{BXUpdate.png}
-\caption{Time consumtion percentage of the update operations in BaseX}
+\caption{Time consumption percentage of the update operations in BaseX}
 \label{figBXUpdate}
 \end{figure}
 
@@ -1830,7 +1834,7 @@ In regards to the unsatisfactory query times in the \textit{near} feature, we ha
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{MongoviaBX-near-sec-log.png}
-\caption{Performance comparision of the \textit{near} feature in BaseX vs. MongoDB through BaseX}
+\caption{Performance comparison of the \textit{near} feature in BaseX vs. MongoDB through BaseX}
 \label{figMongoviaBX-near}
 \end{figure}
 
@@ -1840,23 +1844,23 @@ Figure~\ref{figMongoviaBX-near} implies that the performance of \textit{near} qu
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{MongoviaBX-Update-sec-log.png}
-\caption{Performance comparision of the update operation in BaseX vs. MongoDB through BaseX}
+\caption{Performance comparison of the update operation in BaseX vs. MongoDB through BaseX}
 \label{figMongoviaBX-update}
 \end{figure}
 
-This process is done for the update operaions such that the update query modifies the database in MongoDB. Correspondingly, it should be decided to continue the querying either in MongoDB or in BaseX after repeating the update queries and rebuilding the index structure. Figure~\ref{figMongoviaBX-update} indicates the better timing result of updating by MongoDB through BaseX. 
+This process is done for the update operations such that the update query modifies the database in MongoDB. Correspondingly, it should be decided to continue the querying either in MongoDB or in BaseX after repeating the update queries and rebuilding the index structure. Figure~\ref{figMongoviaBX-update} indicates the better timing result of updating by MongoDB through BaseX. 
 
 \subsection{Discussion}
 \label{s.disc}
 Throughout this section we investigated two strategies to efficiently process the geospatial data in BaseX. Based on these investigations, here we will discuss the  previously-mentioned approaches of the geospatial processing in BaseX and cover the pros and cons of the available approaches, particularly the most recent one in Section~\ref{MongoviaBX}. 
 
-To start with, we suppose that a user has a geospatial dataset in GML and they would like to work in this format in BaseX, since their general requirements are met by BaseX. Based on our examinations, there are some queries in which BaseX is not able to cover them or can not provide some features in a proper timing. It means, those cases either are not covered, like updating the index structure or are covered with an apparently poor performance in comparision with the other similar query times, such as the \textit{near} feature. Therefore, geospatial queries such as \textit{intersects} or \textit{within}, can be applied efficiently while some other like \textit{near} and update, can not. Furthermore, regarding to our assumption, some funtionalities of BaseX convinces the user to work with GML. We call them \textit{GML-related} features. We consider these co-called \textit{GML-related} features in our discussion, as they might influnce the geospatial processing approch that wil be preferred.
+To start with, we suppose that a user has a geospatial dataset in GML and they would like to work in this format in BaseX, since their general requirements are met by BaseX. Based on our examinations, there are some queries in which BaseX is not able to cover them or can not provide some features in a proper timing. It means, those cases either are not covered, like updating the index structure or are covered with an apparently poor performance in comparison with the other similar query times, such as the \textit{near} feature. Therefore, geospatial queries such as \textit{intersects} or \textit{within}, can be applied efficiently while some other like \textit{near} and update, can not. Furthermore, regarding to our assumption, some functionality of BaseX convinces the user to work with GML. We call them \textit{GML-related} features. We consider these co-called \textit{GML-related} features in our discussion, as they might influence the geospatial processing approach that Will be preferred.
 
 %Although BaseX can handle the non-geospatial queries as well as some geospatial queries like intersects %and within almost efficiently using Index, the near query and the database update decreases the efficiency dramatically. Therefore, besides the geospatial queries there might be some non-geospatial queries as well, e.g. finding the point elements or the number of polygons in a dataset. It means that the geospatial queries are not necessarily the only focuse of the queries and the user can mix both types in a piece of code. Hence, these so-called non-geospatial queries should be considered in the set of user requiremets, however analysing them are not our focuse. This point is important when the user wants to choose between BaseX and MongoDB for geospatial queries while the non-geospaial queries will be done by BaseX. In this case the user can benefi from both databases while the most requirements are fulfilled by BaseX. 
 
 %To summarize the results of our investigations, the near query and the geospatial index updating in BaseX are far from the ......???, though geospatial query times which are the focuse of the index structure, like intersects, seem that could be satisfying in some cases/some how.???  
 
-Table~\ref{t.comparisonBaseXMongo} summarizes the statement above. \textit{MongoDB through BaseX} in this table means that BaseX connects to MongoDB to benefit by the features which are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the aforementioned features which are supposed here to be satisfying enough for the user, indicatd with the notation $"\times"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
+Table~\ref{t.comparisonBaseXMongo} summarizes the statement above. \textit{MongoDB through BaseX} in this table means that BaseX connects to MongoDB to benefit by the features which are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the aforementioned features which are supposed here to be satisfying enough for the user, indicated with the notation $"\times"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
 %Otherwise, the user might choose to work with another system, like MongoDB.
 % is better in efficiency.
 With $"\times\times"$, we mean that option is very efficient.
@@ -1878,12 +1882,12 @@ like \textit{intersects/within} & & \\\hline
 \end{table}
 \vspace{10px}
 
-As is expressed in Table~\ref{t.comparisonBaseXMongo}, the geospatial queries like \textit{intersects} and \textit{within} are working with an acceptable performance in BaseX. On the other hand, for the \textit{near} and update queries connecting to MongoDB seems to be the appropriate approach. Hence, a fast conclusion would be to have the advantage of using MongoDB through BaseX. However, the synchronization of the database instace in BaseX and the database instance in MongoDB should be precisely examined. If the user intends to modify the database which also means the modification of index without any further querying regarding the changes, the faster strategy is to update the MongoDB instace, while the database instance in BaseX remains untouched. But, in case that the user wants to do further querying based on the changes, this approach is not optimized.  
+As is expressed in Table~\ref{t.comparisonBaseXMongo}, the geospatial queries like \textit{intersects} and \textit{within} are working with an acceptable performance in BaseX. On the other hand, for the \textit{near} and update queries connecting to MongoDB seems to be the appropriate approach. Hence, a fast conclusion would be to have the advantage of using MongoDB through BaseX. However, the synchronization of the database instance in BaseX and the database instance in MongoDB should be precisely examined. If the user intends to modify the database which also means the modification of index without any further querying regarding the changes, the faster strategy is to update the MongoDB instance, while the database instance in BaseX remains untouched. But, in case that the user wants to do further querying based on the changes, this approach is not optimized.  
 
 One way to discard the above-mentioned problem could be limiting the user to do all geospatial queries regarding the index in MongoDB and use BaseX just as a connector. 
 However, as we see in Table~\ref{t.comparisonBaseXMongo} doing some queries in BaseX are more efficient and connecting to MongoDB might be a disadvantage, since this adds at least the connection time to the query time. Moreover, the complete dependency of BaseX on MongoDB for all geospatial queries would be too much and disadvantageous while each system is designed for different requirements and follow various goals. 
 %a big limitation for this software regarding the geospatial processing. 
-Thus, it will be more appropriate to provide the user with both possiblities.
+Thus, it will be more appropriate to provide the user with both possibilities.
 
 Table~\ref{t.possibilities} summarizes the sample scenarios that could happen based on the existing features to process the geospatial data. In addition, this table shows the relevant/appropriate actions the user can apply as an efficient strategy toward her/his goal.
 
@@ -1893,7 +1897,7 @@ Table~\ref{t.possibilities} summarizes the sample scenarios that could happen ba
 \scalebox{1}{
 \begin{tabular}{|l | l | }\hline
 \textbf{Scenarios} & \textbf{What to do?}\\\hline
- Needs a \textit{instersects/within} query  & Using BaseX only\\
+ Needs a \textit{intersects/within} query  & Using BaseX only\\
 and no update and no \textit{near} query  & \\\hline
  Needs a \textit{near} query and no update & Using BaseX and MongoDB together\\\hline
  Needs modifications in the database & Using MongoDB only\\\hline
@@ -1902,15 +1906,15 @@ and no update and no \textit{near} query  & \\\hline
 \label{t.possibilities}
 \end{table}
 
-The first scenario in Table~\ref{t.possibilities} is the use cases in which the BaseX \textit{Geo Module} functions and index structure fulfills all the requirements and there is no need for further queries, while the database remains unchaged. In such case, every thing could be done by BaseX. In the second scenario of this table the user needs the \textit{near} feature as a missing one, based on the untouched state of the database. For this case the user could connect to MongoDB in order to gain the result easier and faster. It should be mentioned that the issues related to the coordinate systems must be managed before applying the \textit{near} query. The last scenario mentioned in the table is the cases in shich the database will be updated and the next queries are based on the new state of the database. In this case which BaseX does not provide a proper way, accessing MongoDB update facilities and applying the subsequent queries in MongoDB hereafter is the advantageous approach. 
+The first scenario in Table~\ref{t.possibilities} is the use cases in which the BaseX \textit{Geo Module} functions and index structure fulfills all the requirements and there is no need for further queries, while the database remains unchanged. In such case, every thing could be done by BaseX. In the second scenario of this table the user needs the \textit{near} feature as a missing one, based on the untouched state of the database. For this case the user could connect to MongoDB in order to gain the result easier and faster. It should be mentioned that the issues related to the coordinate systems must be managed before applying the \textit{near} query. The last scenario mentioned in the table is the cases in which the database will be updated and the next queries are based on the new state of the database. In this case which BaseX does not provide a proper way, accessing MongoDB update facilities and applying the subsequent queries in MongoDB hereafter is the advantageous approach. 
 
 \subsection{Conclusion}
 \label{conc}
-In this section, we mainly concentrated on the geospatial features of MongoDB in order to find ways to improve the BaseX Geo Module efficiency. We started with the investigation of geospatial features to see the different viewpoints in MongoDB. Based on the common features in both databases, the perofrmances was represented and explained both with and without the index, to see the influence of geospatial index on them.
-Among the queries, finding the geometries within a specific distance, called the \textit{near} feature, is of a great importance, as it is widely used. MongoDB provides this feature in both WGS84 for the data on Earth as well as legacy cordinate pairs, while BaseX supports only for the projected coordinate systems, since geospatial functions in BaseX do the calculation on the flat space. To add the support of data in WGS84 in BaseX, new functions should be implemented. Testing this feature in both databases shows better performance in MongoDB. 
+In this section, we mainly concentrated on the geospatial features of MongoDB in order to find ways to improve the BaseX Geo Module efficiency. We started with the investigation of geospatial features to see the different viewpoints in MongoDB. Based on the common features in both databases, the performances was represented and explained both with and without the index, to see the influence of geospatial index on them.
+Among the queries, finding the geometries within a specific distance, called the \textit{near} feature, is of a great importance, as it is widely used. MongoDB provides this feature in both WGS84 for the data on Earth as well as legacy coordinate pairs, while BaseX supports only for the projected coordinate systems, since geospatial functions in BaseX do the calculation on the flat space. To add the support of data in WGS84 in BaseX, new functions should be implemented. Testing this feature in both databases shows better performance in MongoDB. 
 
 %through \textit{\$near} and \textit{\$nearSphere} operators in MongoDB, while BaseX. 
-Besides, updating in both databases is discussed. Update in MongoDB implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed. Therefore, query time severly increases considering the time consumed by index updating. 
+Besides, updating in both databases is discussed. Update in MongoDB implicitly updates the index structure, while the geospatial index in BaseX must be reconstructed. Therefore, query time severely increases considering the time consumed by index updating. 
 
 
 Since the performance of two major functionalities, i.e., the \textit{near} feature and updating, are not satisfying in BaseX and MongoDB provides them in a faster way, we connect to MongoDB and run these queries through BaseX. The results of the \textit{near} feature by this approach seem convincing enough to have this alternative way of querying in BaseX. In addition, updating the database by MongoDB via BaseX is faster than updating in BaseX. However, using this approach is controversial. The discussion is in regards to the subsequent queries after the database modification. Indeed, the changes happen in MongoDB and the database in BaseX remains untouched. Therefore, further querying based on the new changes is possible merely in MongoDB. In case that the next geospatial queries need to be done in BaseX, this way will not worth trying, because the whole update and index reconstruction process must be repeated in BaseX. The approach sets the limitation for the use cases in which the database will be updated, to do the geospatial querying completely in MongoDB.
@@ -1921,7 +1925,7 @@ Since the performance of two major functionalities, i.e., the \textit{near} feat
 \label{s.future}
 We added to BaseX the new functionality of processing geospatial data.
 However, there is still room for future improvements. 
-In particular, the storage and indexings are in the center of attention.
+In particular, the storage and indexing are in the center of attention.
 Right now, the indexing tree is stored in the main memory 
 which results in poor I/O efficiency.% reading time.
 One of the first ideas is to bring some parts of the tree, 

@@ -1947,6 +1947,26 @@ the simultaneously indexed data in MongoDB. A future improvement is to
 implement a module to give the user the whole control over these two possibilities.
 Besides, we can follow this idea by connection to the other well-known databases.
 
+
+\newpage
+\section{Summary}
+\label{sum}
+In this thesis, we discussed several topics related to the geospatial data processing. As the main focuse, we examined issues related to geospatial features in native XML database BaseX. 
+
+Knowing the geospatial properties and definitions, the first topic that we covered as the most important one, was the geospatial indexing structure. We chose some major indexing structures and their variations which are studied broadly in the literature. Numerous structures are introduced later based on the few ones, such as KD-tree or R-tree. We explained each algorithm together with its pros and cons by collecting the information from various sources. This section as a quick source, provides a perspective of the different structures for future developments in BaseX. As stated in Section~\ref{s.geospatial-index}, each index structure is developed to meet a particular requirement. For Example, dynamic variants of the R-tree are proper for the data which changes frequently. Consequently, a suitable index structure should be chosen based on the system properties and features. However there are numerous publications on this topic, choosing and implementing an index structure is not straightforward. Since the R-tree is a widely used structure, we chose an advanced static variant of the R-tree, STR-tree, to implement a experimental index structure in BaseX. The implementation which is integrated into BaseX is from a well-known open source API, JTS. 
+
+Another topic we discussed in this thesis is the related areas to focus when providing geospatial features.
+To the best of our knowledge, storage and querying are the main topics and we introduced some proposed or implemented ideas. Beside, we explained the geospatial features in some database systems to shows how the implemented ideas work.
+
+
+The Geo Module implementation in BaseX as our focus starts with geospatial functions and proceeds with adding the STR-tree as the index structure. The evaluations demonstrates how the index implementation and other optimizations helped us to follow a better performance.
+
+
+Studying geospatial features of MongoDB, we found that in some cases BaseX outperforms MongoDB and vise versa. Hence, we tried to run the queries which MongoDB provides better performance through a driver. We represented the evaluations which are convincing to follow this approach as a parallel way. 
+As we discussed in Section~\ref{s.future}, the BaseX Geo Module can be expanded by adding the support of other geospatial data formats and an index structure for dynamic data such as Quad-tree. Besides, the idea of connecting to MongoDB can be integrated into BaseX to benefit from the specific index structure and features for GeoJSON.
+
+
+
 \newpage
 \bibliographystyle{plain}
 \bibliography{refs}

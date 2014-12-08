@@ -1706,7 +1706,7 @@ The assessment process is continued by applying the geospatial index. In MongoDB
 db.Collection.ensureIndex({geometry:"2dsphere"}) 
 \end{fakeJSON}
 \vspace{10px}
-The same step is also taken in BaseX. Running again the same queries using a geospatial index, supposedly gives declined query times (see Figure~\ref{figBXvsMongoIndexIntersects}). As explained in Section~\ref{s.basex}, index is applied through the \textit{filter} function in BaseX while MongoDB follows another approach. MongoDB applies the index in casual query formats after executing the above-mentioned command and there is no need to change the queries in general. 
+The same step is also taken in BaseX. Running again the same queries using a geospatial index, supposedly gives declined query times and an upward trend in performance as the number of results go higher in both databases (see Figure~\ref{figBXvsMongoIndexIntersects}). As explained in Section~\ref{s.basex}, index is applied through the \textit{filter} function in BaseX while MongoDB follows another approach. MongoDB applies the index in casual query formats after executing the above-mentioned command and there is no need to change the queries in general. Figure~\ref{f.avg} illustrates how BaseX and MongoDB perform when running the two main geospatial functions, \textit{within} (Figure~\ref{withinAvg}) and \textit{intersect} (Figure~\ref{intersectsAvg}). For each function the average time of eight different queries is shown which are executed with and without index. Not surprisingly, the index structure dramatically improves the performance.
 
 \begin{figure}
 \centering
@@ -1715,6 +1715,22 @@ The same step is also taken in BaseX. Running again the same queries using a geo
 \label{figBXvsMongoIndexIntersects}
 \end{figure}
 
+
+
+\begin{figure}
+\centering
+\subfigure[Average performance of the \textit{within} function]{
+\includegraphics[width=0.7\textwidth]{BXvsMongo-Within-Avg}
+\label{withinAvg}
+}
+\centering
+\subfigure[Average performance of the \textit{intersect} function]{
+\includegraphics[width=0.7\textwidth]{BXvsMongo-Intersects-Avg}
+\label{intersectsAvg}
+}
+\caption{Performance comparison of the two main geospatial functions \textit{within} and \textit{intersect} in BaseX and MongoDB}
+\label{f.avg}
+\end{figure}
 %Besides, the search for the geometries within an input area is done in the same way and the timings are shown in Figure~\ref{figBXvsMongoIndexWithin}. It can be seen that the queries with smaller number ofreturned geometries have better performane in MongoDB. Although it seems a positive point to return the big numbers of result in as shorter time as possible, considering smaller returned numbers of results is of greate importance for us, since these queries are more common in real-world usecases.
 
 % TODO

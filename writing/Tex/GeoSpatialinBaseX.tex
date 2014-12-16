@@ -259,7 +259,7 @@ In order to express the geospatial data by coordinate systems, various encodings
 %TODO \item: encodings, baghiye subitem bashan (http://www.digitalpreservation.gov/formats/fdd/gis_fdd.shtml)
 
 \item Geography Markup Language (GML): The XML-based standard encoding defined by OGC that serves as a modeling language to express geographical features in both spatial and non-spatial characteristic. It is used as an interchange format in Internet data storage, exchange, transport, and transaction. The key to the effectiveness of GML is its capability in integrating all forms of geographic information. %TODO:ref az wikipedia!.
-GML versions before Version 3.0 encode a set of 2D geometries, i.e. Point, LineString, and Polygon. GML 3.0 introduces Curve and Surface as new geometries, plus the support of geometries in 3D.
+The previous versions of GML, namely before the version 3.0, encode a set of 2D geometries, i.e. Point, LineString, and Polygon. The GML 3.0 introduces Curve and Surface as new geometries, plus the support of geometries in 3D.
 
 \item Keyhole Markup Language (KML)~\cite{kml}: An XML-based grammar to encode and represent the geographic data in an 3D earth viewer such as Google Earth, also on a 2D map like Google Maps. KML has been adopted as an international standard by OGC. The 3D geographic coordinates for each place are represented with longitude, latitude, and if available altitude. Coordinates are provided using the plain unprojected WGS84 longitude and latitude. The altitude could be omitted and assumed as $0$. KML mainly focuses on visualizations and expresses what and how to show the data. Code~\ref{kml} shows a sample data in KML. 
 \vspace{10px}
@@ -1828,7 +1828,7 @@ Updating a database as a significant interaction supplied by the database system
 Currently in BaseX, updating is not applied to the geospatial index after the database update operations. It means that the STR-tree do not get updated automatically and the geospatial index has to be rebuilt manually which causes redundant constructions. %Here, we see how it could effect the updating performance in comparison with MongoDB which manages to rebuild the index in the updating process.
 
 Considering the manual update of the geospatial index in BaseX, %re-indexing time must be examined to evaluate the updating process. This implies that the 
-index creation time plus reopening the index file into the main memory are overhead which take a huge amount of total time (see Figure~\ref{figBXUpdate}).
+the time of index creation plus reopening the index file into the main memory are overhead which take a huge amount of total time (see Figure~\ref{figBXUpdate}).
 %should be included in the evaluation. 
 Including these times in evaluations, not surprisingly drops the performance of update operations in BaseX compared to MongoDB. However, each database follows a different approach. One provides a static index structure optimized for the data with none or very few updates and the other provides a dynamic index structure. 
 Besides implementing a dynamic geospatial index structure, accessing MongoDB geospatial features and index structure through BaseX can be an alternative approach. Additionally, we can benefit the \textit{near} feature of MongoDB for small number of results through this way, since this feature is frequently requested to find a few entities around a particular point. In the following section, we discuss this method.

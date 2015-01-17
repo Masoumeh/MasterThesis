@@ -171,26 +171,7 @@ we provide a driver to connect to the well-known document-based database MongoDB
 Through this connection, the queries that are written in BaseX, are executed in MongoDB and then the results are accessible via BaseX. This approach can benefit from the spatial index structure and other spatial functionality of MongoDB. 
 We compare the query time and indexing via this connection with the direct query on BaseX. 
 These results and evaluations are the basis for further investigations and developments in BaseX. 
-%time complexity is especially of great interest. 
-%We talk about the motivations to ....
-%chera XML khube.......
-
-%\subsection{Motivation}
-%BaseX~\cite{www/basex} is a high-performance XML~\cite{www/xml}
-% database which is developed in Konstanz university.
-%It has a powerful text processor as well as the full support 
-%for XQuery~\cite{www/xquery,www/xqueryfun} language according to \cite{conf/xsym/GrunGHS09}.
-%Our goal is to empower BaseX to process the geospatial data in an efficient way. This means to add the support of handling \emph{Geography Markup Language (GML)} data. 
-%The Open Geospatial Consortium (OGC)
-%which is an internationally recognized organization for geospatial standards,
-%is defined this new special XML grammar for the geographical data.
-%We want to have a complete support of this language in BaseX
-%which means the abilities to read, write, and query this data.
-%To achieve this goal we need extensive knowledge over existing researches on the geospatial data and specifically indexing techniques. In this work, a short survay is .....
-%we also consider the othe xml databases to find the best solutions....
-
-%\subsection{Overview}
-This thesis is structured as follows. We first start with the definitions of concepts needed later in the discussions
+\\\\This thesis is structured as follows. We first start with the definitions of concepts needed later in the discussions
 in Section~\ref{s.method}. In addition, a number of spatial indexing structures are introduced in this section. 
 %the basic geospatial data and it's application areas will be introduced. 
 Then, Section~\ref{s.rwork} explains related works in various areas in geospatial processing. The implementation of the Geo Module in BaseX is described in Section~\ref{s.basex}. 
@@ -584,10 +565,9 @@ For example, the internal nodes in Figure~\ref{figcelltree} are polygons.
 Similar to the $R^+$-tree, objects may be stored in more than one leaf, if necessary. This could lead to a division of new objects in order to place them in bounding polygons that do not overlap. 
 As an instance, the object $b$ in Figure~\ref{figcelltree} is contained in two different leaf nodes as $b_1$ and $b_2$.
 This will be more serious in populated databases. 
-%The solution proposed by Chin \emph{et al.}~\cite{survey} improves storage efficiency, but does not give significant query performance. 
-
+\\\\
 \textbf{$\boldsymbol{R^*}$-tree.}
-In order to achieve better performance, $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization by trying the following criteria, as Manolopoulos \emph{et al.}~\cite{Manolopoulos:2005} explains:
+In order to achieve better performance, the $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization by trying the following criteria, as Manolopoulos \emph{et al.}~\cite{Manolopoulos:2005} explains:
 \begin{itemize}
 \item Minimizing the covered area by MBRs to minimize the dead spaces, which leads to fewer paths needed to be traversed in queries. 
 \item Minimizing the MBRs overlapping to reduce the paths, which must be followed by queries.
@@ -857,7 +837,7 @@ other concepts of spatial query languages have already been developed.
 Alemdros~\cite{Alemdros2011, Alemdros2013} defines a semantic version of XPath 
 which is not based on the tree-based (syntactic) structure of GML. Instead, a system is developed to implement a query language based on the semantic structure of GML. More clearly, the GML schema is used to define the queries. However, a semantic content can be structured in several syntaxes. The system stores GML by PostGIS database system and transforms the XPath-based GML queries into the SQL language, considering the GML schema in order to execute semantic based queries. The results of these queries are visualized by exporting into the KML format.
 
-Gutiérrez \emph{et al.}~\cite{Gutierrez2004} also brings a new idea and presents a knowledge-based approach 
+Guti{\`e}rrez \emph{et al.}~\cite{Gutierrez2004} also brings a new idea and presents a knowledge-based approach 
 to query heterogeneous spatial databases by identifying not only the entity classes but also the similar instances. 
 It means that the database uses a conceptual schema to do the queries. 
 The queries based on the ontology and conceptual similarities 

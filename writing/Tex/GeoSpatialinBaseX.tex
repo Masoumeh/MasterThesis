@@ -1351,6 +1351,10 @@ let $a:= <gml:Polygon> ... </gml:Polygon>
 return geo-index:intersects("DB", $a) 
 \end{fakeXML}
 
+
+
+Since having two functions with the same name and functionality is redundant, we introduce a new approach in which the \textit{filter} function can be used in XQuery to benefit from the index structure. A sample query of this approach in Code~\ref{geoandfilter}, filters the geometries by the \textit{geo-index:filter} function. Next, the \textit{geo:intersects} function of Geo Module is applied to the filtered geometries. To summarize, the former approach does the whole process including the first step of filtering through the \textit{geo-index:intersects} function, while the latter uses the original \textit{geo:intersects} function together with \textit{geo-index:filter} which does the first step of filtering. 
+
 \vspace{10px}
 \begin{fakeXML}[label=geoandfilter,caption=Geo function used with index function]
 import module namespace geo-index = "http://expath.org/ns/GeoIndex";
@@ -1368,10 +1372,6 @@ let $a:= <gml:Polygon>
 return ( geo-index:filter("DB", $a)[geo:intersects( $a, .)])
 \end{fakeXML}
 \vspace{10px}
-
-Since having two functions with the same name and functionality is redundant, we introduce a new approach in which the \textit{filter} function can be used in XQuery to benefit from the index structure. A sample query of this approach in Code~\ref{geoandfilter}, filters the geometries by the \textit{geo-index:filter} function. Next, the \textit{geo:intersects} function of Geo Module is applied to the filtered geometries. To summarize, the former approach does the whole process including the first step of filtering through the \textit{geo-index:intersects} function, while the latter uses the original \textit{geo:intersects} function together with \textit{geo-index:filter} which does the first step of filtering. 
-
-
 The negative point about the second approach is that the input polygon, like polygon $\$a$ in Code~\ref{geoandfilter}, is read, parsed, and created every time that the spatial function, here \textit{intersects}, is called in the \textit{for} loop, even though it is the same fixed object. Since, this causes redundancy and consumes a considerable amount of time, we use a hash map to cache the fixed input and prevent the further redundant readings. This will dramatically reduce the query time, as shown in Figure~\ref{figMap}.
  \begin{figure}
 \centering
@@ -1565,7 +1565,7 @@ db.<collection>.find( { <location field> :
 In the following sections, we will discuss the query performance of these two databases. 
 In Section~\ref{s.query}, we analyze specific test queries. Then, the assessment continues
 utilizing the indexing structure in Section~\ref{index}. Later, the update functionality of databases is 
-investigated in Section~\ref{update}. In Section~\cite{MongoviaBX} we explain an experimental approach to query a database by MongoDB via BaseX. A discussion about this approach is then introduced in Section~\cite{s.disc}. Finally, Section~\ref{conc} contains the conclusion and further work.
+investigated in Section~\ref{update}. In Section~\ref{MongoviaBX} we explain an experimental approach to query a database by MongoDB via BaseX. A discussion about this approach is then introduced in Section~\ref{s.disc}. Finally, Section~\ref{conc} contains the conclusion and further work.
 
 \subsection{Querying the Databases}
 \label{s.query}
@@ -1624,6 +1624,7 @@ let $a:= <gml:Polygon>
 for $b in //gml:Polygon 
 return if (geo:intersects( $a, $b)) then $b else ()
 \end{fakeXML}
+\vspace{10px}
 \begin{fakeXML}[label=mongo-query,caption=Example query of \textit{intersects} function in MongoDB]
 db.places.find( { geometry :
                   { $geoIntersects :

@@ -8,6 +8,7 @@
     \begin{center}\large#1\end{center}
     \vskip0.5em}%
 }
+ \usepackage{enumitem}
 \usepackage{color}
 \usepackage{tabularx}
 \usepackage{array,multirow}
@@ -18,26 +19,41 @@
 \usepackage[top=2cm, bottom=2cm, left=4cm, right=2cm]{geometry}
 \usepackage{amsmath}
 \usepackage{float}
-%\begin{titlepage}
-%\begin{center}
-\title{Processing Geospatial Data in BaseX}
-\subtitle{Master Thesis in fulfillment of the requirements for the degree of
-Master of Science (M.Sc.)}
-%\subtitle{Submitted to the Department of Computer and Information Science at the
-%University of Konstanz
-%}
-%{ \huge \bfseries Processing GeoSpatial Data in BaseX \\[0.4cm] }
-%\includegraphics[width=0.15\textwidth]{./unisignet-klein}~\\[1cm]
-\author{\\\\Author: \\
-	Masoumeh Seydi
-	\\\\\\Supervisors: \\
-	Prof. Dr. Marc H. Scholl \\
-	Prof. Dr. Michael Grossniklaus\\ 
-	\\\\\\
-	Konstanz University}
-%\end{center}
-%\end{titlepage}
+
+
 \begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%% Title Page %%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage}
+\begin{center}
+{\LARGE \textbf{Processing Geospatial Data in BaseX}}
+\\[1cm]
+{\Large \textbf{Master Thesis in fulfillment of the requirements for the degree of
+Master of Science (M.Sc.)}}
+\\[1cm]
+{\Large submitted from}
+\\[0.5cm]
+{\LARGE \textbf{Masoumeh Seydi Gheranghiyeh}}
+\\[0.5cm]
+{\Large in the}
+\\[0.5cm]
+\includegraphics[width=0.4\textwidth]{logo.png}
+\\[1cm]
+{\Large \textbf{Department of Computer and Information Science}}
+\\[1cm]
+{\Large \textbf{Chair of Database and Information Systems Group}}
+\\[2cm]
+\begin{minipage}[c]{0.8\textwidth}
+\begin{description}[style=multiline]
+ \item {\Large \textbf{1.Supervisor} Prof. Dr. Marc H. Scholl}
+ \item {\Large \textbf{2.Supervisor} Prof. Dr. Michael Grossniklaus}
+\end{description}
+\end{minipage}
+\vfill
+{\LARGE \textbf{Konstanz, 2014}}
+\end{center}
+\end{titlepage}
+
+
 \definecolor{darkgray}{gray}{0.35}
 \lstnewenvironment{fakeXML}[1][]{
 \lstset{basicstyle=\footnotesize\sffamily,
@@ -76,10 +92,9 @@ emph={}
 
 \renewcommand{\lstlistingname}{Code}
 
-
-\maketitle
+%\maketitle
 \thispagestyle{empty}
-
+\newpage
 \newpage
 \section*{Abstract}
 Geospatial information has been growing rapidly and has been used in variety of applications 

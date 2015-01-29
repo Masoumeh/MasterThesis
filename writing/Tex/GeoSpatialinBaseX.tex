@@ -19,37 +19,37 @@
 \usepackage[top=2cm, bottom=2cm, left=4cm, right=2cm]{geometry}
 \usepackage{amsmath}
 \usepackage{float}
-
+\def\Plus{\texttt{+}}
 
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%% Title Page %%%%%%%%%%%%%%%%%%%%%%%%
 \begin{titlepage}
 \begin{center}
-{\LARGE \textbf{Processing Geospatial Data in BaseX}}
+{\LARGE \textbf{Geospatial Processing in BaseX}}
 \\[1cm]
-{\Large \textbf{Master Thesis in fulfillment of the requirements for the degree of
-Master of Science (M.Sc.)}}
+{\normalsize {Master Thesis in fulfillment of the requirements \\
+for the degree of Master of Science (M.Sc.)}}
 \\[1cm]
-{\Large submitted from}
+{\small submitted from}
 \\[0.5cm]
-{\LARGE \textbf{Masoumeh Seydi Gheranghiyeh}}
+{\large \textbf{Masoumeh Seydi Gheranghiyeh}}
 \\[0.5cm]
-{\Large in the}
+{\small in the}
 \\[0.5cm]
 \includegraphics[width=0.4\textwidth]{logo.png}
 \\[1cm]
-{\Large \textbf{Department of Computer and Information Science}}
-\\[1cm]
-{\Large \textbf{Chair of Database and Information Systems Group}}
+{\normalsize {Department of Computer and Information Science}}
+\\
+{\normalsize {Chair of Database and Information Systems Group}}
 \\[2cm]
 \begin{minipage}[c]{0.8\textwidth}
 \begin{description}[style=multiline]
- \item {\Large \textbf{1.Supervisor} Prof. Dr. Marc H. Scholl}
- \item {\Large \textbf{2.Supervisor} Prof. Dr. Michael Grossniklaus}
+ \item {\large \textbf{1.Supervisor:} Prof. Dr. Marc H. Scholl}
+ \item {\large \textbf{2.Supervisor:} Prof. Dr. M. Grossniklaus}
 \end{description}
 \end{minipage}
 \vfill
-{\LARGE \textbf{Konstanz, 2014}}
+{\large \textbf{Konstanz, 2014}}
 \end{center}
 \end{titlepage}
 
@@ -580,7 +580,8 @@ For example, the internal nodes in Figure~\ref{figcelltree} are polygons.
 Similar to the $R^+$-tree, objects may be stored in more than one leaf, if necessary. This could lead to a division of new objects in order to place them in bounding polygons that do not overlap. 
 As an instance, the object $b$ in Figure~\ref{figcelltree} is contained in two different leaf nodes as $b_1$ and $b_2$.
 This will be more serious in populated databases. 
-\\\\
+%\\\\
+
 \textbf{$\boldsymbol{R^*}$-tree.}
 In order to achieve better performance, the $R^*$-tree~\cite{rstartree} goes beyond the MBR area minimization by trying the following criteria, as Manolopoulos \emph{et al.}~\cite{Manolopoulos:2005} explains:
 \begin{itemize}
@@ -882,7 +883,7 @@ The interface uses the spatial query functions of WFS servers for feature render
 As a completion to the discussion from the previous paragraph, a work is presented here to 
 discuss the whole idea of the geospatial processing from web.
 The web technology, which is widely used nowadays, 
-was an area investigated by Corcoles~\cite{corcoles2003} for the geospatial data. 
+was an area investigated by C{\'o}rcoles~\cite{corcoles2003} for the geospatial data. 
 This effort proposes an approach to integrate geospatial data on the Web by focusing on the definition of a mapping between the ontology and the DTD/Schemas. 
 Geospatial data in this work is stored in GML format and a query language is designed for querying each GML document in the same way. 
 Moreover, ontologies solve the semantic heterogeneity of different GML documents 
@@ -892,7 +893,7 @@ by defining a catalog in RDF, such that this catalog establishes a correspondenc
 \label{integration}
 Toward integrating spatial and non-spatial data from different sources, 
 it is necessary to develop an integration system. 
-Corcoles~\cite{corcoles2003} discusses a prototype of an integration mediator for querying the spatial XML resources. 
+C{\'o}rcoles~\cite{corcoles2003} discusses a prototype of an integration mediator for querying the spatial XML resources. 
 This approach mainly provides an interface or global schema for querying the resources with different schema. 
 This global schema is a simple object-oriented structure in RDF described as an ontology. 
 More clearly, this work provides the infrastructure for formulating structured spatial queries 
@@ -938,7 +939,7 @@ MongoDB~\cite{mongogeneral2010,mongoinaction2011} is one of the leading NoSQL da
 The operators are \textit{\$geo\-Intersects}, \textit{\$geo\-Within}, \textit{\$near}, and \textit{\$near\-Sphere} which first indicate the query operation. Then, the geometry specifiers serve to form the query conditions. These specifiers, \textit{\$geo\-metry}, \textit{\$max\-Distance}, \textit{\$center}, \textit{\$box}, \textit{\$center\-Sphere}, \textit{\$polygon}, and \textit{\$unique\-Docs}, define the various geo\-metries and conditions in GeoJSON or in legacy coordinate pairs to filter the results. The calculation units in the spherical space can be meter or radiant. The units in the flat space are determined by the given coordinate system. 
 
 Apart from the operators, some particular geospatial queries can be done through the geospatial commands, 
-\textit{geo\-Near}, \textit{geo\-Search}, and \textit{geo\-Walk}. The command \textit{geo\-Near} is an alternative to the \textit{\$near} operator which returns additional information, for example the distance of each returned item from the given point or some troubleshooting diagnostic information. The command \textit{geo\-Search} is an interface to use the Haystack index and \textit{geo\-Walk} is an internal command.
+\textit{geo\-Near}, \textit{geo\-Search}, and \textit{geo\-Walk}. The command \textit{geo\-Near} is an alternative to the \textit{\$near} operator which returns additional information, for example the distance of each returned item from the given point or some trouble-shooting diagnostic information. The command \textit{geo\-Search} is an interface to use the Haystack index and \textit{geo\-Walk} is an internal command.
 
 \textbf{The Geospatial Index.}
 The geospatial index in MongoDB is based on the \textit{geo\-hash}~\cite{www/geohash} data structure. Regarding the importance of geohash, we shortly explain it before discussing the index in detail.
@@ -1875,19 +1876,19 @@ To start with, we suppose that a user has a geospatial dataset in GML and they w
 
 %To summarize the results of our investigations, the near query and the geospatial index updating in BaseX are far from the ......???, though geospatial query times which are the focuse of the index structure, like intersects, seem that could be satisfying in some cases/some how.???  
 
-Table~\ref{t.comparisonBaseXMongo} summarizes the statement above. \textit{MongoDB through BaseX} in this table means that BaseX connects to MongoDB to benefit by the features which are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the aforementioned features which are supposed here to be satisfying enough for the user, indicated with the notation $``\times"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
+Table~\ref{t.comparisonBaseXMongo} summarizes the statement above. \textit{MongoDB through BaseX} in this table means that BaseX connects to MongoDB to benefit by the features which are not available or available with poor performance in BaseX, as discussed in Section~\ref{MongoviaBX}. \textit{GML-related} features points the aforementioned features which are supposed here to be satisfying enough for the user, indicated with the notation $``\Plus"$. This assumption is made in order to concentrate on the evaluation of those cases in which the user choose to use BaseX and we try to cover the missing geospatial features.
 %Otherwise, the user might choose to work with another system, like MongoDB.
 % is better in efficiency.
-With $``\times\times"$, we mean that option is very efficient.
+With $``\Plus\Plus"$, we mean that option is very efficient.
 \begin{table}
 \centering
 \begin{tabular}{|l | c | c|}\hline
 \textbf{Tasks} & \textbf{BaseX} & \textbf{MongoDB through BaseX}\\\hline
- \textit{GML-related} Queries & $\times$ &\\\hline
- Geospatial Queries,  & $\times$ &\\
+ \textit{GML-related} Queries & $\Plus$ &\\\hline
+ Geospatial Queries,  & $\Plus$ &\\
 like \textit{intersects/within} & & \\\hline
- The \textit{near} Query & &$\times\times$ \\\hline
- DB Update Queries & &$\times\times$ 
+ The \textit{near} Query & &$\Plus\Plus$ \\\hline
+ DB Update Queries & &$\Plus\Plus$ 
 %like update/insert/delete &&
 \\\hline
 \end{tabular}

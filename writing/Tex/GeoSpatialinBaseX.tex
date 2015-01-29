@@ -124,7 +124,7 @@ The completion of this master thesis would not have been possible
 without the support of many people. 
 I would like to express my sincerest thanks towards 
 Dr. Christian Gr{\"u}n for his continuous support and patience during my research.
-I should confess that I cannot imagine a better person to guide and advise me. Besides, I would like to extend my gratitude to Prof. Dr. Marc H. Scholl to give me the chance to be involved in this group and to Prof. Dr. Michael Grossniklaus for his helpful guidances and comments.
+I should confess that I cannot imagine a better person to guide and advise me. Besides, I would like to extend my gratitude to Prof. Dr. Marc H. Scholl to give me the chance to be involved in this group and to Prof. Dr. Michael Grossniklaus for his helpful guidance and comments.
 
 My special appreciation also goes to Dr. Rolf A. de By from the University of Twente for
 answering completely and accurately the questions that I would ask
@@ -143,7 +143,7 @@ Geospatial data supports a wide range of ever-expanding applications in various 
 Numerous researches and efforts have been dedicated to make the most efficient use of this data, either in representation or manipulation. 
 XML-based structures are part of the widely-used standards to represent the complex structure of geospatial data. 
 Geographic Information Systems (GIS)~\cite{gis-intro}, traditional databases, and other systems have been developed or adopted to handle this type of data format. 
-Storage and retrieval of XML-based geospatial data in native XML databases are also suitable ways to fulfill the geospatial requirements. This requires adding geospatial functionality as a starting point.
+Native XML database is also another approach introduced in recent years to fulfill the geospatial requirements. This requires adding geospatial functionality as a starting point.
 
 Our contribution is to add geospatial functionality to BaseX with the support of GML as a geospatial data format. 
 To do the spatial operations on GML, existing open-source libraries are applied.
@@ -431,6 +431,7 @@ To represent the holey regions, the HB-tree uses the KD-tree within internal nod
 %In HB-tree leaf nodes are called \textit{data nodes} and internal nodes are \textit{index nodes}. 
 %Index nodes  
 %A data space can be non-rectangular and space representation in internal nodes is by KD-trees. The leaf nodes are known as data nodes and the internal node as index nodes. An index node data space is a union of its child node subspaces which are obtained through KD-tree recursive partitioning.
+\newpage
 As Lomet and Salzberg~\cite{hbtree1} state, removing the sparse nodes of the KDB-tree gives better search and insert performance and decent space utilization in the HB-tree. Nevertheless, expensive deletion and splitting as a result of complex structure, and multiple references to a data node that may lead to more than one traversal of a path are the trade-off.
 
 \textbf{Matsuyama's KD-tree.} Since KD-trees are designed as a point access method, the variant structure introduced by Matsuyama \emph{et al.}~\cite{matsuyama} is suitable for non-point objects via adding an extensive duplication strategy. In order to achieve this, a data page is associated to each leaf node containing pointer to the objects. The pointers refer to objects either totally or partially included in the data space. Those objects that overlap several unpartitioned spaces will be referenced in all corresponding pages. As a disadvantage, it should be mentioned that this structure is not appropriate for data with large objects due to duplication.
@@ -1789,22 +1790,19 @@ For the data provided in a geographic coordinate system, calculations do not wor
 
 The aforementioned \textit{near} feature as a common use case is available in BaseX only for metric coordinate systems. To provide this feature also for geographic systems via the current geo functions, we need to convert the geographic coordinates to metric ones. In this way, we convert the specified input geometry in WGS84 to a metric system. Then, we compute the buffer of converted geometry up to the input distance in the same metric system and convert the buffer back to the original geographic coordinate system. A buffer of geometry is an identified region within a specific distance of the geometry. At the end, we find the all geometries within the buffer in geographic coordinate system. This approach benefits from the geospatial index structure via the \textit{within} function while the approach with the \textit{distance} function do not utilize the geospatial index. This process is illustrated in Figure~\ref{figTransform}. 
 This procedure is expressed as below, using the \textit{buffer} and \textit{within} functions and should return the same result as the previous query, 
-
 \vspace{10px}
 \begin{fakeJSON} 
-within(geometry,
-       transform(buffer(
-                   transform(myPoint_in_wgs84, other_metric_cs)
-                   , 500)
-                 , wgs84
-                )
-      )
+within(geometry, transform(buffer(
+         transform(myPoint_in_wgs84, other_metric_cs), 500),wgs84))
 \end{fakeJSON}
+
 \vspace{10px}
 Having the same use cases, we have tested this feature in both databases, with the run-times shown in Figure~\ref{figBXvsMongoNear}. BaseX uses the distance function while \textit{\$nearSphere} operator finds the geometries in MongoDB. MongoDB outperforms BaseX with smaller number of results. The query times and the number of results are directly proportional in MongoDB, since the geospatial index is used and both changes accompany each other. BaseX does not use the geospatial index and consequently returns every result more or less in the same time. In the real-world applications, finding the nearby objects or places in closer surrounding areas are highly applicable and demanded. Therefore, having this functionality in a better performance is advantageous.
 %TODO: figure for converion method in BX
 %TODO:change the chart for new queries of distance in BaseX
 
+As mentioned in Section~\ref{indexBX}, BaseX records the index structure in a file and reads it back into main memory when the geospatial index is required. A point that we should contemplate is to include the time for index opening in query times, since in memory management the index file might be removed from the memory and read back again. This time is not counted in the presented charts.
+%TODO: better explanation
 
 \begin{figure}
 \centering
@@ -1812,10 +1810,6 @@ Having the same use cases, we have tested this feature in both databases, with t
 \caption{Query time of the \textit{near} feature}
 \label{figBXvsMongoNear}
 \end{figure}
-
-
-As mentioned in Section~\ref{indexBX}, BaseX records the index structure in a file and reads it back into main memory when the geospatial index is required. A point that we should contemplate is to include the time for index opening in query times, since in memory management the index file might be removed from the memory and read back again. This time is not counted in the presented charts.
-%TODO: better explanation
 
 
 \subsection{Database Update}
@@ -1903,7 +1897,7 @@ However, as we see in Table~\ref{t.comparisonBaseXMongo}, doing some queries in 
 %a big limitation for this software regarding the geospatial processing. 
 Thus, it will be more appropriate to provide the user with both possibilities.
 
-Table~\ref{t.possibilities} summarizes the sample scenarios that could happen based on the existing features to process the geospatial data. In addition, this table shows the relevant\-/appropriate actions the user can apply as an efficient strategy toward her\-/his goal.
+Table~\ref{t.possibilities} summarizes the sample scenarios that could happen based on the existing features to process the geospatial data. In addition, this table shows the relevant and appropriate actions the user can apply as an efficient strategy toward her\-/his goal.
 
 
 \begin{table}

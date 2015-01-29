@@ -31,7 +31,6 @@ language={English}
   author = {Lee, Taewon and Lee, Sukho},
   biburl = {http://www.bibsonomy.org/bibtex/25aa5f26e14d22be4447704a86020da2e/dblp},
   booktitle = {CAiSE Short Paper Proceedings},
-  crossref = {conf/caise/2003fo},
   date = {2003-09-25},
   description = {dblp},
   editor = {Eder, Johann and Welzer, Tatjana},
@@ -136,7 +135,6 @@ ISSN={0146-7123},}
   year      = {1985},
   pages     = {17-31},
   ee        = {http://doi.acm.org/10.1145/318898.318900},
-  crossref  = {DBLP:conf/sigmod/85},
   bibsource = {DBLP, http://dblp.uni-trier.de}
 }
 
@@ -155,11 +153,12 @@ ISSN={0146-7123},}
  address = {San Francisco, CA, USA},
 } 
 @INPROCEEDINGS{strtree,
-    author = {Scott Leutenegger and Mario A. Lopez and J. Edgington},
-    title = {{STR: A Simple and Efficient Algorithm for R-Tree Packing}},
-    booktitle = {},
-    year = {1997},
-    pages = {497--506}
+author={Leutenegger, S.T. and Lopez, M.A. and Edgington, J.},
+booktitle={Proceedings of 13th International Conference on Data Engineering},
+title={STR: a simple and efficient algorithm for R-tree packing},
+year={1997},
+month={April},
+pages={497--506},
 }
 
 @inproceedings{rstartree,
@@ -223,13 +222,21 @@ ISSN={0146-7123},}
  address = {Washington, DC, USA},
 } 
 
-@INPROCEEDINGS{xtree,
-    author = {Stefan Berchtold and Daniel A. Keim and Hans-Peter Kriegel},
-    title = {{The X-tree: An Index Structure for High-Dimensional Data}},
-    booktitle = {},
-    year = {1996},
-    pages = {28--39}
-}
+@inproceedings{xtree,
+ author = {Berchtold, Stefan and Keim, Daniel A. and Kriegel, Hans-Peter},
+ title = {The X-tree: An Index Structure for High-Dimensional Data},
+ booktitle = {Proceedings of the 22th International Conference on Very Large Data Bases},
+ series = {VLDB '96},
+ year = {1996},
+ isbn = {1-55860-382-4},
+ pages = {28--39},
+ numpages = {12},
+ url = {http://dl.acm.org/citation.cfm?id=645922.673502},
+ acmid = {673502},
+ publisher = {Morgan Kaufmann Publishers Inc.},
+ address = {San Francisco, CA, USA},
+} 
+
 @article{hbtree1,
  author = {Lomet, David B. and Salzberg, Betty},
  title = {The {HB}-tree: A Multiattribute Indexing Method with Good Guaranteed Performance},
@@ -270,15 +277,23 @@ TITLE = "Quad Trees: A Data Structure for Retrieval on Composite Keys",
 JOURNAL = "Acta Inf.",
 PAGES = {1-9},
 YEAR = {1974},
-  }
-@inproceedings{matsuyama,
-   author              = {Matsuyama, Takashi and Hao, Le Viet and Nagao, Makoto},
-   title               = {A file organization for geographic
- information systems based on spatial proximity},
-   journal             = {International Journal of Computer Vision, Graphicsm and Image Processing 26,3},
-   year                = {1984},
-   pages               = {303-318},
 }
+
+
+@article{matsuyama,
+title = "A file organization for geographic information systems based on spatial proximity ",
+journal = "Computer Vision, Graphics, and Image Processing ",
+volume = "26",
+number = "3",
+pages = "303 - 318",
+year = "1984",
+note = "",
+issn = "0734-189X",
+doi = "http://dx.doi.org/10.1016/0734-189X(84)90215-9",
+url = "http://www.sciencedirect.com/science/article/pii/0734189X84902159",
+author = "Takashi Matsuyama and Le Viet Hao and Makoto Nagao"
+}
+
 
 
 @inproceedings{bintreepaging,
@@ -729,18 +744,17 @@ pages={816-820},
 language={English}
 }
 
+
 @book{simpleFeature,
-  author = {Inc., Open Geospatial Consortium},
-  edition = {1.2.1},
-  title = {OpenGIS Implementation Standard for Geographic
-information - Simple feature access-Part 1: Common architecture},
-  year = 2011
+  title={Springer Handbook of Geographic Information},
+  author = {Wolfgang Kresse and David M. Danko},
+  publisher= "Springer",
+  year = 2012
 }
 
 @INBOOK{gml,
 	booktitle = "Encyclopedia of Geographic Information Science",
 	title = "Geography Markup Language (GML)",
-	editor = "Karen K. Kemp",
 	author = "Simon Cox",
 	publisher = "SAGE Publications, Inc.",
 	edition = "0",
@@ -995,9 +1009,7 @@ information - Simple feature access-Part 1: Common architecture},
 }
 
 @misc{gml31,
-  author = {{Open Geospatial Consortium}},
-  description = {dret'd bibliography},
-  editor = {Cox, Simon and Daisey, Paul and Lake, Ron and Portele, Clemens and Whiteside, Arliss},
+  author = {Cox, Simon and Daisey, Paul and Lake, Ron and Portele, Clemens and Whiteside, Arliss},
   howpublished = {OGC 03-105r1, Version 3.1.1},
   month = {February},
   title = {{OpenGIS Geography Markup Language (GML) Encoding Specification}},
@@ -1021,7 +1033,7 @@ howpublished={http://geotools.org/}
 
 @MISC{marklogicGeo,
       AUTHOR = "MarkLogic Corporation",
-      TITLE = "Search Developer’s Guide",
+      TITLE = "{M}ark{L}ogic {S}earch {D}eveloper’s {G}uide",
       MONTH = nov,
       YEAR = 2014,
 }
@@ -1040,7 +1052,7 @@ howpublished={http://geotools.org/}
 	booktitle = {Proc. IEEE Workshop on Visual Languages},
 	year = {1984},
 	pages = {77 - 87},
-	author = {Roussopoulos, Nick and Leifker,D.}
+	author = {Roussopoulos, Nick and Leifker, D.}
 }
 
 @inproceedings{hilbert-rtree,
